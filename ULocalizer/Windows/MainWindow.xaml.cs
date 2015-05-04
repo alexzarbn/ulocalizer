@@ -88,9 +88,9 @@ namespace ULocalizer.Windows
             await Projects.Open();
             this.GetBindingExpression(Window.TitleProperty).UpdateTarget();
         }
-        private void SaveCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void SaveCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Common.SelectedLang.isChanged = false;           
+            await Projects.CurrentProject.SaveTranslations();
         }
 
         private void CloseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -140,16 +140,6 @@ namespace ULocalizer.Windows
             return parent as ItemsControl;
         }
 
-        private async void SaveProjectBtn_Click(object sender, RoutedEventArgs e)
-        {
-            await Projects.CurrentProject.Save();
-        }
-
-        private async void SaveAllBtn_Click(object sender, RoutedEventArgs e)
-        {
-            await Projects.CurrentProject.SaveTranslations();
-        }
-
         private void LanguagesBtn_Click(object sender, RoutedEventArgs e)
         {
             LanguagesWindow LanguagesWnd = new LanguagesWindow();
@@ -164,13 +154,9 @@ namespace ULocalizer.Windows
             {
                 await CBuilder.Build();
                 await CBuilder.BuildTranslations();
+                Common.ToggleOverlay();
                 Projects.isLanguagesListChanged = false;
             }
-        }
-
-        private void SaveAllCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-
         }
     }
 }

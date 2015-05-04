@@ -62,7 +62,7 @@
         </DockPanel>
         <Label Content="Source path"/>
         <TextBox Text="{Binding Source={x:Static binding:Projects.NewProject},Path=SourcePath}"/>
-        <Label Content="Destination"/>
+        <Label Content="Destination path"/>
         <TextBox Text="{Binding Source={x:Static binding:Projects.NewProject},Path=DestinationPath}"/>
         <Button Content="Create" Name="CreateProjectBtn" Click="CreateProjectBtn_Click" Margin="0,5"/>
     </StackPanel>

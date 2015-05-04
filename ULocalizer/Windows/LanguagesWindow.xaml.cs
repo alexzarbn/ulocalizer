@@ -49,6 +49,7 @@ namespace ULocalizer.Windows
         public LanguagesWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
         }
 
         private void AddLangBtn_Click(object sender, RoutedEventArgs e)

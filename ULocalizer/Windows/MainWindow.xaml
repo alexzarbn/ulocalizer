@@ -29,8 +29,7 @@
                 <MenuItem Header="Open Project" InputGestureText="Ctrl+O" Command="Open" IsEnabled="{Binding Path=(binding:Common.isAvailable)}"></MenuItem>
                 <!--TODO
                 <MenuItem Header="Open Recent"></MenuItem>-->
-                <MenuItem Header="Save" InputGestureText="Ctrl+S" Command="Save" IsEnabled="{Binding isChanged,FallbackValue=false,TargetNullValue=false}" DataContext="{Binding Path=(binding:Common.SelectedLang)}"></MenuItem>
-                <MenuItem Header="Save All" Name="SaveAllBtn" Click="SaveAllBtn_Click" IsEnabled="{Binding isTranslationsChanged}" DataContext="{Binding Path=(binding:Projects.CurrentProject)}"></MenuItem>
+                <MenuItem Header="Save" Name="SaveAllBtn" InputGestureText="Ctrl+S" Command="Save" IsEnabled="{Binding isTranslationsChanged}" DataContext="{Binding Path=(binding:Projects.CurrentProject)}"></MenuItem>
                 <Separator/>
                 <MenuItem Header="Edit default config" Name="DefaultLocConfigBtn" Click="DefaultLocConfigBtn_Click"/>
                 <Separator/>
@@ -161,7 +160,7 @@
                         <ColumnDefinition Width="5" MaxWidth="5"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TreeView VerticalAlignment="Stretch" Grid.Column="0" HorizontalAlignment="Stretch" ItemsSource="{Binding Translations}" DataContext="{Binding Path=(binding:Projects.CurrentProject)}" SelectedItemChanged="TreeView_SelectedItemChanged" Name="TranslationTreeView">
+                    <TreeView VerticalAlignment="Stretch" Grid.Column="0" HorizontalAlignment="Stretch" ItemsSource="{Binding Translations}" DataContext="{Binding Path=(binding:Projects.CurrentProject)}" SelectedItemChanged="TreeView_SelectedItemChanged" Name="TranslationTreeView" >
                         <TreeView.Resources>
                             <HierarchicalDataTemplate DataType="{x:Type classes:CTranslation}" ItemsSource="{Binding Nodes}">
                                 <DockPanel>
@@ -180,7 +179,7 @@
                     <GridSplitter Width="5" VerticalAlignment="Stretch" Grid.Column="1" Cursor="Arrow"/>
                     <DataGrid Grid.Column="2" AutoGenerateColumns="False" ItemsSource="{Binding Items}" DataContext="{Binding Path=(binding:Common.SelectedNode)}" CanUserAddRows="False" CanUserDeleteRows="False" EnableRowVirtualization="True" SelectionMode="Single">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Source" Width="*" Binding="{Binding Source}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Source" Width="*" Binding="{Binding Source}" IsReadOnly="True" SortDirection="Ascending"/>
                             <DataGridTextColumn Header="Translation" Width="*" Binding="{Binding Translation}"/>
                         </DataGrid.Columns>
                     </DataGrid>

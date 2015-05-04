@@ -24,8 +24,15 @@ namespace ULocalizer.Classes
             {
                 Common.isAvailable = false;
                 Common.ProcessText = "Building...";
+                if (Common.WorkspaceVisibility == System.Windows.Visibility.Collapsed)
+                {
+                    Common.ToggleWorkspace();
+                }
                 Common.ToggleProcess();
-                Common.ToggleOverlay();
+                if (Common.OverlayVisibility == System.Windows.Visibility.Collapsed)
+                {
+                    Common.ToggleOverlay();
+                }
                 bool isSuccessfull = true;
                 if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini")))
                 {
@@ -74,6 +81,7 @@ namespace ULocalizer.Classes
                 }
                 else
                 {
+                    Common.WriteToConsole("[ERROR] Default localization config doesn't exist.");
                     isSuccessfull = false;
                 } 
                 Common.isAvailable = true;
