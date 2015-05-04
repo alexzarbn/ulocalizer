@@ -11,6 +11,7 @@ namespace ULocalizer.Properties
         public Settings()
         {
             this.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(NotifyPropertyChanged);
+
         }
 
         private void NotifyPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
