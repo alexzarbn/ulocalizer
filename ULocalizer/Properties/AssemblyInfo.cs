@@ -8,11 +8,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ULocalizer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Tool that makes localization process of Unreal Engine 4 games easier.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Indie developer")]
 [assembly: AssemblyProduct("ULocalizer")]
-[assembly: AssemblyCopyright("Copyright © Akai Sora 2015")]
+[assembly: AssemblyCopyright("Copyright © Aoki Sora 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

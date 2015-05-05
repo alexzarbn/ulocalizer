@@ -1,4 +1,4 @@
-# ULocalizer - Tool that makes localization process of Unreal Engine games easier
+# ULocalizer - Tool that makes localization process of Unreal Engine 4 games easier
 
 License: MIT
 

@@ -22,7 +22,7 @@ namespace ULocalizer.Windows
     /// <summary>
     /// Interaction logic for NewProjectWindow.xaml
     /// </summary>
-    public partial class NewProjectWindow : Window,INotifyPropertyChanged
+    public partial class NewProjectWindow : Window, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
@@ -87,14 +87,28 @@ namespace ULocalizer.Windows
 
         private async void CreateProjectBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (SavePathField.IsChecked==true)
+            if (
+                (!string.IsNullOrWhiteSpace(Projects.NewProject.DestinationPath)) &&
+                (!string.IsNullOrWhiteSpace(Projects.NewProject.SourcePath)) &&
+                (!string.IsNullOrWhiteSpace(Projects.NewProject.Name)) &&
+                (!string.IsNullOrWhiteSpace(Projects.NewProject.PathToEditor)) &&
+                (!string.IsNullOrWhiteSpace(Projects.NewProject.PathToProjectFile)) &&
+                (Projects.NewProject.Languages.Count > 0)
+            )
             {
-                Properties.Settings.Default.PathToEditor = Projects.NewProject.PathToEditor;
+                if (SavePathField.IsChecked == true)
+                {
+                    Properties.Settings.Default.PathToEditor = Projects.NewProject.PathToEditor;
+                }
+                await Projects.NewProject.Save();
+                Projects.CurrentProject = Projects.NewProject;
+                Projects.isNewProjectCreated = true;
+                this.Close();
             }
-            await Projects.NewProject.Save();
-            Projects.CurrentProject = Projects.NewProject;
-            Projects.isNewProjectCreated = true;
-            this.Close();
+            else
+            {
+                MessageBox.Show("Some field is empty", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
     }

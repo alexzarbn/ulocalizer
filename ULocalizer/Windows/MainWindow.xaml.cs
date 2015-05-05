@@ -158,5 +158,17 @@ namespace ULocalizer.Windows
                 Projects.isLanguagesListChanged = false;
             }
         }
+
+        private void GettingStartedBtn_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/aoki-sora/ulocalizer#getting-started");
+        }
+
+        private void AboutBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AboutWindow AboutWnd = new AboutWindow();
+            AboutWnd.Owner = this;
+            AboutWnd.ShowDialog();
+        }
     }
 }

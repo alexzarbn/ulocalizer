@@ -108,7 +108,7 @@
                 <MenuItem Header="Generate report" IsEnabled="{Binding Path=(binding:Common.isAvailable)}"/>
             </MenuItem>-->
             <MenuItem Header="Help">
-                <MenuItem Header="About">
+                <MenuItem Header="About" Name="AboutBtn" Click="AboutBtn_Click">
                     <MenuItem.Icon>
                         <Viewbox Width="16" Height="18">
                             <Canvas Width="24" Height="24">
@@ -117,7 +117,7 @@
                         </Viewbox>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Getting started"></MenuItem>
+                <MenuItem Header="Getting started" Name="GettingStartedBtn" Click="GettingStartedBtn_Click"></MenuItem>
                 <MenuItem Header="Localization documentation" Name="LocDocs" Click="LocDocs_Click"></MenuItem>
             </MenuItem>
         </Menu>

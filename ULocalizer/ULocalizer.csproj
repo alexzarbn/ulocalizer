@@ -73,12 +73,19 @@
     <Compile Include="Classes\CUtils.cs" />
     <Compile Include="Converters\MultiValueConverter.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Windows\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\LanguagesWindow.xaml.cs">
       <DependentUpon>LanguagesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\NewProjectWindow.xaml.cs">
       <DependentUpon>NewProjectWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Windows\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\LanguagesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
