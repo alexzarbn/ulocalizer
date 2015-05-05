@@ -5,6 +5,8 @@
 *.suo
 *.user
 *.sln.docstates
+*.exe
+*.dll
 
 # Build results
 [Dd]ebugPublic/
