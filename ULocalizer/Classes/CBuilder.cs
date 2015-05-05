@@ -123,8 +123,7 @@ namespace ULocalizer.Classes
                 {
                     Common.ToggleOverlay();
                 }
-                await Projects.CurrentProject.SaveTranslations();
-                Projects.CurrentProject.Translations.Clear();
+                await Projects.CurrentProject.SaveTranslations(true);
                 foreach (CultureInfo Lang in Projects.CurrentProject.Languages)
                 {
                     if (Directory.Exists(Path.Combine(Projects.CurrentProject.GetProjectRoot(), Projects.CurrentProject.SourcePath)))

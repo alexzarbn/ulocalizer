@@ -147,9 +147,23 @@ namespace ULocalizer.Binding
         /// </summary>
         public static void SetCultures()
         {
-            CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
-            Cultures = cultures.ToList();
-            Cultures.RemoveAt(0);
+            Cultures.Clear(); //for sure...well, something can happend...it's programming, right ?
+            Cultures.Add(CultureInfo.GetCultureInfo("de"));
+            Cultures.Add(CultureInfo.GetCultureInfo("en"));
+            Cultures.Add(CultureInfo.GetCultureInfo("es"));
+            Cultures.Add(CultureInfo.GetCultureInfo("fr"));
+            Cultures.Add(CultureInfo.GetCultureInfo("hi"));
+            Cultures.Add(CultureInfo.GetCultureInfo("it"));
+            Cultures.Add(CultureInfo.GetCultureInfo("ja-jp"));
+            Cultures.Add(CultureInfo.GetCultureInfo("ko-kr"));
+            Cultures.Add(CultureInfo.GetCultureInfo("pl"));
+            Cultures.Add(CultureInfo.GetCultureInfo("pt"));
+            Cultures.Add(CultureInfo.GetCultureInfo("ru"));
+            Cultures.Add(CultureInfo.GetCultureInfo("sv"));
+            Cultures.Add(CultureInfo.GetCultureInfo("zh"));
+            //CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
+            //Cultures = cultures.ToList();
+            //Cultures.RemoveAt(0);
         }
 
         /// <summary>

@@ -107,7 +107,7 @@ namespace ULocalizer.Windows
             }
             else
             {
-                MessageBox.Show("Some field is empty", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Some field(s) is empty", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

@@ -113,7 +113,7 @@ namespace ULocalizer.Classes
             await CUtils.SaveContentToFile(Path.Combine(Path.GetDirectoryName(this.PathToProjectFile),this.Name + ".ulp"), serializedProject, this.Encoding.GetEncoding());
         }
 
-        public async Task SaveTranslations()
+        public async Task SaveTranslations(bool clean = false)
         {
             await Task.Run(() =>
             {
@@ -190,6 +190,10 @@ namespace ULocalizer.Classes
                     }
                 }
                 this.isTranslationsChanged = false;
+                if (clean)
+                {
+                    Projects.CurrentProject.Translations.Clear();
+                }
                 Common.ToggleSaving();
             });
         }
