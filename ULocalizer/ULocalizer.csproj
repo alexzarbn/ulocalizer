@@ -39,12 +39,20 @@
     <ApplicationIcon>Images\Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MahApps.Metro, Version=1.1.2.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\MahApps.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -71,22 +79,59 @@
     <Compile Include="Classes\CTranslationNode.cs" />
     <Compile Include="Classes\CTranslationNodeItem.cs" />
     <Compile Include="Classes\CUtils.cs" />
-    <Compile Include="Converters\MultiValueConverter.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="Windows\AboutWindow.xaml.cs">
-      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    <Compile Include="Controls\LanguagePickerControl.xaml.cs">
+      <DependentUpon>LanguagePickerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\LanguagesWindow.xaml.cs">
-      <DependentUpon>LanguagesWindow.xaml</DependentUpon>
+    <Compile Include="Controls\LanguagesControl.xaml.cs">
+      <DependentUpon>LanguagesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectPropertiesControl.xaml.cs">
+      <DependentUpon>ProjectPropertiesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\CultureToFlagIconConverter.cs" />
+    <Compile Include="Converters\SelectedTranslationToBooleanConverter.cs" />
+    <Compile Include="Converters\SelectedTranslationToVisibilityConverter.cs" />
+    <Compile Include="Converters\MultiValueConverter.cs" />
+    <Compile Include="ExtensionMethods\EIEnumerable.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Windows\ConsoleWindow.xaml.cs">
+      <DependentUpon>ConsoleWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PropertiesWindow.xaml.cs">
+      <DependentUpon>PropertiesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\NewProjectWindow.xaml.cs">
       <DependentUpon>NewProjectWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Windows\AboutWindow.xaml">
+    <Page Include="Controls\LanguagePickerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\LanguagesWindow.xaml">
+    <Page Include="Controls\LanguagesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectPropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\CustomStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\DefaultAccent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ConsoleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\PropertiesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -131,6 +176,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -164,6 +210,124 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\variable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\WindowsIcons-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\de-AT.png" />
+    <Resource Include="Images\flags\de-CH.png" />
+    <Resource Include="Images\flags\de-LI.png" />
+    <Resource Include="Images\flags\de-LU.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\en-AU.png" />
+    <Resource Include="Images\flags\en-BZ.png" />
+    <Resource Include="Images\flags\en-CA.png" />
+    <Resource Include="Images\flags\en-GB.png" />
+    <Resource Include="Images\flags\en-HK.png" />
+    <Resource Include="Images\flags\en-IE.png" />
+    <Resource Include="Images\flags\en-IN.png" />
+    <Resource Include="Images\flags\en-JM.png" />
+    <Resource Include="Images\flags\en-MY.png" />
+    <Resource Include="Images\flags\en-NZ.png" />
+    <Resource Include="Images\flags\en-PH.png" />
+    <Resource Include="Images\flags\en-SG.png" />
+    <Resource Include="Images\flags\en-TT.png" />
+    <Resource Include="Images\flags\en-US.png" />
+    <Resource Include="Images\flags\en-ZA.png" />
+    <Resource Include="Images\flags\en-ZW.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\es-AR.png" />
+    <Resource Include="Images\flags\es-BO.png" />
+    <Resource Include="Images\flags\es-CL.png" />
+    <Resource Include="Images\flags\es-CO.png" />
+    <Resource Include="Images\flags\es-CR.png" />
+    <Resource Include="Images\flags\es-DO.png" />
+    <Resource Include="Images\flags\es-EC.png" />
+    <Resource Include="Images\flags\es-ES.png" />
+    <Resource Include="Images\flags\es-GT.png" />
+    <Resource Include="Images\flags\es-HN.png" />
+    <Resource Include="Images\flags\es-MX.png" />
+    <Resource Include="Images\flags\es-NI.png" />
+    <Resource Include="Images\flags\es-PA.png" />
+    <Resource Include="Images\flags\es-PE.png" />
+    <Resource Include="Images\flags\es-PR.png" />
+    <Resource Include="Images\flags\es-PY.png" />
+    <Resource Include="Images\flags\es-SV.png" />
+    <Resource Include="Images\flags\es-US.png" />
+    <Resource Include="Images\flags\es-UY.png" />
+    <Resource Include="Images\flags\es-VE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\hi-IN.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\fr-BE.png" />
+    <Resource Include="Images\flags\fr-CA.png" />
+    <Resource Include="Images\flags\fr-CD.png" />
+    <Resource Include="Images\flags\fr-CH.png" />
+    <Resource Include="Images\flags\fr-CI.png" />
+    <Resource Include="Images\flags\fr-CM.png" />
+    <Resource Include="Images\flags\fr-FR.png" />
+    <Resource Include="Images\flags\fr-HT.png" />
+    <Resource Include="Images\flags\fr-LU.png" />
+    <Resource Include="Images\flags\fr-MA.png" />
+    <Resource Include="Images\flags\fr-MC.png" />
+    <Resource Include="Images\flags\fr-ML.png" />
+    <Resource Include="Images\flags\fr-RE.png" />
+    <Resource Include="Images\flags\fr-SN.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\it-CH.png" />
+    <Resource Include="Images\flags\it-IT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\pl-PL.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\pt-AO.png" />
+    <Resource Include="Images\flags\pt-BR.png" />
+    <Resource Include="Images\flags\pt-PT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\sv-FI.png" />
+    <Resource Include="Images\flags\sv-SE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\zh-Hans.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\zh-Hant.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\de-DE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\ru-RU.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\es-419.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\en-029.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\ja.png" />
+    <Resource Include="Images\flags\ko-KP.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\ko.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\properties.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\console.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

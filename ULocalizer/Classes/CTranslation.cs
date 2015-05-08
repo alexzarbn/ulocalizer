@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Globalization;
+using System.Windows.Markup;
 using ULocalizer.Binding;
 
 namespace ULocalizer.Classes
@@ -25,8 +26,11 @@ namespace ULocalizer.Classes
         public CultureInfo Language
         {
             get { return _Language; }
-            set { _Language = value; NotifyPropertyChanged(); }
+            set { _Language = value; NotifyPropertyChanged();  }
         }
+
+
+        
 
         /// <summary>
         /// Path to translation file (*.archive)

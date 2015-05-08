@@ -1,69 +1,11 @@
-﻿<Window x:Class="ULocalizer.Windows.NewProjectWindow"
+﻿<Controls:MetroWindow x:Class="ULocalizer.Windows.NewProjectWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:binding="clr-namespace:ULocalizer.Binding"
-        Title="New Project" Height="550" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" SizeToContent="Height" Icon="/Images/newProject.ico">
-    <Window.Resources>
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="Margin" Value="0,0,0,5" />
-            <Setter Property="Height" Value="25"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-    </Window.Resources>
+        xmlns:UControls="clr-namespace:ULocalizer.Controls"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls" ShowIconOnTitleBar="False"  WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"  GlowBrush="{StaticResource AccentColorBrush}"
+        Title="New Project" TitlebarHeight="26" Height="600" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" SizeToContent="Height" Icon="/Images/newProject.ico" NonActiveWindowTitleBrush="White">
     <StackPanel Margin="10">
-        <Label Content="Path to Editor" Padding="0"/>
-        <DockPanel>
-            <TextBox MinWidth="428" Text="{Binding Source={x:Static binding:Projects.NewProject},Path=PathToEditor}"/>
-            <Button Content="..." Width="32" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Name="SetPathToEditorBtn" Click="SetPathToEditorBtn_Click"/>
-        </DockPanel>
-        <CheckBox Content="Save path for further projects" IsChecked="True" Margin="0,0,0,5" Name="SavePathField"/>
-        <Label Content="Path to project file (.uproject)" Padding="0"/>
-        <DockPanel>
-            <TextBox MinWidth="428" Text="{Binding Source={x:Static binding:Projects.NewProject},Path=PathToProjectFile}"/>
-            <Button Content="..." Width="32" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Name="SetPathToProjectFileBtn" Click="SetPathToProjectFileBtn_Click"/>
-        </DockPanel>
-        <Label Content="Project name" Padding="0"/>
-        <TextBox Width="428" HorizontalAlignment="Left" Text="{Binding Source={x:Static binding:Projects.NewProject},Path=Name}"/>
-        <StackPanel>
-            <Label Content="Encoding" Padding="0"/>
-            <ComboBox Width="256" HorizontalAlignment="Left" ItemsSource="{Binding Source={x:Static binding:Common.Encodings}}" SelectedValue="{Binding Source={x:Static binding:Projects.NewProject},Path=Encoding}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding DisplayName}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </StackPanel>
-        <DockPanel Margin="0,5,0,0">
-            <StackPanel>
-                <Label Content="Localize for:" Padding="0"/>
-                <ListView Width="210" HorizontalAlignment="Left" Height="128" ItemsSource="{Binding Source={x:Static binding:Common.Cultures}}" SelectedValue="{Binding SelectedLanguage}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding DisplayName}"/>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>
-            <StackPanel VerticalAlignment="Center" Margin="5">
-                <Button Content=">" Width="32" Name="AddLangBtn" Click="AddLangBtn_Click"></Button>
-                <Button Content="&lt;" Width="32" Name="DelLangBtn" Click="DelLangBtn_Click"></Button>
-            </StackPanel>
-            <StackPanel>
-                <Label Content="Selected for localization:" Padding="0"/>
-                <ListView Width="210" HorizontalAlignment="Left" Height="128" ItemsSource="{Binding Source={x:Static binding:Projects.NewProject},Path=Languages}" SelectedValue="{Binding SelectedLocalizedLanguage}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding DisplayName}"/>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>
-        </DockPanel>
-        <Label Content="Source path"/>
-        <TextBox Text="{Binding Source={x:Static binding:Projects.NewProject},Path=SourcePath}"/>
-        <Label Content="Destination path"/>
-        <TextBox Text="{Binding Source={x:Static binding:Projects.NewProject},Path=DestinationPath}"/>
-        <Button Content="Create" Name="CreateProjectBtn" Click="CreateProjectBtn_Click" Margin="0,5"/>
+        <UControls:ProjectPropertiesControl Mode="New" DataContext="{Binding Path=(binding:Projects.NewProject)}" Executed="ProjectPropertiesControl_Executed"/>
     </StackPanel>
-</Window>
+    </Controls:MetroWindow>

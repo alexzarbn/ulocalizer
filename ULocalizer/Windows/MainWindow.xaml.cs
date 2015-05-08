@@ -16,13 +16,15 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ULocalizer.Binding;
 using ULocalizer.Classes;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace ULocalizer.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window,INotifyPropertyChanged
+    public partial class MainWindow : MetroWindow,INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
@@ -53,51 +55,16 @@ namespace ULocalizer.Windows
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = this;        
+            this.DataContext = this;    
+    
         }
 
-        
 
-        private void NewCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void NewProjectWnd_Closed(object sender, EventArgs e)
         {
-            Projects.NewProject = new Classes.CProject();
-            NewProjectWindow NewProjectWnd = new NewProjectWindow();
-            NewProjectWnd.Owner = this;
-            NewProjectWnd.Closed += NewProjectWnd_Closed;
-            NewProjectWnd.ShowDialog();
-        }
-
-        private async Task Build()
-        {
-            await CBuilder.Build();
-            OutputField.ScrollToEnd();
-        }
-
-        private async void NewProjectWnd_Closed(object sender, EventArgs e)
-        {
-            if (Projects.isNewProjectCreated)
-            {
-                this.GetBindingExpression(Window.TitleProperty).UpdateTarget();
-                await Build();
-                Projects.isNewProjectCreated = false;
-            }
-        }
-        
-        private async void OpenCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            await Projects.Open();
             this.GetBindingExpression(Window.TitleProperty).UpdateTarget();
         }
-        private async void SaveCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            await Projects.CurrentProject.SaveTranslations();
-        }
-
-        private void CloseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
+        
         private void LocDocs_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://docs.unrealengine.com/latest/INT/Gameplay/Localization/index.html");
@@ -105,7 +72,7 @@ namespace ULocalizer.Windows
 
         private async void BuildBtn_Click(object sender, RoutedEventArgs e)
         {
-            await Build();
+            await CBuilder.Build();
         }
 
 
@@ -142,33 +109,69 @@ namespace ULocalizer.Windows
 
         private void LanguagesBtn_Click(object sender, RoutedEventArgs e)
         {
-            LanguagesWindow LanguagesWnd = new LanguagesWindow();
-            LanguagesWnd.Closed += LanguagesWnd_Closed;
-            LanguagesWnd.Owner = this;
-            LanguagesWnd.ShowDialog();
+            PropertiesWindow PropertiesWnd = new PropertiesWindow();
+            PropertiesWnd.Owner = this;
+            PropertiesWnd.ShowDialog();
         }
 
-        private async void LanguagesWnd_Closed(object sender, EventArgs e)
-        {
-            if (Projects.isLanguagesListChanged)
-            {
-                await CBuilder.Build();
-                await CBuilder.BuildTranslations();
-                Common.ToggleOverlay();
-                Projects.isLanguagesListChanged = false;
-            }
-        }
 
         private void GettingStartedBtn_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/aoki-sora/ulocalizer#getting-started");
         }
 
-        private void AboutBtn_Click(object sender, RoutedEventArgs e)
+        private void NewProjectBtn_Click(object sender, RoutedEventArgs e)
         {
-            AboutWindow AboutWnd = new AboutWindow();
-            AboutWnd.Owner = this;
-            AboutWnd.ShowDialog();
+            NewProjectWindow NewProjectWnd = new NewProjectWindow();
+            NewProjectWnd.Owner = this;
+            NewProjectWnd.Closed += NewProjectWnd_Closed;
+            NewProjectWnd.ShowDialog();
         }
+
+        private async void OpenProjectBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await Projects.Open();
+            this.GetBindingExpression(Window.TitleProperty).UpdateTarget();
+        }
+
+        private void LanguagesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((e.AddedItems.Count>0) && (e.AddedItems[0].GetType().ToString() == "ULocalizer.Classes.CTranslation"))
+            {
+                Common.SelectedLang = (CTranslation)e.AddedItems[0];
+                if (Common.SelectedLang.Nodes.Count > 0)
+                {
+                    NodeSelectionBtn.SelectedIndex = 0;
+                }
+            }
+        }
+
+        private async void SaveAllBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await Projects.CurrentProject.SaveTranslations(true);
+        }
+
+
+        private void GitHubBtn_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/aoki-sora/ulocalizer");
+        }
+
+        private void PropertiesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            PropertiesWindow PropertiesWnd = new PropertiesWindow();
+            PropertiesWnd.Owner = this;
+            PropertiesWnd.ShowDialog();
+        }
+
+        private void ConsoleBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ConsoleWindow ConsoleWnd = new ConsoleWindow();
+            ConsoleWnd.Owner = this;
+            ConsoleWnd.Show();
+        }
+
+
+
     }
 }

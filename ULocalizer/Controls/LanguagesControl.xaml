@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="ULocalizer.Controls.LanguagesControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:binding="clr-namespace:ULocalizer.Binding"
+             xmlns:UControls="clr-namespace:ULocalizer.Controls"
+             Name="UCLanguages"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="42"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <UControls:LanguagePickerControl x:Name="SourceLanguagePicker" Title="Localizable languages:" Items="{Binding Source={x:Static binding:Common.Cultures}}"/>
+        <StackPanel VerticalAlignment="Center" Grid.Column="1">
+            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="34" ToolTip="Add all"  Name="AddAllLangBtn" Click="AddAllLangBtn_Click" Margin="4">
+                <DockPanel>
+                <Rectangle Width="24" Height="24" Margin="-2,0,0,0"
+                   Fill="{StaticResource IdealForegroundColorBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" 
+                         Visual="{StaticResource appbar_chevron_right}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+                    <Rectangle Width="24" Height="24" Margin="-10,0,0,0"
+                   Fill="{StaticResource IdealForegroundColorBrush}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" 
+                         Visual="{StaticResource appbar_chevron_right}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </DockPanel>
+            </Button>
+            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24" ToolTip="Add language"  Name="AddLangBtn" Click="AddLangBtn_Click" Margin="4">
+                <Rectangle Width="24" Height="24" 
+                   Fill="{StaticResource IdealForegroundColorBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" 
+                         Visual="{StaticResource appbar_chevron_right}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24" ToolTip="Remove language"  Name="DelLangBtn" Click="DelLangBtn_Click" Margin="4">
+                
+                <Rectangle Width="24" Height="24" 
+                   Fill="{StaticResource IdealForegroundColorBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" 
+                         Visual="{StaticResource appbar_chevron_left}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+        </StackPanel>
+        <UControls:LanguagePickerControl x:Name="DestinationLanguagePicker" Grid.Column="2" Title="Selected languages:" Items="{Binding ElementName=UCLanguages,Path=DestinationSource}"/>
+    </Grid>
+</UserControl>

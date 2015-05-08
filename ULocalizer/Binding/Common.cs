@@ -5,7 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
 using System.ComponentModel;
+using System.Windows.Markup;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using ULocalizer.Classes;
+using ExtensionMethods;
 
 namespace ULocalizer.Binding
 {
@@ -29,78 +33,52 @@ namespace ULocalizer.Binding
             set { _Encodings = value; }
         }
 
-        private static List<CultureInfo> _Cultures = new List<CultureInfo>();
-        public static List<CultureInfo> Cultures
+        private static CObservableList<CultureInfo> _Cultures = new CObservableList<CultureInfo>();
+        public static CObservableList<CultureInfo> Cultures
         {
             get { return _Cultures; }
             set { _Cultures = value; }
         }
 
-
-        private static System.Windows.Visibility _OverlayVisibility = System.Windows.Visibility.Visible;
-        public static System.Windows.Visibility OverlayVisibility
+        private static ProgressDialogController _ProgressController = null;
+        public static ProgressDialogController ProgressController
         {
-            get { return _OverlayVisibility; }
-            set { _OverlayVisibility = value; RaiseStaticPropertyChanged("OverlayVisibility"); }
+            get { return _ProgressController; }
+            set { _ProgressController = value; }
         }
 
-        private static System.Windows.Visibility _WorkspaceVisibility = System.Windows.Visibility.Collapsed;
-        public static System.Windows.Visibility WorkspaceVisibility
+        public static bool IsProgressShown()
         {
-            get { return _WorkspaceVisibility; }
-            set { _WorkspaceVisibility = value; RaiseStaticPropertyChanged("WorkspaceVisibility"); }
+            if ((ProgressController!=null) && (ProgressController.IsOpen)) {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        private static System.Windows.Visibility _WelcomeMessageVisibility = System.Windows.Visibility.Visible;
-        public static System.Windows.Visibility WelcomeMessageVisibility
+        private static async Task ShowProgressDialog(string Message)
         {
-            get { return _WelcomeMessageVisibility; }
-            set { _WelcomeMessageVisibility = value; RaiseStaticPropertyChanged("WelcomeMessageVisibility"); }
+            await App.Current.Dispatcher.InvokeAsync(async () => ProgressController = await DialogManager.ShowProgressAsync(App.Current.MainWindow as MetroWindow, "Operation in progress", Message));
         }
 
-        private static System.Windows.Visibility _ProcessVisibility = System.Windows.Visibility.Collapsed;
-        public static System.Windows.Visibility ProcessVisibility
+        public static async Task ShowProgress(string Message)
         {
-            get { return _ProcessVisibility; }
-            set { _ProcessVisibility = value; RaiseStaticPropertyChanged("ProcessVisibility"); }
+            if (!Common.IsProgressShown())
+            {
+                await Common.ShowProgressDialog(Message);
+            }
+            else
+            {
+                Common.ProgressController.SetMessage(Message);
+            }
         }
 
-        private static System.Windows.Visibility _SuccessTextVisibility = System.Windows.Visibility.Collapsed;
-        public static System.Windows.Visibility SuccessTextVisibility
+        public static async Task ShowError(string Message)
         {
-            get { return _SuccessTextVisibility; }
-            set { _SuccessTextVisibility = value; RaiseStaticPropertyChanged("SuccessTextVisibility"); }
+            await App.Current.Dispatcher.InvokeAsync(async () => await DialogManager.ShowMessageAsync(App.Current.MainWindow as MetroWindow, "Error",Message));
         }
-
-        private static System.Windows.Visibility _ErrorTextVisibility = System.Windows.Visibility.Collapsed;
-        public static System.Windows.Visibility ErrorTextVisibility
-        {
-            get { return _ErrorTextVisibility; }
-            set { _ErrorTextVisibility = value; RaiseStaticPropertyChanged("ErrorTextVisibility"); }
-        }
-
-
-        private static string _ProcessText = "Loading...";
-        public static string ProcessText
-        {
-            get { return _ProcessText; }
-            set { _ProcessText = value; RaiseStaticPropertyChanged("ProcessText"); }
-        }
-
-        private static string _SuccessText = "Completed";
-        public static string SuccessText
-        {
-            get { return _SuccessText; }
-            set { _SuccessText = value; RaiseStaticPropertyChanged("SuccessText"); }
-        }
-
-        private static string _ErrorText = "Unknown error";
-        public static string ErrorText
-        {
-            get { return _ErrorText; }
-            set { _ErrorText = value; RaiseStaticPropertyChanged("ErrorText"); }
-        }
-
 
         private static string _ConsoleData = string.Empty;
         public static string ConsoleData
@@ -130,7 +108,7 @@ namespace ULocalizer.Binding
         public static CTranslation SelectedLang
         {
             get { return _SelectedLang; }
-            set { _SelectedLang = value; RaiseStaticPropertyChanged("SelectedLang"); }
+            set { _SelectedLang = value; RaiseStaticPropertyChanged("SelectedLang"); Projects.XmlLang = XmlLanguage.GetLanguage(SelectedLang.Language.Name); }
         }
 
         /// <summary>
@@ -154,16 +132,27 @@ namespace ULocalizer.Binding
             Cultures.Add(CultureInfo.GetCultureInfo("fr"));
             Cultures.Add(CultureInfo.GetCultureInfo("hi"));
             Cultures.Add(CultureInfo.GetCultureInfo("it"));
-            Cultures.Add(CultureInfo.GetCultureInfo("ja-jp"));
-            Cultures.Add(CultureInfo.GetCultureInfo("ko-kr"));
+            Cultures.Add(CultureInfo.GetCultureInfo("ja"));
+            Cultures.Add(CultureInfo.GetCultureInfo("ko"));
             Cultures.Add(CultureInfo.GetCultureInfo("pl"));
             Cultures.Add(CultureInfo.GetCultureInfo("pt"));
             Cultures.Add(CultureInfo.GetCultureInfo("ru"));
             Cultures.Add(CultureInfo.GetCultureInfo("sv"));
             Cultures.Add(CultureInfo.GetCultureInfo("zh"));
-            //CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
-            //Cultures = cultures.ToList();
-            //Cultures.RemoveAt(0);
+            foreach (CultureInfo CI in Cultures.ToList())
+            {
+                AddRegions(CI.Name);
+            }
+            Cultures = Cultures.OrderBy(culture => culture.Name).ToObservableList();
+        }
+
+        private static void AddRegions(string ParentCulture)
+        {
+            var Regions = CultureInfo.GetCultures(CultureTypes.AllCultures).Where(x => x.Parent.Name == ParentCulture);
+            foreach (CultureInfo RegionInstance in Regions)
+            {
+                Cultures.Add(RegionInstance);
+            }
         }
 
         /// <summary>
@@ -173,97 +162,6 @@ namespace ULocalizer.Binding
         public static void WriteToConsole(string Text)
         {
             ConsoleData += Text + Environment.NewLine;
-        }
-
-        public static void ToggleOverlay()
-        {
-            if (OverlayVisibility == System.Windows.Visibility.Visible)
-            {
-                OverlayVisibility = System.Windows.Visibility.Collapsed;
-            }
-            else
-            {
-                OverlayVisibility = System.Windows.Visibility.Visible;
-            }
-        }
-
-        public static void ToggleWorkspace()
-        {
-            if (WorkspaceVisibility == System.Windows.Visibility.Collapsed)
-            {
-                WorkspaceVisibility = System.Windows.Visibility.Visible;
-            }
-            else
-            {
-                WorkspaceVisibility = System.Windows.Visibility.Collapsed;
-            }
-        }
-
-        public static void ToggleWelcomeMessage()
-        {
-            ProcessVisibility = System.Windows.Visibility.Collapsed;
-            SuccessTextVisibility = System.Windows.Visibility.Collapsed;
-            ErrorTextVisibility = System.Windows.Visibility.Collapsed;
-            if (WelcomeMessageVisibility == System.Windows.Visibility.Collapsed)
-            {
-                WelcomeMessageVisibility = System.Windows.Visibility.Visible;
-            }
-            else
-            {
-                WelcomeMessageVisibility = System.Windows.Visibility.Collapsed;
-            }
-        }
-
-        public static void ToggleProcess()
-        {
-            WelcomeMessageVisibility = System.Windows.Visibility.Collapsed;
-            SuccessTextVisibility = System.Windows.Visibility.Collapsed;
-            ErrorTextVisibility = System.Windows.Visibility.Collapsed;
-            if (ProcessVisibility == System.Windows.Visibility.Collapsed)
-            {
-                ProcessVisibility = System.Windows.Visibility.Visible;
-            }
-            else
-            {
-                ProcessVisibility = System.Windows.Visibility.Collapsed;
-            }
-        }
-
-        public static void ToggleSuccessText()
-        {
-            WelcomeMessageVisibility = System.Windows.Visibility.Collapsed;
-            ProcessVisibility = System.Windows.Visibility.Collapsed;
-            ErrorTextVisibility = System.Windows.Visibility.Collapsed;
-            if (SuccessTextVisibility == System.Windows.Visibility.Collapsed)
-            {
-                SuccessTextVisibility = System.Windows.Visibility.Visible;
-            }
-            else
-            {
-                SuccessTextVisibility = System.Windows.Visibility.Collapsed;
-            }
-        }
-
-        public static void ToggleErrorText()
-        {
-            WelcomeMessageVisibility = System.Windows.Visibility.Collapsed;
-            ProcessVisibility = System.Windows.Visibility.Collapsed;
-            SuccessTextVisibility = System.Windows.Visibility.Collapsed;
-            if (ErrorTextVisibility == System.Windows.Visibility.Collapsed)
-            {
-                ErrorTextVisibility = System.Windows.Visibility.Visible;
-            }
-            else
-            {
-                ErrorTextVisibility = System.Windows.Visibility.Collapsed;
-            }
-        }
-
-        public static void ToggleSaving()
-        {
-            ProcessText = "Saving...";
-            ToggleProcess();
-            ToggleOverlay();
         }
     }
 }

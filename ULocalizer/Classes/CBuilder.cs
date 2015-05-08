@@ -9,6 +9,8 @@ using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ULocalizer.Binding;
+using ExtensionMethods;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace ULocalizer.Classes
 {
@@ -20,19 +22,9 @@ namespace ULocalizer.Classes
         /// <returns></returns>
         public static async Task Build()
         {
-            await Task.Run(async() =>
+            await Task.Run(async () =>
             {
-                Common.isAvailable = false;
-                Common.ProcessText = "Building...";
-                if (Common.WorkspaceVisibility == System.Windows.Visibility.Collapsed)
-                {
-                    Common.ToggleWorkspace();
-                }
-                Common.ToggleProcess();
-                if (Common.OverlayVisibility == System.Windows.Visibility.Collapsed)
-                {
-                    Common.ToggleOverlay();
-                }
+                await Common.ShowProgress("Building...");
                 bool isSuccessfull = true;
                 if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini")))
                 {
@@ -42,9 +34,9 @@ namespace ULocalizer.Classes
                         List<string> CulturesToGenerate = new List<string>();
                         foreach (CultureInfo CI in Projects.CurrentProject.Languages)
                         {
-                            CulturesToGenerate.Add("CulturesToGenerate="+CI.Name);
+                            CulturesToGenerate.Add("CulturesToGenerate=" + CI.Name);
                         }
-                        await CUtils.MakeConfig(Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"),CulturesToGenerate,Projects.CurrentProject.SourcePath,Projects.CurrentProject.DestinationPath);
+                        await CUtils.MakeConfig(Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), CulturesToGenerate, Projects.CurrentProject.SourcePath, Projects.CurrentProject.DestinationPath);
                         var BuilderProcess = new Process
                         {
                             StartInfo = new ProcessStartInfo
@@ -70,10 +62,10 @@ namespace ULocalizer.Classes
                         BuilderProcess.WaitForExit();
                         if (isSuccessfull)
                         {
-                            await BuildTranslations();
+                            await LoadTranslations(false);
                         }
                     }
-                    catch (IOException ex)
+                    catch (Exception ex)
                     {
                         isSuccessfull = false;
                         Common.WriteToConsole(ex.Message);
@@ -83,55 +75,36 @@ namespace ULocalizer.Classes
                 {
                     Common.WriteToConsole("[ERROR] Default localization config doesn't exist.");
                     isSuccessfull = false;
-                } 
+                }
                 Common.isAvailable = true;
-                Common.ToggleProcess();
-                if (isSuccessfull)
+                if (!isSuccessfull)
                 {
-                    Common.SuccessText = "Build successful";
-                    Common.ToggleSuccessText();
+                    await Common.ShowError("Build error. See console for details.");
                 }
-                else
-                {
-                    Common.ErrorText = "Build error. See console for details.";
-                    Common.ToggleErrorText();
-                }
-                await Task.Delay(2000);
-                Common.ToggleOverlay();
-                if (isSuccessfull)
-                {
-                    if (Common.WorkspaceVisibility == System.Windows.Visibility.Collapsed)
-                    {
-                        Common.ToggleWorkspace();
-                    }
-                }
+                await Common.ProgressController.CloseAsync();
             });
 
         }
 
         /// <summary>
-        /// Builds the localization tree (on the left side of app)
+        /// Builds the languages tree (on the left side of app)
         /// </summary>
         /// <returns></returns>
-        public static async Task BuildTranslations()
+        public static async Task LoadTranslations(bool closeProgressAfterExecution)
         {
-            await Task.Run(async() =>
+            await Task.Run(async () =>
             {
-                Common.ProcessText = "Building translations...";
-                Common.ToggleProcess();
-                if (Common.OverlayVisibility == System.Windows.Visibility.Collapsed)
-                {
-                    Common.ToggleOverlay();
-                }
-                await Projects.CurrentProject.SaveTranslations(true);
+                await Common.ShowProgress("Loading translations...");
+                await Task.Delay(1000); //Getting exeption when trying to close the progress dialog without delay...
+                Projects.CurrentProject.Translations.Clear();
                 foreach (CultureInfo Lang in Projects.CurrentProject.Languages)
                 {
                     if (Directory.Exists(Path.Combine(Projects.CurrentProject.GetProjectRoot(), Projects.CurrentProject.SourcePath)))
                     {
-                        string[] Files = Directory.GetFiles(CUtils.FixPath(Path.Combine(Projects.CurrentProject.GetProjectRoot(), Projects.CurrentProject.SourcePath,Lang.Name)), "*.archive");
-                        if (Files.Count() > 0)
+                        try
                         {
-                            try
+                            string[] Files = Directory.GetFiles(CUtils.FixPath(Path.Combine(Projects.CurrentProject.GetProjectRoot(), Projects.CurrentProject.SourcePath, Lang.Name)), "*.archive");
+                            if (Files.Count() > 0)
                             {
                                 JObject DeserializedTranslation = JObject.Parse(File.ReadAllText(Files[0]));
                                 JToken Vars;
@@ -165,16 +138,15 @@ namespace ULocalizer.Classes
                                             foreach (JToken Val in Subnamespace.Value<JToken>("Children").Children())
                                             {
                                                 CTranslationNodeItem Item = new CTranslationNodeItem();
-                                                Item.Source = Val.Value<JToken>("Source").Value<string>("Text") ;
+                                                Item.Source = Val.Value<JToken>("Source").Value<string>("Text");
                                                 Item.Translation = Val.Value<JToken>("Translation").Value<string>("Text");
 
                                                 SubnamespacesNode.Items.Add(Item);
                                             }
                                             TranslationInstance.Nodes.Add(SubnamespacesNode);
-                                            
+
                                         }
                                     }
-                                    TranslationInstance.Nodes.Reverse();
                                     Projects.CurrentProject.Translations.Add(TranslationInstance);
                                 }
                                 else
@@ -182,14 +154,14 @@ namespace ULocalizer.Classes
                                     Common.WriteToConsole("Something wrong with translation file. Please, run repair using Tools->Repair.");
                                 }
                             }
-                            catch (JsonException ex)
+                            else
                             {
-                                Common.WriteToConsole(ex.Message);
+                                Common.WriteToConsole("[ERROR] Translation file for " + Lang.DisplayName + " language doesn't exist.");
                             }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Common.WriteToConsole("[ERROR] Translation file for " + Lang.DisplayName + " language doesn't exist.");
+                            Common.WriteToConsole(ex.Message);
                         }
                     }
                     else
@@ -198,7 +170,10 @@ namespace ULocalizer.Classes
                     }
                 }
                 Projects.CurrentProject.isTranslationsChanged = false;
-                Common.ToggleProcess();
+                if (closeProgressAfterExecution)
+                {
+                    await Common.ProgressController.CloseAsync();
+                }
             });
         }
     }

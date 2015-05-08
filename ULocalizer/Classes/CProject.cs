@@ -78,24 +78,24 @@ namespace ULocalizer.Classes
             set { _DestinationPath = value; NotifyPropertyChanged(); isChanged = true; }
         }
 
-        [JsonIgnore]
         private CObservableList<CTranslation> _Translations = new CObservableList<CTranslation>();
+        [JsonIgnore]
         public CObservableList<CTranslation> Translations
         {
             get { return _Translations; }
             set { _Translations = value; NotifyPropertyChanged(); isTranslationsChanged = true; }
         }
 
-        [JsonIgnore]
         private bool _isChanged = false;
+        [JsonIgnore]
         public bool isChanged
         {
             get { return _isChanged; }
             set { _isChanged = value; NotifyPropertyChanged(); }
         }
 
-        [JsonIgnore]
         private bool _isTranslationsChanged = false;
+        [JsonIgnore]
         public bool isTranslationsChanged
         {
             get { return _isTranslationsChanged; }
@@ -105,19 +105,16 @@ namespace ULocalizer.Classes
 
         public async Task Save()
         {
-            if (!this.Languages.Contains(CultureInfo.GetCultureInfo("en")))
-            {
-                this.Languages.Add(CultureInfo.GetCultureInfo("en"));
-            }
             string serializedProject = JsonConvert.SerializeObject(this);
             await CUtils.SaveContentToFile(Path.Combine(Path.GetDirectoryName(this.PathToProjectFile),this.Name + ".ulp"), serializedProject, this.Encoding.GetEncoding());
         }
 
-        public async Task SaveTranslations(bool clean = false)
+        public async Task SaveTranslations(bool closeProgressAfterExecution = false)
         {
-            await Task.Run(() =>
+            await Task.Run(async() =>
             {
-                Common.ToggleSaving();
+                await Common.ShowProgress("Saving translations...");
+                await Task.Delay(1000); //Getting exeption when trying to close the progress dialog without delay...
                 foreach (CTranslation TranslationInstance in this.Translations)
                 {
                     if (File.Exists(TranslationInstance.Path))
@@ -190,11 +187,10 @@ namespace ULocalizer.Classes
                     }
                 }
                 this.isTranslationsChanged = false;
-                if (clean)
+                if (closeProgressAfterExecution)
                 {
-                    Projects.CurrentProject.Translations.Clear();
+                    await Common.ProgressController.CloseAsync();
                 }
-                Common.ToggleSaving();
             });
         }
 
@@ -225,7 +221,6 @@ namespace ULocalizer.Classes
 
         public CProject()
         {
-
         }
 
     }

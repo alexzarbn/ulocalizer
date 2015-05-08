@@ -5,8 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.IO;
+using System.Windows.Markup;
 using Newtonsoft.Json;
 using ULocalizer.Classes;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace ULocalizer.Binding
 {
@@ -35,11 +38,11 @@ namespace ULocalizer.Binding
             set { _CurrentProject = value; RaiseStaticPropertyChanged("CurrentProject"); isProjectSetted = true; }
         }
 
-        private static bool _isNewProjectCreated = false;
-        public static bool isNewProjectCreated
+        private static XmlLanguage _XmlLang = null;
+        public static XmlLanguage XmlLang
         {
-            get { return _isNewProjectCreated; }
-            set { _isNewProjectCreated = value; RaiseStaticPropertyChanged("isNewProjectCreated"); }
+            get { return _XmlLang; }
+            set { _XmlLang = value; RaiseStaticPropertyChanged("XmlLang"); }
         }
 
         private static bool _isProjectSetted = false;
@@ -62,12 +65,6 @@ namespace ULocalizer.Binding
             await Task.Run(async () =>
             {
                 bool isSuccessful = true;
-                Common.ProcessText = "Loading...";
-                Common.ToggleProcess();
-                if (Common.OverlayVisibility == System.Windows.Visibility.Collapsed)
-                {
-                    Common.ToggleOverlay();
-                }
                 string Path = CUtils.ShowFileDialog(FileTypesFilter.ULocProject);
                 if (!string.IsNullOrWhiteSpace(Path))
                 {
@@ -76,43 +73,26 @@ namespace ULocalizer.Binding
                         string serializedProject = File.ReadAllText(Path);
                         CurrentProject = JsonConvert.DeserializeObject<CProject>(serializedProject);
                         CurrentProject.isChanged = false;
-                        Common.ToggleProcess();
-                        await CBuilder.BuildTranslations();
+                        await CBuilder.LoadTranslations(true);
                         CurrentProject.isTranslationsChanged = false;
                         Common.isAvailable = true;
-                        Common.SuccessText = "The project has been loaded";
-                        Common.ToggleSuccessText();
-                        await Task.Delay(2000);
-                        Common.ToggleSuccessText();
                     }
                     catch (IOException ex)
                     {
                         isSuccessful = false;
                         Common.WriteToConsole(ex.Message);
-                        Common.ErrorText = "Cannot open the project.";
-                        Common.ToggleErrorText();
                     }
                 }
                 else
                 {
-                    Common.ToggleProcess();
                     if (string.IsNullOrWhiteSpace(CurrentProject.Name))
                     {
                         isSuccessful = false;
                     }
                 }
-                if (isSuccessful)
+                if (!isSuccessful)
                 {
-                    Common.ToggleOverlay();
-                    if (Common.WorkspaceVisibility == System.Windows.Visibility.Collapsed)
-                    {
-                        Common.ToggleWorkspace();
-                    }
-                }
-                else
-                {
-                    Common.ToggleErrorText();
-                    Common.ToggleWelcomeMessage();
+                    await Common.ShowError("Could not open the project. See console for details.");
                 }
             });
         }

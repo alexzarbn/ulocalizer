@@ -20,6 +20,12 @@ namespace ULocalizer.Classes
         [Description("ULocalizer Project|*.ulp")]
         ULocProject = 2
     }
+
+    public enum ProjectPropertiesMode : byte
+    {
+        New = 0,
+        Exist = 1
+    }
     public static class CUtils
     {
         /// <summary>
@@ -31,7 +37,7 @@ namespace ULocalizer.Classes
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Filter = GetEnumDescription(pFilter);
-
+            
             Nullable<bool> result = dlg.ShowDialog();
 
             if (result == true)

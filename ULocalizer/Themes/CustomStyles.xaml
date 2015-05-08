@@ -1,0 +1,67 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="WindowButtonStyle" BasedOn="{StaticResource MetroWindowButtonStyle}"  TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="30"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="{StaticResource AccentColorBrush3}" />
+                <Setter Property="Foreground" 
+                        Value="White" />
+            </Trigger>
+            <Trigger Property="IsPressed"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="{StaticResource AccentColorBrush}" />
+                <Setter Property="Foreground" 
+                        Value="White" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="WindowCloseButtonStyle" BasedOn="{StaticResource MetroWindowButtonStyle}"  TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="30"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="#e04343" />
+                <Setter Property="Foreground" 
+                        Value="White" />
+            </Trigger>
+            <Trigger Property="IsPressed"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="#993d3d" />
+                <Setter Property="Foreground" 
+                        Value="White" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="ToolBarButtonStyle" BasedOn="{StaticResource WindowButtonStyle}" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="14"/>
+        <Setter Property="Foreground" Value="{StaticResource AccentColorBrush}"/>
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="Foreground" 
+                        Value="{StaticResource AccentColorBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="FormTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MetroTextBox}">
+        <Setter Property="Margin" Value="0,0,0,5" />
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="PaddingLabelStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource MetroLabel}">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="0,4"/>
+    </Style>
+    <DropShadowEffect x:Key="HorizontalShadow" Direction="-90" RenderingBias="Quality" ShadowDepth="2" BlurRadius="6" />
+    <DropShadowEffect x:Key="VerticalShadow" Direction="-135" RenderingBias="Quality" ShadowDepth="2" BlurRadius="4"/>
+</ResourceDictionary>

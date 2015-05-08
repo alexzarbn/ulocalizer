@@ -15,18 +15,13 @@ using System.Windows.Shapes;
 namespace ULocalizer.Windows
 {
     /// <summary>
-    /// Interaction logic for AboutWindow.xaml
+    /// Interaction logic for ConsoleWindow.xaml
     /// </summary>
-    public partial class AboutWindow : Window
+    public partial class ConsoleWindow
     {
-        public AboutWindow()
+        public ConsoleWindow()
         {
             InitializeComponent();
-        }
-
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
-        {
-            System.Diagnostics.Process.Start(e.Uri.ToString());
         }
     }
 }
