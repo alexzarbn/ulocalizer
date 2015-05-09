@@ -26,6 +26,15 @@ namespace ULocalizer.Classes
         New = 0,
         Exist = 1
     }
+
+    public enum TranslateMode : byte
+    {
+        Project = 0,
+        Language = 1,
+        Node = 2,
+        Words = 3
+    }
+
     public static class CUtils
     {
         /// <summary>

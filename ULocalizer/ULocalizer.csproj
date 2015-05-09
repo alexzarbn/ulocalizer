@@ -51,6 +51,10 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -82,15 +86,22 @@
     <Compile Include="Classes\CTranslation.cs" />
     <Compile Include="Classes\CTranslationNode.cs" />
     <Compile Include="Classes\CTranslationNodeItem.cs" />
+    <Compile Include="Classes\CTranslator.cs" />
     <Compile Include="Classes\CUtils.cs" />
     <Compile Include="Controls\LanguagePickerControl.xaml.cs">
       <DependentUpon>LanguagePickerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LanguagesComboBox.xaml.cs">
+      <DependentUpon>LanguagesComboBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LanguagesControl.xaml.cs">
       <DependentUpon>LanguagesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectPropertiesControl.xaml.cs">
       <DependentUpon>ProjectPropertiesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TranslateDirectionControl.xaml.cs">
+      <DependentUpon>TranslateDirectionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\CultureToFlagIconConverter.cs" />
     <Compile Include="Converters\SelectedTranslationToBooleanConverter.cs" />
@@ -107,7 +118,17 @@
     <Compile Include="Windows\NewProjectWindow.xaml.cs">
       <DependentUpon>NewProjectWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\TranslateOptionsWindow.xaml.cs">
+      <DependentUpon>TranslateOptionsWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\LanguagePickerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\LanguagesComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -116,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ProjectPropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TranslateDirectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -151,6 +176,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TranslateOptionsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -170,7 +203,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="LICENSE" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

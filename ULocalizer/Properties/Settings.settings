@@ -5,5 +5,8 @@
     <Setting Name="PathToEditor" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Program Files\Epic Games\4.7\Engine\Binaries\Win64\UE4Editor.exe</Value>
     </Setting>
+    <Setting Name="TranslateAPIKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

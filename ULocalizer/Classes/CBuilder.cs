@@ -24,7 +24,7 @@ namespace ULocalizer.Classes
         {
             await Task.Run(async () =>
             {
-                await Common.ShowProgress("Building...");
+                await Common.ShowProgressMessage("Building...");
                 bool isSuccessfull = true;
                 if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini")))
                 {
@@ -87,14 +87,14 @@ namespace ULocalizer.Classes
         }
 
         /// <summary>
-        /// Builds the languages tree (on the left side of app)
+        /// Builds the languages list (on the left side of app)
         /// </summary>
         /// <returns></returns>
         public static async Task LoadTranslations(bool closeProgressAfterExecution)
         {
             await Task.Run(async () =>
             {
-                await Common.ShowProgress("Loading translations...");
+                await Common.ShowProgressMessage("Loading translations...");
                 await Task.Delay(1000); //Getting exeption when trying to close the progress dialog without delay...
                 Projects.CurrentProject.Translations.Clear();
                 foreach (CultureInfo Lang in Projects.CurrentProject.Languages)

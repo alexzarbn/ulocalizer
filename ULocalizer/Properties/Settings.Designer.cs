@@ -34,5 +34,17 @@ namespace ULocalizer.Properties {
                 this["PathToEditor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TranslateAPIKey {
+            get {
+                return ((string)(this["TranslateAPIKey"]));
+            }
+            set {
+                this["TranslateAPIKey"] = value;
+            }
+        }
     }
 }

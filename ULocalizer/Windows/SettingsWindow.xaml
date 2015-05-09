@@ -1,0 +1,14 @@
+﻿<Controls:MetroWindow x:Class="ULocalizer.Windows.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:props="clr-namespace:ULocalizer.Properties"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls" ShowIconOnTitleBar="False"  WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"  GlowBrush="{StaticResource AccentColorBrush}" TitlebarHeight="26"
+        Title="Settings" Height="300" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Icon="/Images/properties.ico" NonActiveWindowTitleBrush="White" SizeToContent="Height">
+    <Controls:MetroWindow.Resources>
+        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource PaddingLabelStyle}"/>
+    </Controls:MetroWindow.Resources>
+    <StackPanel Margin="10">
+        <Label Content="Translate API Key"/>
+        <TextBox Text="{Binding TranslateAPIKey,Source={x:Static props:Settings.Default}}"/>
+    </StackPanel>
+</Controls:MetroWindow>

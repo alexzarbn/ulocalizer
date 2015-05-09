@@ -113,7 +113,7 @@ namespace ULocalizer.Classes
         {
             await Task.Run(async() =>
             {
-                await Common.ShowProgress("Saving translations...");
+                await Common.ShowProgressMessage("Saving translations...");
                 await Task.Delay(1000); //Getting exeption when trying to close the progress dialog without delay...
                 foreach (CTranslation TranslationInstance in this.Translations)
                 {

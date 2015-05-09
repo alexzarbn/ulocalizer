@@ -138,8 +138,8 @@ namespace ULocalizer.Windows
         {
             if ((e.AddedItems.Count>0) && (e.AddedItems[0].GetType().ToString() == "ULocalizer.Classes.CTranslation"))
             {
-                Common.SelectedLang = (CTranslation)e.AddedItems[0];
-                if (Common.SelectedLang.Nodes.Count > 0)
+                Common.SelectedTranslation = (CTranslation)e.AddedItems[0];
+                if (Common.SelectedTranslation.Nodes.Count > 0)
                 {
                     NodeSelectionBtn.SelectedIndex = 0;
                 }
@@ -169,6 +169,63 @@ namespace ULocalizer.Windows
             ConsoleWindow ConsoleWnd = new ConsoleWindow();
             ConsoleWnd.Owner = this;
             ConsoleWnd.Show();
+        }
+
+        private void SetToDefValBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Common.SelectedTranslationNodeItem != null)
+            {
+                try
+                {
+                    Common.SelectedTranslationNodeItem.Translation = Projects.CurrentProject.Translations.First(translation => translation.Language.Name == "en").Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.First(item => item.Source == Common.SelectedTranslationNodeItem.Source).Translation;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }    
+        }
+
+        private async void ShowTranslateOptionsWindow(TranslateMode Mode)
+        {
+            if (Common.TranslationCultures.Count > 1)
+            {
+                TranslateOptionsWindow TranslateOptionsWnd = new TranslateOptionsWindow();
+                TranslateOptionsWnd.Owner = this;
+                TranslateOptionsWnd.Mode = Mode;
+                TranslateOptionsWnd.ShowDialog();
+            }
+            else
+            {
+                await Common.ShowError("List of languages available for translation is empty");
+            }
+        }
+
+        private void TranslateEverythingBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ShowTranslateOptionsWindow(TranslateMode.Project);
+        }
+
+        private void TranslateSelectedWordsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ShowTranslateOptionsWindow(TranslateMode.Words);
+        }
+
+        private void TranslateSelectedNodeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ShowTranslateOptionsWindow(TranslateMode.Node);
+        }
+
+        private void TranslateSelectedLangBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ShowTranslateOptionsWindow(TranslateMode.Language);
+        }
+
+        private void SettingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow SettingsWnd = new SettingsWindow();
+            SettingsWnd.Owner = this;
+            SettingsWnd.ShowDialog();
         }
 
 

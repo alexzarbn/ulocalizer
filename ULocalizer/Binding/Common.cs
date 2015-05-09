@@ -40,6 +40,17 @@ namespace ULocalizer.Binding
             set { _Cultures = value; }
         }
 
+        /// <summary>
+        /// Available cultures for automatic translation
+        /// </summary>
+        private static CObservableList<CultureInfo> _TranslationCultures = new CObservableList<CultureInfo>();
+        public static CObservableList<CultureInfo> TranslationCultures
+        {
+            get { return _TranslationCultures; }
+            set { _TranslationCultures = value; }
+        }
+
+
         private static ProgressDialogController _ProgressController = null;
         public static ProgressDialogController ProgressController
         {
@@ -63,7 +74,7 @@ namespace ULocalizer.Binding
             await App.Current.Dispatcher.InvokeAsync(async () => ProgressController = await DialogManager.ShowProgressAsync(App.Current.MainWindow as MetroWindow, "Operation in progress", Message));
         }
 
-        public static async Task ShowProgress(string Message)
+        public static async Task ShowProgressMessage(string Message)
         {
             if (!Common.IsProgressShown())
             {
@@ -104,12 +115,20 @@ namespace ULocalizer.Binding
             set { _SelectedNode = value; RaiseStaticPropertyChanged("SelectedNode"); }
         }
 
-        private static CTranslation _SelectedLang = null;
-        public static CTranslation SelectedLang
+        private static CTranslation _SelectedTranslation = null;
+        public static CTranslation SelectedTranslation
         {
-            get { return _SelectedLang; }
-            set { _SelectedLang = value; RaiseStaticPropertyChanged("SelectedLang"); Projects.XmlLang = XmlLanguage.GetLanguage(SelectedLang.Language.Name); }
+            get { return _SelectedTranslation; }
+            set { _SelectedTranslation = value; RaiseStaticPropertyChanged("SelectedTranslation"); Projects.XmlLang = XmlLanguage.GetLanguage(SelectedTranslation.Language.Name); }
         }
+
+        private static CTranslationNodeItem _SelectedTranslationNodeItem = null;
+        public static CTranslationNodeItem SelectedTranslationNodeItem
+        {
+            get { return _SelectedTranslationNodeItem; }
+            set { _SelectedTranslationNodeItem = value; RaiseStaticPropertyChanged("SelectedTranslationNodeItem"); }
+        }
+
 
         /// <summary>
         /// Sets the encodings list
@@ -123,7 +142,7 @@ namespace ULocalizer.Binding
         /// <summary>
         /// Sets the cultures list
         /// </summary>
-        public static void SetCultures()
+        public static async void SetCultures()
         {
             Cultures.Clear(); //for sure...well, something can happend...it's programming, right ?
             Cultures.Add(CultureInfo.GetCultureInfo("de"));
@@ -139,6 +158,7 @@ namespace ULocalizer.Binding
             Cultures.Add(CultureInfo.GetCultureInfo("ru"));
             Cultures.Add(CultureInfo.GetCultureInfo("sv"));
             Cultures.Add(CultureInfo.GetCultureInfo("zh"));
+            await CTranslator.GetAvailableLanguages();
             foreach (CultureInfo CI in Cultures.ToList())
             {
                 AddRegions(CI.Name);

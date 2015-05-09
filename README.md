@@ -2,6 +2,10 @@
 
 License: MIT
 
+
+If you are not familiar with localization process in Unreal Engine 4, check out [documentation page](https://docs.unrealengine.com/latest/INT/Gameplay/Localization/index.html)
+Just for test create any blueprint and add FText variable(NSLOCTEXT for C++), save it and follow the steps below.
+
 Getting started
 ----------------------------------------
 + When the app is started, click on menu File -> New Project.
