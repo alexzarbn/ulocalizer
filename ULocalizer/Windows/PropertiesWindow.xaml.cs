@@ -11,17 +11,25 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ULocalizer.Binding;
+using ULocalizer.Classes;
 
 namespace ULocalizer.Windows
 {
     /// <summary>
-    /// Interaction logic for ConsoleWindow.xaml
+    /// Interaction logic for PropertiesWindow.xaml
     /// </summary>
-    public partial class ConsoleWindow
+    public partial class PropertiesWindow
     {
-        public ConsoleWindow()
+        public PropertiesWindow()
         {
             InitializeComponent();
+        }
+
+        private async void ProjectPropertiesControl_Executed(object sender, EventArgs e)
+        {
+            this.Close();
+            await CBuilder.Build();
         }
     }
 }
