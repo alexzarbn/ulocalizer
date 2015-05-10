@@ -23,4 +23,4 @@ Automatic translation usage
 + If you don't have an account there, first it will ask you to create such one, then you can access API key request.
 + Agree with terms and click "Get API key" and copy the presented key string.
 + Open ULocalizer, go to Settings (right corner of the app) and paste previously copied API key.
-+ That's it, you're ready to go! Open your project and choose what you would like to translate: whole project, selected language, selected node or selected items.
++ That's it, you're ready to go! Open your project and choose(buttons near build & show console) what you would like to translate: whole project, selected language, selected node or selected items.
