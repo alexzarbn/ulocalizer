@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Globalization;
-using RestSharp;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using RestSharp;
 using ULocalizer.Binding;
 using ULocalizer.Windows;
 

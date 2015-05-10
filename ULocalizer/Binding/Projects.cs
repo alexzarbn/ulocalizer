@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Markup;
 using Newtonsoft.Json;
 using ULocalizer.Classes;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace ULocalizer.Binding
 {

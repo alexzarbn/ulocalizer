@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using System.Diagnostics;
 using System.Globalization;
-using Newtonsoft.Json;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using ExtensionMethods;
 using Newtonsoft.Json.Linq;
 using ULocalizer.Binding;
-using ExtensionMethods;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace ULocalizer.Classes
 {

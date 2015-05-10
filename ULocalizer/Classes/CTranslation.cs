@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Globalization;
-using System.Windows.Markup;
-using ULocalizer.Binding;
+using System.Runtime.CompilerServices;
 
 namespace ULocalizer.Classes
 {
@@ -28,10 +22,6 @@ namespace ULocalizer.Classes
             get { return _Language; }
             set { _Language = value; NotifyPropertyChanged();  }
         }
-
-
-        
-
         /// <summary>
         /// Path to translation file (*.archive)
         /// </summary>
