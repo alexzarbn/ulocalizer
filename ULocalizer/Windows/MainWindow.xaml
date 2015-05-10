@@ -109,7 +109,7 @@
                 <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Left" Margin="16,2,0,0" Name="PropertiesBtn"  ToolTip="Properties" Click="PropertiesBtn_Click" DataContext="{Binding Path=(binding:Projects.CurrentProject)}">
                     <Button.IsEnabled>
                         <MultiBinding Converter="{StaticResource MultiValueConverter}" >
-                            <Binding Path="(binding:Common.isAvailable)"/>
+                            <!--<Binding Path="(binding:Common.isAvailable)"/>-->
                             <Binding Path="(binding:Projects.isProjectSetted)"/>
                         </MultiBinding>
                     </Button.IsEnabled>
@@ -163,7 +163,7 @@
                 <Button Style="{DynamicResource ToolBarButtonStyle}" Width="16" Margin="6,0,0,0" ToolTip="Build" Name="BuildBtn" Click="BuildBtn_Click" HorizontalAlignment="Left">
                     <Button.IsEnabled>
                         <MultiBinding Converter="{StaticResource MultiValueConverter}" >
-                            <Binding Path="(binding:Common.isAvailable)"/>
+                            <!--<Binding Path="(binding:Common.isAvailable)"/>-->
                             <Binding Path="(binding:Projects.isProjectSetted)"/>
                         </MultiBinding>
                     </Button.IsEnabled>
@@ -200,7 +200,7 @@
                 <DockPanel HorizontalAlignment="Left">
                     <DockPanel.IsEnabled>
                         <MultiBinding Converter="{StaticResource MultiValueConverter}" >
-                            <Binding Path="(binding:Common.isAvailable)"/>
+                            <!--<Binding Path="(binding:Common.isAvailable)"/>-->
                             <Binding Path="(binding:Projects.isProjectSetted)"/>
                         </MultiBinding>
                     </DockPanel.IsEnabled>

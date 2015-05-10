@@ -113,8 +113,7 @@ namespace ULocalizer.Classes
         {
             await Task.Run(async() =>
             {
-                await Common.ShowProgressMessage("Saving translations...");
-                await Task.Delay(1000); //Getting exeption when trying to close the progress dialog without delay...
+                await Common.ShowProgressMessage("Saving translations...",true);
                 foreach (CTranslation TranslationInstance in this.Translations)
                 {
                     if (File.Exists(TranslationInstance.Path))
@@ -150,7 +149,7 @@ namespace ULocalizer.Classes
                                         }
                                         else
                                         {
-                                            Common.WriteToConsole("[ERROR] K2Node is broken or not found in " + TranslationInstance.Path + " file.");
+                                            Common.WriteToConsole("K2Node is broken or not found in " + TranslationInstance.Path + " file.",MessageType.Error);
                                         }
                                     }
                                     if (SpriteCategoryNode != null)
@@ -164,13 +163,13 @@ namespace ULocalizer.Classes
                                         }
                                         else
                                         {
-                                            Common.WriteToConsole("[ERROR] Broken SpriteCategory node is broken or not found in " + TranslationInstance.Path + " file.");
+                                            Common.WriteToConsole("Broken SpriteCategory node is broken or not found in " + TranslationInstance.Path + " file.",MessageType.Error);
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    Common.WriteToConsole("[ERROR] Cannot write K2Node and SpriteCategory nodes to " + TranslationInstance.Path + " file due to broken Subnamespaces node.");
+                                    Common.WriteToConsole("Cannot write K2Node and SpriteCategory nodes to " + TranslationInstance.Path + " file due to broken Subnamespaces node.", MessageType.Error);
                                 }
                             }
                             File.WriteAllText(TranslationInstance.Path, JsonConvert.SerializeObject(DeserializedFile,Formatting.Indented));
@@ -178,12 +177,12 @@ namespace ULocalizer.Classes
                         }
                         catch (JsonException ex)
                         {
-                            Common.WriteToConsole("[ERROR] Something wrong with " + TranslationInstance.Path + " or you don't have access to read this file." + ex.Message);
+                            Common.WriteToConsole("Something wrong with " + TranslationInstance.Path + " or you don't have access to read this file." + ex.Message,MessageType.Error);
                         }
                     }
                     else
                     {
-                        Common.WriteToConsole("[ERROR] Translation file " + TranslationInstance.Path + " doesn't exist.");
+                        Common.WriteToConsole("Translation file " + TranslationInstance.Path + " doesn't exist.",MessageType.Error);
                     }
                 }
                 this.isTranslationsChanged = false;

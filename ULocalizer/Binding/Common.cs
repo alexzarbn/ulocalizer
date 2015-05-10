@@ -74,7 +74,7 @@ namespace ULocalizer.Binding
             await App.Current.Dispatcher.InvokeAsync(async () => ProgressController = await DialogManager.ShowProgressAsync(App.Current.MainWindow as MetroWindow, "Operation in progress", Message));
         }
 
-        public static async Task ShowProgressMessage(string Message)
+        public static async Task ShowProgressMessage(string Message,bool useDelay)
         {
             if (!Common.IsProgressShown())
             {
@@ -83,6 +83,10 @@ namespace ULocalizer.Binding
             else
             {
                 Common.ProgressController.SetMessage(Message);
+            }
+            if (useDelay)
+            {
+                await Task.Delay(1000);
             }
         }
 
@@ -98,15 +102,15 @@ namespace ULocalizer.Binding
             set { _ConsoleData = value; RaiseStaticPropertyChanged("ConsoleData"); }
         }
 
-        private static bool _isAvailable = true;
+        //private static bool _isAvailable = true;
         /// <summary>
         /// Gets of sets the value of app activity
         /// </summary>
-        public static bool isAvailable
-        {
-            get { return _isAvailable; }
-            set { _isAvailable = value; RaiseStaticPropertyChanged("isAvailable"); }
-        }
+        //public static bool isAvailable
+        //{
+        //    get { return _isAvailable; }
+        //    set { _isAvailable = value; RaiseStaticPropertyChanged("isAvailable"); }
+        //}
 
         private static CTranslationNode _SelectedNode = null;
         public static CTranslationNode SelectedNode
@@ -144,7 +148,7 @@ namespace ULocalizer.Binding
         /// </summary>
         public static async void SetCultures()
         {
-            Cultures.Clear(); //for sure...well, something can happend...it's programming, right ?
+            Cultures.Clear(); //for sure...well, something can happend...it's programming, right ? x)
             Cultures.Add(CultureInfo.GetCultureInfo("de"));
             Cultures.Add(CultureInfo.GetCultureInfo("en"));
             Cultures.Add(CultureInfo.GetCultureInfo("es"));
@@ -179,9 +183,30 @@ namespace ULocalizer.Binding
         /// Writes text to console
         /// </summary>
         /// <param name="Text">Text for writing</param>
-        public static void WriteToConsole(string Text)
+        public static void WriteToConsole(string Text,MessageType messageType)
         {
-            ConsoleData += Text + Environment.NewLine;
+            string Prefix = string.Empty;
+            switch (messageType)
+            {
+                case MessageType.Blank:
+                    break;
+                case MessageType.Info:
+                    Prefix = "[Info]";
+                    break;
+                case MessageType.Warning:
+                    Prefix = "[Warning]";
+                    break;
+                case MessageType.Error:
+                    Prefix = "[Error]";
+                    break;
+                default:
+                    break;
+            }
+            if (messageType == MessageType.Info || messageType == MessageType.Warning || messageType == MessageType.Error)
+            {
+                Prefix += "[" + DateTime.Now.ToString() + "]: ";
+            }
+            ConsoleData += Prefix + Text + Environment.NewLine;
         }
     }
 }

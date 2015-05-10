@@ -20,7 +20,7 @@ namespace ULocalizer.Classes
         {
             if (string.IsNullOrWhiteSpace(Properties.Settings.Default.TranslateAPIKey))
             {
-                Common.WriteToConsole("Translate API key is not presented.");
+                Common.WriteToConsole("Translate API key is not presented.",MessageType.Warning);
                 return;
             }
             RestRequest Request = new RestRequest("getLangs", Method.GET);
@@ -33,7 +33,7 @@ namespace ULocalizer.Classes
             }
             catch (Exception ex)
             {
-                Common.WriteToConsole(ex.Message);
+                Common.WriteToConsole(ex.Message,MessageType.Error);
             }
             if ((Response!=null)  && (Response.ResponseStatus == ResponseStatus.Completed))
             {
@@ -46,14 +46,13 @@ namespace ULocalizer.Classes
                        Common.TranslationCultures.Add(CI);
                    }
                 }
-                Common.WriteToConsole("List of languages available for translation has been loaded.");
+                Common.WriteToConsole("List of languages available for translation has been loaded.",MessageType.Info);
             }
         }
 
         public static async Task TranslateProject(CultureInfo From)
         {
-            await Common.ShowProgressMessage("Translating the whole project...");
-            await Task.Delay(1000);
+            await Common.ShowProgressMessage("Translating the whole project...",true);
             foreach (CTranslation Translation in Projects.CurrentProject.Translations)
             {
                 if (Translation.Language.Name == From.Name)
@@ -67,8 +66,7 @@ namespace ULocalizer.Classes
 
         public static async Task TranslateLanguage(CTranslation SourceTranslation, CultureInfo From, CultureInfo To,bool closeProgress = false)
         {
-            await Common.ShowProgressMessage("Translating "+SourceTranslation.Language.DisplayName+" language...");
-            await Task.Delay(1000);
+            await Common.ShowProgressMessage("Translating "+SourceTranslation.Language.DisplayName+" language...",true);
             foreach (CTranslationNode Node in SourceTranslation.Nodes)
             {
                 Node.Items = await TranslateNode(Node.Title,Node.Items, From, To);
@@ -81,7 +79,7 @@ namespace ULocalizer.Classes
 
         public static async Task<CObservableList<CTranslationNode>> TranslateLanguage(string Language,CObservableList<CTranslationNode> SourceNodes, CultureInfo From, CultureInfo To)
         {
-            await Common.ShowProgressMessage("Translating " + Language + " language...");
+            await Common.ShowProgressMessage("Translating " + Language + " language...",false);
             foreach (CTranslationNode Node in SourceNodes)
             {
                 Node.Items = await TranslateNode(Node.Title,Node.Items, From, To);
@@ -91,8 +89,7 @@ namespace ULocalizer.Classes
 
         public static async Task TranslateNode(CTranslationNode SourceNode, CultureInfo From, CultureInfo To,bool closeProgress = false)
         {
-            await Common.ShowProgressMessage("Translating " + SourceNode.Title + " node...");
-            await Task.Delay(1000);
+            await Common.ShowProgressMessage("Translating " + SourceNode.Title + " node...",true);
             SourceNode.Items = await TranslateNodeItems(SourceNode.Items, From, To);
             if (closeProgress)
             {
@@ -102,19 +99,18 @@ namespace ULocalizer.Classes
 
         public static async Task<CObservableList<CTranslationNodeItem>> TranslateNode(string Title,CObservableList<CTranslationNodeItem> SourceNodeItems, CultureInfo From, CultureInfo To)
         {
-            await Common.ShowProgressMessage("Translating " + Title + " node...");
+            await Common.ShowProgressMessage("Translating " + Title + " node...",false);
             return await TranslateNodeItems(SourceNodeItems, From, To);
         }
 
         public static async Task TranslateList(CultureInfo From,CultureInfo To)
         {
-            await Common.ShowProgressMessage("Translating selected items...");
-            await Task.Delay(1000);
+            await Common.ShowProgressMessage("Translating selected items...",true);
             foreach (CTranslationNodeItem Item in (App.Current.MainWindow as MainWindow).NodeItemsDataGrid.SelectedItems)
             {
                 Item.Translation = await CTranslator.TranslateText(Item.Translation, From, To);
             }
-            await Common.ShowProgressMessage("Selected items have been translated");
+            await Common.ShowProgressMessage("Selected items have been translated",false);
             await Common.ProgressController.CloseAsync();
         }
 
@@ -123,7 +119,7 @@ namespace ULocalizer.Classes
         {
             if (string.IsNullOrWhiteSpace(Properties.Settings.Default.TranslateAPIKey))
             {
-                Common.WriteToConsole("Translate API key is not presented.");
+                Common.WriteToConsole("Translate API key is not presented.",MessageType.Error);
                 return SourceText;
             }
             RestRequest Request = new RestRequest("translate", Method.GET);
@@ -161,10 +157,10 @@ namespace ULocalizer.Classes
 
         public static async Task<string> TranslateText(string SourceText, CultureInfo From, CultureInfo To)
         {
-            await Common.ShowProgressMessage("Translating " + SourceText);
+            await Common.ShowProgressMessage("Translating " + SourceText,false);
             if (string.IsNullOrWhiteSpace(Properties.Settings.Default.TranslateAPIKey))
             {
-                Common.WriteToConsole("Translate API key is not presented.");
+                Common.WriteToConsole("Translate API key is not presented.",MessageType.Error);
                 return SourceText;
             }
             RestRequest Request = new RestRequest("translate", Method.GET);
@@ -178,7 +174,7 @@ namespace ULocalizer.Classes
             }
             catch (Exception ex)
             {
-                Common.WriteToConsole(ex.Message);
+                Common.WriteToConsole(ex.Message,MessageType.Error);
             }
             if ((Response!=null) && (Response.ResponseStatus == ResponseStatus.Completed))
             {

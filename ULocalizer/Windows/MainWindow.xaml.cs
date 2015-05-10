@@ -73,7 +73,7 @@ namespace ULocalizer.Windows
 
         private async void BuildBtn_Click(object sender, RoutedEventArgs e)
         {
-            await CBuilder.Build(false);
+            await CBuilder.Build(true,false);
         }
 
 
@@ -85,7 +85,7 @@ namespace ULocalizer.Windows
             }
             else
             {
-                Common.WriteToConsole("[ERROR] Cannot locate default localization config file.");
+                Common.WriteToConsole("Cannot locate default localization config file.",MessageType.Error);
             }
         }
 

@@ -75,12 +75,12 @@ namespace ULocalizer.Binding
                         CurrentProject.isChanged = false;
                         await CBuilder.LoadTranslations(true);
                         CurrentProject.isTranslationsChanged = false;
-                        Common.isAvailable = true;
+                        //Common.isAvailable = true;
                     }
                     catch (IOException ex)
                     {
                         isSuccessful = false;
-                        Common.WriteToConsole(ex.Message);
+                        Common.WriteToConsole(ex.Message,MessageType.Error);
                     }
                 }
                 else

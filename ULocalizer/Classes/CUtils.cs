@@ -35,6 +35,14 @@ namespace ULocalizer.Classes
         Words = 3
     }
 
+    public enum MessageType : byte
+    {
+        Blank = 0,
+        Info = 1,
+        Warning = 2,
+        Error = 3
+    }
+
     public static class CUtils
     {
         /// <summary>

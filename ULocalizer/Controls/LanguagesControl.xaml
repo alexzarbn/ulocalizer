@@ -14,11 +14,11 @@
             <ColumnDefinition Width="42"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <UControls:LanguagePickerControl x:Name="SourceLanguagePicker" Title="Localizable languages:" Items="{Binding Source={x:Static binding:Common.Cultures}}"/>
-        <StackPanel VerticalAlignment="Center" Grid.Column="1">
+        <UControls:LanguagePickerControl x:Name="SourceLanguagePicker" Title="Localizable languages:" Items="{Binding Source={x:Static binding:Common.Cultures}}" VerticalAlignment="Center"/>
+        <StackPanel VerticalAlignment="Center" Grid.Column="1" Margin="0,18,0,0">
             <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24" ToolTip="Add all"  Name="AddAllLangBtn" Click="AddAllLangBtn_Click" Margin="4">
                 <DockPanel>
-                    <Rectangle Width="24" Height="24" Margin="-2,0,0,0"
+                    <Rectangle Width="24" Height="24" 
                    Fill="{StaticResource IdealForegroundColorBrush}">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill">
@@ -47,7 +47,6 @@
                 </Rectangle>
             </Button>
             <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24" ToolTip="Remove language"  Name="DelLangBtn" Click="DelLangBtn_Click" Margin="4">
-                
                 <Rectangle Width="24" Height="24" 
                    Fill="{StaticResource IdealForegroundColorBrush}">
                     <Rectangle.OpacityMask>
@@ -61,7 +60,23 @@
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
+            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24" ToolTip="Remove all"  Name="RemoveAllLangBtn" Click="RemoveAllLangBtn_Click" Margin="4">
+                <DockPanel>
+                    <Rectangle Width="24" Height="24" 
+                   Fill="{StaticResource IdealForegroundColorBrush}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill">
+                                <VisualBrush.Visual>
+                                    <Canvas Width="24" Height="24">
+                                        <Path Data="M18.41,7.41L17,6L11,12L17,18L18.41,16.59L13.83,12L18.41,7.41M12.41,7.41L11,6L5,12L11,18L12.41,16.59L7.83,12L12.41,7.41Z" Fill="Black" />
+                                    </Canvas>
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </DockPanel>
+            </Button>
         </StackPanel>
-        <UControls:LanguagePickerControl x:Name="DestinationLanguagePicker" Grid.Column="2" Title="Selected languages:" Items="{Binding ElementName=UCLanguages,Path=DestinationSource}"/>
+        <UControls:LanguagePickerControl x:Name="DestinationLanguagePicker" Grid.Column="2" Title="Selected languages:" Items="{Binding ElementName=UCLanguages,Path=DestinationSource}" VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

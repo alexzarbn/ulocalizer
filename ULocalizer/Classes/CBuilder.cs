@@ -20,12 +20,15 @@ namespace ULocalizer.Classes
         /// Build the localization packages
         /// </summary>
         /// <returns></returns>
-        public static async Task Build(bool reloadTranslations)
+        public static async Task Build(bool saveTranslations,bool reloadTranslations)
         {
             await Task.Run(async () =>
             {
-                await Projects.CurrentProject.SaveTranslations(reloadTranslations);
-                await Common.ShowProgressMessage("Building...");
+                if (saveTranslations)
+                {
+                    await Projects.CurrentProject.SaveTranslations(reloadTranslations);
+                }
+                await Common.ShowProgressMessage("Building...",false);
                 bool isSuccessfull = true;
                 if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini")))
                 {
@@ -53,12 +56,12 @@ namespace ULocalizer.Classes
                         BuilderProcess.Start();
                         while (!BuilderProcess.StandardOutput.EndOfStream)
                         {
-                            Common.ConsoleData += BuilderProcess.StandardOutput.ReadLine() + Environment.NewLine;
+                            Common.WriteToConsole(BuilderProcess.StandardOutput.ReadLine(), MessageType.Blank);
                         }
                         while (!BuilderProcess.StandardError.EndOfStream)
                         {
                             isSuccessfull = false;
-                            Common.ConsoleData += BuilderProcess.StandardError.ReadLine() + Environment.NewLine;
+                            Common.WriteToConsole(BuilderProcess.StandardError.ReadLine(), MessageType.Blank);
                         }
                         BuilderProcess.WaitForExit();
                         if (isSuccessfull && reloadTranslations)
@@ -69,15 +72,15 @@ namespace ULocalizer.Classes
                     catch (Exception ex)
                     {
                         isSuccessfull = false;
-                        Common.WriteToConsole(ex.Message);
+                        Common.WriteToConsole(ex.Message,MessageType.Error);
                     }
                 }
                 else
                 {
-                    Common.WriteToConsole("[ERROR] Default localization config doesn't exist.");
+                    Common.WriteToConsole("Default localization config doesn't exist.",MessageType.Error);
                     isSuccessfull = false;
                 }
-                Common.isAvailable = true;
+                //Common.isAvailable = true;
                 if (!isSuccessfull)
                 {
                     await Common.ShowError("Build error. See console for details.");
@@ -95,8 +98,7 @@ namespace ULocalizer.Classes
         {
             await Task.Run(async () =>
             {
-                await Common.ShowProgressMessage("Loading translations...");
-                await Task.Delay(1000); //Getting exeption when trying to close the progress dialog without delay...
+                await Common.ShowProgressMessage("Loading translations...",true);
                 Projects.CurrentProject.Translations.Clear();
                 foreach (CultureInfo Lang in Projects.CurrentProject.Languages)
                 {
@@ -152,24 +154,26 @@ namespace ULocalizer.Classes
                                 }
                                 else
                                 {
-                                    Common.WriteToConsole("Something wrong with translation file. Please, run repair using Tools->Repair.");
+                                    Common.WriteToConsole("Something wrong with translation file. Please, run repair using Tools->Repair.",MessageType.Error);
                                 }
                             }
                             else
                             {
-                                Common.WriteToConsole("[ERROR] Translation file for " + Lang.DisplayName + " language doesn't exist.");
+                                Common.WriteToConsole("Translation file for " + Lang.DisplayName + " language doesn't exist.",MessageType.Error);
                             }
                         }
                         catch (Exception ex)
                         {
-                            Common.WriteToConsole(ex.Message);
+                            Common.WriteToConsole(ex.Message,MessageType.Error);
                         }
                     }
                     else
                     {
-                        Common.WriteToConsole("[ERROR] Folder for " + Lang.DisplayName + " language doesn't exist.");
+                        Common.WriteToConsole("Folder for " + Lang.DisplayName + " language doesn't exist.",MessageType.Error);
                     }
                 }
+                await Common.ShowProgressMessage("Sorting...",true);
+                Projects.CurrentProject.Translations = Projects.CurrentProject.Translations.OrderBy(translation => translation.Language.Name).ToObservableList();
                 Projects.CurrentProject.isTranslationsChanged = false;
                 if (closeProgressAfterExecution)
                 {

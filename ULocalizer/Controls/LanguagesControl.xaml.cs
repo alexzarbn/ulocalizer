@@ -62,7 +62,7 @@ namespace ULocalizer.Controls
 
         private void AddLangBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (!WorkingProject.Languages.Contains(SourceLanguagePicker.SelectedLanguage))
+            if ((SourceLanguagePicker.SelectedLanguage!=null) && (!WorkingProject.Languages.Contains(SourceLanguagePicker.SelectedLanguage)))
             {
                 WorkingProject.Languages.Add(SourceLanguagePicker.SelectedLanguage);
                 WorkingProject.Languages = WorkingProject.Languages.OrderBy(culture => culture.Name).ToObservableList();
@@ -71,7 +71,7 @@ namespace ULocalizer.Controls
 
         private void DelLangBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (DestinationLanguagePicker.SelectedLanguage != null && DestinationLanguagePicker.Items.Count>1)
+            if (DestinationLanguagePicker.SelectedLanguage != null && DestinationLanguagePicker.Items.Count>1 && DestinationLanguagePicker.SelectedLanguage.Name!="en")
             {
                 WorkingProject.Languages.Remove(DestinationLanguagePicker.SelectedLanguage);
             }
@@ -87,6 +87,17 @@ namespace ULocalizer.Controls
                 }
             }
             WorkingProject.Languages = WorkingProject.Languages.OrderBy(culture => culture.Name).ToObservableList();
+        }
+
+        private void RemoveAllLangBtn_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (CultureInfo CI in DestinationLanguagePicker.Items.ToList())
+            {
+                if ((CI.Name != "en") && (WorkingProject.Languages.Contains(CI)))
+                {
+                    WorkingProject.Languages.Remove(CI);
+                }
+            }
         }
     }
 }
