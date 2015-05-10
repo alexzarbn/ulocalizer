@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:w="clr-namespace:ULocalizer"
         xmlns:binding="clr-namespace:ULocalizer.Binding"
         xmlns:converters="clr-namespace:ULocalizer.Converters" 
         xmlns:classes="clr-namespace:ULocalizer.Classes" ShowIconOnTitleBar="False"  WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}" WindowMaxButtonStyle="{StaticResource WindowButtonStyle}" WindowMinButtonStyle="{StaticResource WindowButtonStyle}" EnableDWMDropShadow="True"

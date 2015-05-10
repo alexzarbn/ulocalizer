@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Data;
-
 namespace ULocalizer.Converters
 {
     /// <summary>

@@ -23,14 +23,12 @@ namespace ULocalizer.Classes
             get { return _IconPath; }
             set { _IconPath = value; NotifyPropertyChanged(); }
         }
-
         private string _Title = string.Empty;
         public string Title
         {
             get { return _Title; }
             set { _Title = value; NotifyPropertyChanged(); }
         }
-
         /// <summary>
         /// List of items to translate
         /// </summary>
@@ -40,11 +38,9 @@ namespace ULocalizer.Classes
             get { return _Items; }
             set { _Items = value; NotifyPropertyChanged(); }
         }
-
         public override string ToString()
         {
             return this.Title;
         }
-
     }
 }

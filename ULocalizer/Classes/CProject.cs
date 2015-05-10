@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ULocalizer.Binding;
-
 namespace ULocalizer.Classes
 {
     /// <summary>
@@ -33,49 +32,42 @@ namespace ULocalizer.Classes
             get { return _PathToEditor; }
             set { _PathToEditor = value; NotifyPropertyChanged(); isChanged = true; }
         }
-
         private string _PathToProjectFile = string.Empty;
         public string PathToProjectFile
         {
             get { return _PathToProjectFile; }
             set { _PathToProjectFile = value; NotifyPropertyChanged(); isChanged = true; }
         }
-
         private string _Name = string.Empty;
         public string Name
         {
             get { return _Name; }
             set { _Name = value; NotifyPropertyChanged(); isChanged = true; }
         }
-
         private EncodingInfo _Encoding = Binding.Common.Encodings.Find(e=> e.Name=="utf-8");
         public EncodingInfo Encoding
         {
             get { return _Encoding; }
             set { _Encoding = value; NotifyPropertyChanged(); isChanged = true; }
         }
-
         private CObservableList<CultureInfo> _Languages = new CObservableList<CultureInfo>();
         public CObservableList<CultureInfo> Languages
         {
             get { return _Languages; }
             set { _Languages = value; NotifyPropertyChanged(); isChanged = true; }
         }
-
         private string _SourcePath = "./Content/Localization/Game";
         public string SourcePath
         {
             get { return _SourcePath; }
             set { _SourcePath = value; NotifyPropertyChanged(); isChanged = true; }
         }
-
         private string _DestinationPath = "./Content/Localization/Game";
         public string DestinationPath
         {
             get { return _DestinationPath; }
             set { _DestinationPath = value; NotifyPropertyChanged(); isChanged = true; }
         }
-
         private CObservableList<CTranslation> _Translations = new CObservableList<CTranslation>();
         [JsonIgnore]
         public CObservableList<CTranslation> Translations
@@ -83,7 +75,6 @@ namespace ULocalizer.Classes
             get { return _Translations; }
             set { _Translations = value; NotifyPropertyChanged(); isTranslationsChanged = true; }
         }
-
         private bool _isChanged = false;
         [JsonIgnore]
         public bool isChanged
@@ -91,7 +82,6 @@ namespace ULocalizer.Classes
             get { return _isChanged; }
             set { _isChanged = value; NotifyPropertyChanged(); }
         }
-
         private bool _isTranslationsChanged = false;
         [JsonIgnore]
         public bool isTranslationsChanged
@@ -99,14 +89,11 @@ namespace ULocalizer.Classes
             get { return _isTranslationsChanged; }
             set { _isTranslationsChanged = value; NotifyPropertyChanged(); }
         }
-
-
         public async Task Save()
         {
             string serializedProject = JsonConvert.SerializeObject(this);
             await CUtils.SaveContentToFile(Path.Combine(Path.GetDirectoryName(this.PathToProjectFile),this.Name + ".ulp"), serializedProject, this.Encoding.GetEncoding());
         }
-
         public async Task SaveTranslations(bool clearTranslations,bool closeProgressAfterExecution = false)
         {
             await Task.Run(async() =>
@@ -195,7 +182,6 @@ namespace ULocalizer.Classes
                 }
             });
         }
-
         private List<JObject> MakeChildList(CObservableList<CTranslationNodeItem> Items)
         {
             List<JObject> ChildItems = new List<JObject>();
@@ -205,13 +191,10 @@ namespace ULocalizer.Classes
                 JObject newVarsJObject = new JObject();
                 JObject SourceTextNode = new JObject();
                 JObject TranslationTextNode = new JObject();
-
                 SourceTextNode.Add("Text", Item.Source);
                 newVarsJObject.Add("Source", SourceTextNode);
-
                 TranslationTextNode.Add("Text",Item.Translation);
                 newVarsJObject.Add("Translation", TranslationTextNode);
-
                 ChildItems.Add(newVarsJObject);
             }
             return ChildItems;
@@ -220,10 +203,8 @@ namespace ULocalizer.Classes
         {
             return Path.GetDirectoryName(this.PathToProjectFile);
         }
-
         public CProject()
         {
         }
-
     }
 }

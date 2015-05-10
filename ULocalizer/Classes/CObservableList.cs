@@ -4,15 +4,14 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Threading;
-
 namespace ULocalizer.Classes
 {
+    [Serializable]
     public class CObservableList<T> : ObservableCollection<T>
     {
         private Dispatcher dispatcher;
         public override event NotifyCollectionChangedEventHandler CollectionChanged;
         #region Constructors
-
         public CObservableList(Dispatcher dispatcher = null)
         {
             this.dispatcher = dispatcher ??
@@ -20,7 +19,6 @@ namespace ULocalizer.Classes
                                    ? Application.Current.Dispatcher
                                    : Dispatcher.CurrentDispatcher);
         }
-
         public CObservableList(IEnumerable<T> collection, Dispatcher dispatcher = null)
             : base(collection)
         {
@@ -29,7 +27,6 @@ namespace ULocalizer.Classes
                                    ? Application.Current.Dispatcher
                                    : Dispatcher.CurrentDispatcher);
         }
-
         public CObservableList(List<T> list, Dispatcher dispatcher = null)
             : base(list)
         {
@@ -38,9 +35,7 @@ namespace ULocalizer.Classes
                                    ? Application.Current.Dispatcher
                                    : Dispatcher.CurrentDispatcher);
         }
-
         #endregion
-
         protected override async void ClearItems()
         {
             if (dispatcher.CheckAccess())
@@ -52,7 +47,6 @@ namespace ULocalizer.Classes
                 await dispatcher.InvokeAsync(new Action(ClearItems));
             }
         }
-
         protected override async void RemoveItem(int index)
         {
             if (dispatcher.CheckAccess())
@@ -64,7 +58,6 @@ namespace ULocalizer.Classes
                 await dispatcher.InvokeAsync(new Action(() => RemoveItem(index)));
             }
         }
-
         protected override async void InsertItem(int index, T item)
         {
             if (dispatcher.CheckAccess())
@@ -76,7 +69,6 @@ namespace ULocalizer.Classes
                 await dispatcher.InvokeAsync(new Action(() => InsertItem(index, item)),DispatcherPriority.Background);
             }
         }
-
         protected override async void SetItem(int index, T item)
         {
             if (dispatcher.CheckAccess())
@@ -88,7 +80,6 @@ namespace ULocalizer.Classes
                 await dispatcher.InvokeAsync(new Action(() => SetItem(index, item)));
             }
         }
-
         protected override async void MoveItem(int oldIndex, int newIndex)
         {
             if (dispatcher.CheckAccess())
@@ -100,7 +91,6 @@ namespace ULocalizer.Classes
                 await dispatcher.InvokeAsync(new Action(() => MoveItem(oldIndex, newIndex)));
             }
         }
-
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             // Be nice - use BlockReentrancy like MSDN said

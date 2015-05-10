@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using ULocalizer.Binding;
 using ULocalizer.Classes;
-
 namespace ULocalizer.Controls
 {
     /// <summary>
@@ -21,34 +20,27 @@ namespace ULocalizer.Controls
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
         public ProjectPropertiesMode Mode
         {
             get { return (ProjectPropertiesMode)GetValue(ModeProperty); }
             set { SetValue(ModeProperty, value); NotifyPropertyChanged(); }
         }
-
         public static readonly DependencyProperty ModeProperty =
             DependencyProperty.Register("Mode", typeof(ProjectPropertiesMode), typeof(ProjectPropertiesControl), new PropertyMetadata(ProjectPropertiesMode.New));
-
         public event EventHandler Executed;
-
         public ProjectPropertiesControl()
         {
             InitializeComponent();
         }
-
         private void SetPathToEditorBtn_Click(object sender, RoutedEventArgs e)
         {
             ((CProject)this.DataContext).PathToEditor = CUtils.ShowFileDialog(FileTypesFilter.Executable);
         }
-
         private void SetPathToProjectFileBtn_Click(object sender, RoutedEventArgs e)
         {
             ((CProject)this.DataContext).PathToProjectFile = CUtils.ShowFileDialog(FileTypesFilter.UProject);
             ((CProject)this.DataContext).Name = System.IO.Path.GetFileNameWithoutExtension(((CProject)this.DataContext).PathToProjectFile);
         }
-
         private async void ActionBtn_Click(object sender, RoutedEventArgs e)
         {
             if (
@@ -79,7 +71,6 @@ namespace ULocalizer.Controls
                 Executed(this, EventArgs.Empty);
             }
         }
-
         private void UCProjectProperties_Loaded(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.PathToEditor))
@@ -91,7 +82,6 @@ namespace ULocalizer.Controls
                 ActionBtn.Content = "Save";
             }
         }
-
         
     }
 }

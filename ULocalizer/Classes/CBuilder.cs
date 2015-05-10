@@ -84,9 +84,7 @@ namespace ULocalizer.Classes
                 }
                 await Common.ProgressController.CloseAsync();
             });
-
         }
-
         /// <summary>
         /// Builds the languages list (on the left side of app)
         /// </summary>
@@ -140,11 +138,9 @@ namespace ULocalizer.Classes
                                                 CTranslationNodeItem Item = new CTranslationNodeItem();
                                                 Item.Source = Val.Value<JToken>("Source").Value<string>("Text");
                                                 Item.Translation = Val.Value<JToken>("Translation").Value<string>("Text");
-
                                                 SubnamespacesNode.Items.Add(Item);
                                             }
                                             TranslationInstance.Nodes.Add(SubnamespacesNode);
-
                                         }
                                     }
                                     Projects.CurrentProject.Translations.Add(TranslationInstance);

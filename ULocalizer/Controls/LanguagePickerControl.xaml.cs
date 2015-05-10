@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using ULocalizer.Classes;
-
 namespace ULocalizer.Controls
 {
     /// <summary>
@@ -21,14 +20,12 @@ namespace ULocalizer.Controls
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
         private CultureInfo _SelectedLanguage = null;
         public CultureInfo SelectedLanguage
         {
             get { return _SelectedLanguage; }
             set { _SelectedLanguage = value; NotifyPropertyChanged(); }
         }
-
         public string Title
         {
             get { return (string)this.GetValue(TitleProperty); }
@@ -36,7 +33,6 @@ namespace ULocalizer.Controls
         }
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
           "Title", typeof(string), typeof(LanguagePickerControl), new PropertyMetadata(string.Empty));
-
         public CObservableList<CultureInfo> Items
         {
             get { return (CObservableList<CultureInfo>)this.GetValue(ItemsProperty); }
@@ -44,7 +40,6 @@ namespace ULocalizer.Controls
         }
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(
           "Items", typeof(CObservableList<CultureInfo>), typeof(LanguagePickerControl), new PropertyMetadata(new CObservableList<CultureInfo>()));
-
         public LanguagePickerControl()
         {
             InitializeComponent();

@@ -15,7 +15,6 @@ namespace ULocalizer.Classes
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
         private CultureInfo _Language = null;
         public CultureInfo Language
         {
@@ -31,20 +30,16 @@ namespace ULocalizer.Classes
             get { return _Path; }
             set { _Path = value; NotifyPropertyChanged(); }
         }
-
         public string IconPath
         {
             get { return "/Images/flags/" + this.Language.Name + ".png"; }
         }
-
-
         private CObservableList<CTranslationNode> _Nodes = new CObservableList<CTranslationNode>();
         public CObservableList<CTranslationNode> Nodes
         {
             get { return _Nodes; }
             set { _Nodes = value; NotifyPropertyChanged(); this.isChanged = true; }
         }
-
         private bool _isChanged = false;
         public bool isChanged
         {

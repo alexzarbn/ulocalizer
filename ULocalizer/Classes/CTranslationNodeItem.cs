@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ULocalizer.Binding;
-
 namespace ULocalizer.Classes
 {
     /// <summary>
@@ -18,7 +17,6 @@ namespace ULocalizer.Classes
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
         /// <summary>
         /// Source text
         /// </summary>
@@ -28,7 +26,6 @@ namespace ULocalizer.Classes
             get { return _Source; }
             set { _Source = value; NotifyPropertyChanged(); }
         }
-
         /// <summary>
         /// Translated text
         /// </summary>
@@ -38,6 +35,5 @@ namespace ULocalizer.Classes
             get { return _Translation; }
             set { _Translation = value; NotifyPropertyChanged(); Projects.CurrentProject.isTranslationsChanged = true;  }
         }
-
     }
 }
