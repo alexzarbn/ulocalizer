@@ -53,7 +53,7 @@
                 <RowDefinition Height="1"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <DockPanel Grid.Row="0" Margin="0,-8,0,0">
+            <DockPanel Grid.Row="0" Margin="0,-8,0,0" HorizontalAlignment="Stretch">
                 <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Left" Margin="16,0,0,0" Name="NewProjectBtn" Click="NewProjectBtn_Click" ToolTip="New Project">
                     <Rectangle Width="14" Height="16"
                    Fill="{StaticResource IdealForegroundColorBrush}">

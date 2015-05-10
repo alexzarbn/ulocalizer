@@ -172,6 +172,7 @@ namespace ULocalizer.Classes
                                     Common.WriteToConsole("Cannot write K2Node and SpriteCategory nodes to " + TranslationInstance.Path + " file due to broken Subnamespaces node.", MessageType.Error);
                                 }
                             }
+                            await Task.Delay(100);
                             File.WriteAllText(TranslationInstance.Path, JsonConvert.SerializeObject(DeserializedFile,Formatting.Indented));
                             
                         }
