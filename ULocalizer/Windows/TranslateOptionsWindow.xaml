@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
        xmlns:UControls="clr-namespace:ULocalizer.Controls"
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls" ShowIconOnTitleBar="False"  WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"  GlowBrush="{StaticResource AccentColorBrush}" TitlebarHeight="26"
-        Title="Translate options" Height="300" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Icon="/Images/properties.ico" NonActiveWindowTitleBrush="White" SizeToContent="Height">
+        Title="Translate options" Height="300" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Icon="/Images/abc.ico" NonActiveWindowTitleBrush="White" SizeToContent="Height">
     <StackPanel Margin="10">
         <UControls:TranslateDirectionControl x:Name="DirectionsControl"/>
         <Button Content="Translate" Name="TranslateBtn" Margin="0,10,0,0" Click="TranslateBtn_Click"/>

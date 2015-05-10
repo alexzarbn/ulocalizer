@@ -104,6 +104,8 @@
       <DependentUpon>TranslateDirectionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\CultureToFlagIconConverter.cs" />
+    <Compile Include="Converters\SelectedItemToBooleanConverter.cs" />
+    <Compile Include="Converters\SelectedNodeToBooleanConverter.cs" />
     <Compile Include="Converters\SelectedTranslationToBooleanConverter.cs" />
     <Compile Include="Converters\SelectedTranslationToVisibilityConverter.cs" />
     <Compile Include="Converters\MultiValueConverter.cs" />
@@ -361,6 +363,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\console.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\abc.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\settings.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

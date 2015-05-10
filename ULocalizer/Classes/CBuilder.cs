@@ -20,10 +20,11 @@ namespace ULocalizer.Classes
         /// Build the localization packages
         /// </summary>
         /// <returns></returns>
-        public static async Task Build()
+        public static async Task Build(bool reloadTranslations)
         {
             await Task.Run(async () =>
             {
+                await Projects.CurrentProject.SaveTranslations(reloadTranslations);
                 await Common.ShowProgressMessage("Building...");
                 bool isSuccessfull = true;
                 if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini")))
@@ -60,7 +61,7 @@ namespace ULocalizer.Classes
                             Common.ConsoleData += BuilderProcess.StandardError.ReadLine() + Environment.NewLine;
                         }
                         BuilderProcess.WaitForExit();
-                        if (isSuccessfull)
+                        if (isSuccessfull && reloadTranslations)
                         {
                             await LoadTranslations(false);
                         }

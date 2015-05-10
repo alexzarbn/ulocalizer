@@ -40,7 +40,7 @@ namespace ULocalizer.Windows
             switch (Mode)
             {
                 case TranslateMode.Project:
-                    await CTranslator.TranslateProject(DirectionsControl.SourceLanguage.SelectedLanguage, DirectionsControl.DestinationLanguage.SelectedLanguage);
+                    //await CTranslator.TranslateProject(DirectionsControl.SourceLanguage.SelectedLanguage, DirectionsControl.DestinationLanguage.SelectedLanguage);
                     break;
                 case TranslateMode.Language:
                     await CTranslator.TranslateLanguage(Common.SelectedTranslation, DirectionsControl.SourceLanguage.SelectedLanguage, DirectionsControl.DestinationLanguage.SelectedLanguage,true);

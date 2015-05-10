@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:props="clr-namespace:ULocalizer.Properties"
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls" ShowIconOnTitleBar="False"  WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"  GlowBrush="{StaticResource AccentColorBrush}" TitlebarHeight="26"
-        Title="Settings" Height="300" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Icon="/Images/properties.ico" NonActiveWindowTitleBrush="White" SizeToContent="Height">
+        Title="Settings" Height="300" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Icon="/Images/settings.ico" NonActiveWindowTitleBrush="White" SizeToContent="Height">
     <Controls:MetroWindow.Resources>
         <Style TargetType="{x:Type Label}" BasedOn="{StaticResource PaddingLabelStyle}"/>
     </Controls:MetroWindow.Resources>

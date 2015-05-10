@@ -18,6 +18,7 @@ using ULocalizer.Binding;
 using ULocalizer.Classes;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using ExtensionMethods;
 
 namespace ULocalizer.Windows
 {
@@ -72,7 +73,7 @@ namespace ULocalizer.Windows
 
         private async void BuildBtn_Click(object sender, RoutedEventArgs e)
         {
-            await CBuilder.Build();
+            await CBuilder.Build(false);
         }
 
 
@@ -186,24 +187,27 @@ namespace ULocalizer.Windows
             }    
         }
 
-        private async void ShowTranslateOptionsWindow(TranslateMode Mode)
+        private async void ShowTranslateOptionsWindow(TranslateMode Mode,bool hideDirectionControl = false)
         {
             if (Common.TranslationCultures.Count > 1)
             {
                 TranslateOptionsWindow TranslateOptionsWnd = new TranslateOptionsWindow();
                 TranslateOptionsWnd.Owner = this;
                 TranslateOptionsWnd.Mode = Mode;
+                if (hideDirectionControl)
+                {
+                    TranslateOptionsWnd.DirectionsControl.Visibility = System.Windows.Visibility.Collapsed;
+                }
+                if (!string.IsNullOrWhiteSpace(Common.SelectedTranslation.Language.Parent.Name))
+                {
+                    TranslateOptionsWnd.DirectionsControl.DestinationLanguage.SelectedLanguage = Common.TranslationCultures.First(translation => translation.Name == Common.SelectedTranslation.Language.Parent.Name);
+                }
                 TranslateOptionsWnd.ShowDialog();
             }
             else
             {
                 await Common.ShowError("List of languages available for translation is empty");
             }
-        }
-
-        private void TranslateEverythingBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ShowTranslateOptionsWindow(TranslateMode.Project);
         }
 
         private void TranslateSelectedWordsBtn_Click(object sender, RoutedEventArgs e)
@@ -226,6 +230,42 @@ namespace ULocalizer.Windows
             SettingsWindow SettingsWnd = new SettingsWindow();
             SettingsWnd.Owner = this;
             SettingsWnd.ShowDialog();
+        }
+
+        private void SetNodeToDefValBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Common.SelectedNode != null)
+            {
+                try
+                {
+                    Common.SelectedNode.Items = Projects.CurrentProject.Translations.First(translation => translation.Language.Name == "en").Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.ToObservableList();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }    
+        }
+
+        private void SetLangToDefValBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Common.SelectedTranslation != null)
+            {
+                try
+                {
+                    Common.SelectedTranslation.Nodes = Projects.CurrentProject.Translations.First(translation => translation.Language.Name == "en").Nodes.ToObservableList();
+                    Common.SelectedNode = Common.SelectedTranslation.Nodes[0];
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }    
+        }
+
+        private async void TranslateProjectBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await CTranslator.TranslateProject(Common.TranslationCultures.First(translation => translation.Name == "en"));
         }
 
 

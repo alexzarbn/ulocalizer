@@ -50,13 +50,17 @@ namespace ULocalizer.Classes
             }
         }
 
-        public static async Task TranslateProject(CultureInfo From, CultureInfo To)
+        public static async Task TranslateProject(CultureInfo From)
         {
             await Common.ShowProgressMessage("Translating the whole project...");
             await Task.Delay(1000);
             foreach (CTranslation Translation in Projects.CurrentProject.Translations)
             {
-                Translation.Nodes = await TranslateLanguage(Translation.Language.DisplayName,Translation.Nodes, From, To);
+                if (Translation.Language.Name == From.Name)
+                {
+                    continue;
+                }
+                Translation.Nodes = await TranslateLanguage(Translation.Language.DisplayName,Translation.Nodes, From, string.IsNullOrWhiteSpace(Translation.Language.Parent.Name)?Translation.Language:Translation.Language.Parent);
             }
             await Common.ProgressController.CloseAsync();
         }

@@ -34,7 +34,7 @@ namespace ULocalizer.Windows
         {
 
             this.Close();
-            await CBuilder.Build();
+            await CBuilder.Build(true);
         }
 
     }
