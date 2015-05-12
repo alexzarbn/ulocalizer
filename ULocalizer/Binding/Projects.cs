@@ -62,7 +62,6 @@ namespace ULocalizer.Binding
                         CurrentProject.isChanged = false;
                         await CBuilder.LoadTranslations(true);
                         CurrentProject.isTranslationsChanged = false;
-                        //Common.isAvailable = true;
                     }
                     catch (IOException ex)
                     {

@@ -17,13 +17,13 @@ namespace ULocalizer.Classes
         /// Build the localization packages
         /// </summary>
         /// <returns></returns>
-        public static async Task Build(bool saveTranslations,bool reloadTranslations)
+        public static async Task Build(bool saveTranslations)
         {
             await Task.Run(async () =>
             {
                 if (saveTranslations)
                 {
-                    await Projects.CurrentProject.SaveTranslations(reloadTranslations);
+                    await Projects.CurrentProject.SaveTranslations(true);
                 }
                 await Common.ShowProgressMessage("Building...",false);
                 bool isSuccessfull = true;
@@ -61,7 +61,8 @@ namespace ULocalizer.Classes
                             Common.WriteToConsole(BuilderProcess.StandardError.ReadLine(), MessageType.Blank);
                         }
                         BuilderProcess.WaitForExit();
-                        if (isSuccessfull && reloadTranslations)
+                        await Task.Delay(1000);
+                        if (isSuccessfull)
                         {
                             await LoadTranslations(false);
                         }
@@ -77,7 +78,6 @@ namespace ULocalizer.Classes
                     Common.WriteToConsole("Default localization config doesn't exist.",MessageType.Error);
                     isSuccessfull = false;
                 }
-                //Common.isAvailable = true;
                 if (!isSuccessfull)
                 {
                     await Common.ShowError("Build error. See console for details.");
@@ -94,7 +94,6 @@ namespace ULocalizer.Classes
             await Task.Run(async () =>
             {
                 await Common.ShowProgressMessage("Loading translations...",true);
-                Projects.CurrentProject.Translations.Clear();
                 foreach (CultureInfo Lang in Projects.CurrentProject.Languages)
                 {
                     if (Directory.Exists(Path.Combine(Projects.CurrentProject.GetProjectRoot(), Projects.CurrentProject.SourcePath)))
@@ -105,8 +104,8 @@ namespace ULocalizer.Classes
                             if (Files.Count() > 0)
                             {
                                 JObject DeserializedTranslation = JObject.Parse(File.ReadAllText(Files[0]));
-                                JToken Vars;
-                                JToken Subnamespaces;
+                                JToken Vars = null;
+                                JToken Subnamespaces = null;
                                 bool isVarsValid = DeserializedTranslation.TryGetValue("Children", out Vars);
                                 bool isSubnamespacesValid = DeserializedTranslation.TryGetValue("Subnamespaces", out Subnamespaces);
                                 if (isVarsValid || isSubnamespacesValid)
@@ -117,6 +116,7 @@ namespace ULocalizer.Classes
                                     if (isVarsValid)
                                     {
                                         CTranslationNode VarsNode = new CTranslationNode();
+                                        VarsNode.isTopLevel = true;
                                         VarsNode.Title = "Variables";
                                         foreach (JToken Var in Vars.Children())
                                         {
@@ -141,9 +141,12 @@ namespace ULocalizer.Classes
                                                 SubnamespacesNode.Items.Add(Item);
                                             }
                                             TranslationInstance.Nodes.Add(SubnamespacesNode);
+
                                         }
+                                        
                                     }
                                     Projects.CurrentProject.Translations.Add(TranslationInstance);
+                                    
                                 }
                                 else
                                 {
@@ -168,6 +171,7 @@ namespace ULocalizer.Classes
                 await Common.ShowProgressMessage("Sorting...",true);
                 Projects.CurrentProject.Translations = Projects.CurrentProject.Translations.OrderBy(translation => translation.Language.Name).ToObservableList();
                 Projects.CurrentProject.isTranslationsChanged = false;
+                await App.Current.Dispatcher.InvokeAsync(()=>(App.Current.MainWindow as Windows.MainWindow).LanguagesList.SelectedIndex = 0);
                 if (closeProgressAfterExecution)
                 {
                     await Common.ProgressController.CloseAsync();

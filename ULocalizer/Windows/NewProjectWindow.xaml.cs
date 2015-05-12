@@ -19,7 +19,7 @@ namespace ULocalizer.Windows
         private async void ProjectPropertiesControl_Executed(object sender, EventArgs e)
         {
             this.Close();
-            await CBuilder.Build(false,true);
+            await CBuilder.Build(false);
         }
     }
 }

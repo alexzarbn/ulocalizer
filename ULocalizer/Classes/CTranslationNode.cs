@@ -17,6 +17,13 @@ namespace ULocalizer.Classes
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+        private bool _isTopLevel = false;
+        public bool isTopLevel
+        {
+            get { return _isTopLevel; }
+            set { _isTopLevel = value; }
+        }
+
         private string _IconPath = "/Images/variable.png";
         public string IconPath
         {

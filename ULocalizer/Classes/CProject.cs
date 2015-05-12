@@ -106,55 +106,45 @@ namespace ULocalizer.Classes
                         try
                         {
                             JObject DeserializedFile = JObject.Parse(File.ReadAllText(TranslationInstance.Path));
-                            JToken Subnamespaces;
-                            CTranslationNode VariablesNode = null;
-                            CTranslationNode K2Node = null;
-                            CTranslationNode SpriteCategoryNode = null;
-                            VariablesNode = TranslationInstance.Nodes.First(e => e.Title == "Variables");
-                            K2Node = TranslationInstance.Nodes.First(e => e.Title == "K2Node");
-                            SpriteCategoryNode = TranslationInstance.Nodes.First(e => e.Title == "SpriteCategory");
-                            if (VariablesNode != null)
+                            JToken tmpToken = null;
+                            if (DeserializedFile.TryGetValue("Namespace", out tmpToken))
                             {
-                                JArray VariablesNodeInst = DeserializedFile.Value<JArray>("Children");
-                                VariablesNodeInst = JArray.FromObject(MakeChildList(VariablesNode.Items));
-                                DeserializedFile["Children"] = VariablesNodeInst;
+                                DeserializedFile["Namespace"] = string.Empty;
                             }
-                            if ((K2Node != null) || (SpriteCategoryNode != null))
+                            else
                             {
-                                if (DeserializedFile.TryGetValue("Subnamespaces", out Subnamespaces))
+                                DeserializedFile.Add("Namespace",string.Empty);
+                            }
+                            tmpToken = null;
+                            if (DeserializedFile.TryGetValue("Children", out tmpToken)) 
+                            {
+                                DeserializedFile["Children"] = new JArray();
+                            }
+                            else
+                            {
+                                DeserializedFile.Add("Children", new JArray());
+                            }
+                            tmpToken = null;
+                            if (DeserializedFile.TryGetValue("Subnamespaces", out tmpToken))
+                            {
+                                DeserializedFile["Subnamespaces"] = new JArray();
+                            }else{
+                                DeserializedFile.Add("Subnamespaces",new JArray());
+                            }
+                            foreach (CTranslationNode Node in TranslationInstance.Nodes)
+                            {
+                                if (Node.isTopLevel)
                                 {
-                                    if (K2Node != null)
-                                    {
-                                        JToken K2NodeInst = Subnamespaces.Children().First(e => e.Value<string>("Namespace") == "K2Node");
-                                        if (K2NodeInst != null)
-                                        {
-                                            JArray K2NodeInstChild = K2NodeInst.Value<JArray>("Children");
-                                            K2NodeInstChild = JArray.FromObject(MakeChildList(K2Node.Items));
-                                            K2NodeInst["Children"] = K2NodeInstChild;
-                                        }
-                                        else
-                                        {
-                                            Common.WriteToConsole("K2Node is broken or not found in " + TranslationInstance.Path + " file.",MessageType.Error);
-                                        }
-                                    }
-                                    if (SpriteCategoryNode != null)
-                                    {
-                                        JToken SpriteCategoryNodeInst = Subnamespaces.Children().First(e => e.Value<string>("Namespace") == "SpriteCategory");
-                                        if (SpriteCategoryNodeInst != null)
-                                        {
-                                            JArray SpriteCategoryNodeInstChild = SpriteCategoryNodeInst.Value<JArray>("Children");
-                                            SpriteCategoryNodeInstChild = JArray.FromObject(MakeChildList(SpriteCategoryNode.Items));
-                                            SpriteCategoryNodeInst["Children"] = SpriteCategoryNodeInstChild;
-                                        }
-                                        else
-                                        {
-                                            Common.WriteToConsole("Broken SpriteCategory node is broken or not found in " + TranslationInstance.Path + " file.",MessageType.Error);
-                                        }
-                                    }
+                                    JArray VariablesNodeInst = DeserializedFile.Value<JArray>("Children");
+                                    VariablesNodeInst = JArray.FromObject(MakeChildList(Node.Items));
+                                    DeserializedFile["Children"] = VariablesNodeInst;
                                 }
                                 else
                                 {
-                                    Common.WriteToConsole("Cannot write K2Node and SpriteCategory nodes to " + TranslationInstance.Path + " file due to broken Subnamespaces node.", MessageType.Error);
+                                    JObject CurrentNodeJObject = new JObject();
+                                    CurrentNodeJObject.Add("Namespace", Node.Title);
+                                    CurrentNodeJObject.Add("Children", JArray.FromObject(MakeChildList(Node.Items)));
+                                    DeserializedFile.Value<JArray>("Subnamespaces").Add(CurrentNodeJObject);
                                 }
                             }
                             await Task.Delay(100);
@@ -174,7 +164,7 @@ namespace ULocalizer.Classes
                 this.isTranslationsChanged = false;
                 if (clearTranslations)
                 {
-                    this.Translations.Clear();
+                    this.Translations = new CObservableList<CTranslation>();
                 }
                 if (closeProgressAfterExecution)
                 {
@@ -187,7 +177,6 @@ namespace ULocalizer.Classes
             List<JObject> ChildItems = new List<JObject>();
             foreach (CTranslationNodeItem Item in Items)
             {
-                
                 JObject newVarsJObject = new JObject();
                 JObject SourceTextNode = new JObject();
                 JObject TranslationTextNode = new JObject();
@@ -199,6 +188,9 @@ namespace ULocalizer.Classes
             }
             return ChildItems;
         }
+
+        
+
         public string GetProjectRoot()
         {
             return Path.GetDirectoryName(this.PathToProjectFile);

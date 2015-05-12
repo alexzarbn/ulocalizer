@@ -63,7 +63,7 @@ namespace ULocalizer.Windows
 
         private async void BuildBtn_Click(object sender, RoutedEventArgs e)
         {
-            await CBuilder.Build(true,false);
+            await CBuilder.Build(true);
         }
 
 
@@ -139,7 +139,7 @@ namespace ULocalizer.Windows
 
         private async void SaveAllBtn_Click(object sender, RoutedEventArgs e)
         {
-            await Projects.CurrentProject.SaveTranslations(true);
+            await Projects.CurrentProject.SaveTranslations(false,true);
         }
 
 

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Threading;
+
 namespace ULocalizer.Classes
 {
     [Serializable]
@@ -46,6 +47,7 @@ namespace ULocalizer.Classes
             {
                 await dispatcher.InvokeAsync(new Action(ClearItems));
             }
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
         protected override async void RemoveItem(int index)
         {
@@ -57,17 +59,21 @@ namespace ULocalizer.Classes
             {
                 await dispatcher.InvokeAsync(new Action(() => RemoveItem(index)));
             }
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove));
         }
         protected override async void InsertItem(int index, T item)
         {
             if (dispatcher.CheckAccess())
             {
                 base.InsertItem(index, item);
+
+                
             }
             else
             {
                 await dispatcher.InvokeAsync(new Action(() => InsertItem(index, item)),DispatcherPriority.Background);
             }
+           
         }
         protected override async void SetItem(int index, T item)
         {
@@ -79,6 +85,7 @@ namespace ULocalizer.Classes
             {
                 await dispatcher.InvokeAsync(new Action(() => SetItem(index, item)));
             }
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace));
         }
         protected override async void MoveItem(int oldIndex, int newIndex)
         {
@@ -90,6 +97,7 @@ namespace ULocalizer.Classes
             {
                 await dispatcher.InvokeAsync(new Action(() => MoveItem(oldIndex, newIndex)));
             }
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move));
         }
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {

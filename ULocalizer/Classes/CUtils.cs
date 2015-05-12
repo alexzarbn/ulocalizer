@@ -120,12 +120,13 @@ namespace ULocalizer.Classes
         {
             await Task.Run(() =>
             {
-                try {
-                List<string> ConfigContent = File.ReadAllLines(Path).ToList();
-                ConfigContent.Insert(2, "SourcePath=" + SourcePath);
-                ConfigContent.Insert(3, "DestinationPath=" + DestinationPath);
-                ConfigContent.InsertRange(11, Cultures);
-                File.WriteAllLines(Path, ConfigContent);
+                try 
+                {
+                    List<string> ConfigContent = File.ReadAllLines(Path).ToList();
+                    ConfigContent.Insert(2, "SourcePath=" + SourcePath);
+                    ConfigContent.Insert(3, "DestinationPath=" + DestinationPath);
+                    ConfigContent.InsertRange(10, Cultures);
+                    File.WriteAllLines(Path, ConfigContent);
                 }
                 catch (IOException ex)
                 {
