@@ -1,8 +1,7 @@
-﻿
-namespace ULocalizer.Windows
+﻿namespace ULocalizer.Windows
 {
     /// <summary>
-    /// Interaction logic for SettingsWindow.xaml
+    ///     Interaction logic for SettingsWindow.xaml
     /// </summary>
     public partial class SettingsWindow
     {

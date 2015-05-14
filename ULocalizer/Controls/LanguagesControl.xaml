@@ -1,30 +1,35 @@
 ﻿<UserControl x:Class="ULocalizer.Controls.LanguagesControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:binding="clr-namespace:ULocalizer.Binding"
-             xmlns:UControls="clr-namespace:ULocalizer.Controls"
-             Name="UCLanguages"
-             mc:Ignorable="d" 
+             xmlns:uControls="clr-namespace:ULocalizer.Controls"
+             Name="UcLanguages"
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="42"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="42" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <UControls:LanguagePickerControl x:Name="SourceLanguagePicker" Title="Localizable languages:" Items="{Binding Source={x:Static binding:Common.Cultures}}" VerticalAlignment="Center"/>
+        <uControls:LanguagePickerControl x:Name="SourceLanguagePicker" Title="Localizable languages:"
+                                         Items="{Binding Source={x:Static binding:Common.Cultures}}"
+                                         VerticalAlignment="Center" />
         <StackPanel VerticalAlignment="Center" Grid.Column="1" Margin="0,18,0,0">
-            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24" ToolTip="Add all"  Name="AddAllLangBtn" Click="AddAllLangBtn_Click" Margin="4">
+            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24"
+                    ToolTip="Add all" Name="AddAllLangBtn" Click="AddAllLangBtn_Click" Margin="4">
                 <DockPanel>
-                    <Rectangle Width="24" Height="24" 
-                   Fill="{StaticResource IdealForegroundColorBrush}">
+                    <Rectangle Width="24" Height="24"
+                               Fill="{StaticResource IdealForegroundColorBrush}">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill">
                                 <VisualBrush.Visual>
                                     <Canvas Width="24" Height="24">
-                                        <Path Data="M5.59,7.41L7,6L13,12L7,18L5.59,16.59L10.17,12L5.59,7.41M11.59,7.41L13,6L19,12L13,18L11.59,16.59L16.17,12L11.59,7.41Z" Fill="Black" />
+                                        <Path
+                                            Data="M5.59,7.41L7,6L13,12L7,18L5.59,16.59L10.17,12L5.59,7.41M11.59,7.41L13,6L19,12L13,18L11.59,16.59L16.17,12L11.59,7.41Z"
+                                            Fill="Black" />
                                     </Canvas>
                                 </VisualBrush.Visual>
                             </VisualBrush>
@@ -32,43 +37,50 @@
                     </Rectangle>
                 </DockPanel>
             </Button>
-            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24" ToolTip="Add language"  Name="AddLangBtn" Click="AddLangBtn_Click" Margin="4">
-                <Rectangle Width="24" Height="24" 
-                   Fill="{StaticResource IdealForegroundColorBrush}">
+            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24"
+                    ToolTip="Add language" Name="AddLangBtn" Click="AddLangBtn_Click" Margin="4">
+                <Rectangle Width="24" Height="24"
+                           Fill="{StaticResource IdealForegroundColorBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill">
                             <VisualBrush.Visual>
                                 <Canvas Width="24" Height="24">
-                                    <Path Data="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" Fill="Black" />
+                                    <Path Data="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"
+                                          Fill="Black" />
                                 </Canvas>
                             </VisualBrush.Visual>
                         </VisualBrush>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24" ToolTip="Remove language"  Name="DelLangBtn" Click="DelLangBtn_Click" Margin="4">
-                <Rectangle Width="24" Height="24" 
-                   Fill="{StaticResource IdealForegroundColorBrush}">
+            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24"
+                    ToolTip="Remove language" Name="DelLangBtn" Click="DelLangBtn_Click" Margin="4">
+                <Rectangle Width="24" Height="24"
+                           Fill="{StaticResource IdealForegroundColorBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill">
                             <VisualBrush.Visual>
                                 <Canvas Width="24" Height="24">
-                                    <Path Data="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" Fill="Black" />
+                                    <Path Data="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"
+                                          Fill="Black" />
                                 </Canvas>
                             </VisualBrush.Visual>
                         </VisualBrush>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24" ToolTip="Remove all"  Name="RemoveAllLangBtn" Click="RemoveAllLangBtn_Click" Margin="4">
+            <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24"
+                    ToolTip="Remove all" Name="RemoveAllLangBtn" Click="RemoveAllLangBtn_Click" Margin="4">
                 <DockPanel>
-                    <Rectangle Width="24" Height="24" 
-                   Fill="{StaticResource IdealForegroundColorBrush}">
+                    <Rectangle Width="24" Height="24"
+                               Fill="{StaticResource IdealForegroundColorBrush}">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill">
                                 <VisualBrush.Visual>
                                     <Canvas Width="24" Height="24">
-                                        <Path Data="M18.41,7.41L17,6L11,12L17,18L18.41,16.59L13.83,12L18.41,7.41M12.41,7.41L11,6L5,12L11,18L12.41,16.59L7.83,12L12.41,7.41Z" Fill="Black" />
+                                        <Path
+                                            Data="M18.41,7.41L17,6L11,12L17,18L18.41,16.59L13.83,12L18.41,7.41M12.41,7.41L11,6L5,12L11,18L12.41,16.59L7.83,12L12.41,7.41Z"
+                                            Fill="Black" />
                                     </Canvas>
                                 </VisualBrush.Visual>
                             </VisualBrush>
@@ -77,6 +89,8 @@
                 </DockPanel>
             </Button>
         </StackPanel>
-        <UControls:LanguagePickerControl x:Name="DestinationLanguagePicker" Grid.Column="2" Title="Selected languages:" Items="{Binding ElementName=UCLanguages,Path=DestinationSource}" VerticalAlignment="Center"/>
+        <uControls:LanguagePickerControl x:Name="DestinationLanguagePicker" Grid.Column="2" Title="Selected languages:"
+                                         Items="{Binding ElementName=UcLanguages,Path=DestinationSource}"
+                                         VerticalAlignment="Center" />
     </Grid>
 </UserControl>

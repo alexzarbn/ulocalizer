@@ -4,7 +4,7 @@ using ULocalizer.Classes;
 namespace ULocalizer.Windows
 {
     /// <summary>
-    /// Interaction logic for PropertiesWindow.xaml
+    ///     Interaction logic for PropertiesWindow.xaml
     /// </summary>
     public partial class PropertiesWindow
     {
@@ -15,7 +15,7 @@ namespace ULocalizer.Windows
 
         private async void ProjectPropertiesControl_Executed(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
             await CBuilder.Build(true);
         }
     }

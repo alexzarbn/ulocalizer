@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Win32;
 
 namespace ULocalizer.Classes
 {
     public enum FileTypesFilter : byte
     {
-        [Description("Apps|*.exe")]
-        Executable = 0,
-        [Description("Unreal Engine Project|*.uproject")]
-        UProject = 1,
-        [Description("ULocalizer Project|*.ulp")]
-        ULocProject = 2
+        [Description("Apps|*.exe")] Executable = 0,
+        [Description("Unreal Engine Project|*.uproject")] UProject = 1,
+        [Description("ULocalizer Project|*.ulp")] ULocProject = 2
     }
 
     public enum ProjectPropertiesMode : byte
@@ -45,61 +42,54 @@ namespace ULocalizer.Classes
     public static class CUtils
     {
         /// <summary>
-        /// Shows up file dialog and returns the path of selected file
+        ///     Shows up file dialog and returns the path of selected file
         /// </summary>
         /// <param name="pFilter">File type filter</param>
         /// <returns></returns>
         public static string ShowFileDialog(FileTypesFilter pFilter)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.Filter = GetEnumDescription(pFilter);
-            
-            Nullable<bool> result = dlg.ShowDialog();
+            var dlg = new OpenFileDialog {Filter = GetEnumDescription(pFilter)};
+
+            var result = dlg.ShowDialog();
 
             if (result == true)
             {
                 return dlg.FileName;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         /// <summary>
-        /// Gets description attribute value
+        ///     Gets description attribute value
         /// </summary>
-        /// <param name="EnumInstance">Enum to get description attribute from</param>
+        /// <param name="enumInstance">Enum to get description attribute from</param>
         /// <returns></returns>
-        public static string GetEnumDescription(Enum EnumInstance)
+        private static string GetEnumDescription(Enum enumInstance)
         {
-            FieldInfo fi = EnumInstance.GetType().GetField(EnumInstance.ToString());
-            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            var fi = enumInstance.GetType().GetField(enumInstance.ToString());
+            var attributes = (DescriptionAttribute[]) fi.GetCustomAttributes(typeof (DescriptionAttribute), false);
 
-            if (attributes != null && attributes.Length > 0)
+            if (attributes.Length > 0)
             {
                 return attributes[0].Description;
             }
-            else
-            {
-                return EnumInstance.ToString();
-            }
+            return enumInstance.ToString();
         }
 
         /// <summary>
-        /// Saves string data to file with specified encoding
+        ///     Saves string data to file with specified encoding
         /// </summary>
-        /// <param name="Path">Location of the file to save to</param>
-        /// <param name="Content">Content to save</param>
-        /// <param name="ContentEncoding">Content encoding</param>
+        /// <param name="path">Location of the file to save to</param>
+        /// <param name="content">Content to save</param>
+        /// <param name="contentEncoding">Content encoding</param>
         /// <returns></returns>
-        public static async Task SaveContentToFile(string Path,string Content,Encoding ContentEncoding)
+        public static async Task SaveContentToFile(string path, string content, Encoding contentEncoding)
         {
             await Task.Run(() =>
             {
                 try
                 {
-                    File.WriteAllText(Path, Content, ContentEncoding);
+                    File.WriteAllText(path, content, contentEncoding);
                 }
                 catch (IOException ex)
                 {
@@ -109,24 +99,24 @@ namespace ULocalizer.Classes
         }
 
         /// <summary>
-        /// Updates localization config
+        ///     Updates localization config
         /// </summary>
-        /// <param name="Path">Path to config file</param>
-        /// <param name="Cultures">Cultures to generate</param>
-        /// <param name="SourcePath">SourcePath property for config</param>
-        /// <param name="DestinationPath">DestinationPath property for config</param>
+        /// <param name="path">Path to config file</param>
+        /// <param name="cultures">Cultures to generate</param>
+        /// <param name="sourcePath">SourcePath property for config</param>
+        /// <param name="destinationPath">DestinationPath property for config</param>
         /// <returns></returns>
-        public static async Task MakeConfig(string Path, List<string> Cultures,string SourcePath,string DestinationPath)
+        public static async Task MakeConfig(string path, List<string> cultures, string sourcePath, string destinationPath)
         {
             await Task.Run(() =>
             {
-                try 
+                try
                 {
-                    List<string> ConfigContent = File.ReadAllLines(Path).ToList();
-                    ConfigContent.Insert(2, "SourcePath=" + SourcePath);
-                    ConfigContent.Insert(3, "DestinationPath=" + DestinationPath);
-                    ConfigContent.InsertRange(10, Cultures);
-                    File.WriteAllLines(Path, ConfigContent);
+                    var configContent = File.ReadAllLines(path).ToList();
+                    configContent.Insert(2, "SourcePath=" + sourcePath);
+                    configContent.Insert(3, "DestinationPath=" + destinationPath);
+                    configContent.InsertRange(10, cultures);
+                    File.WriteAllLines(path, configContent);
                 }
                 catch (IOException ex)
                 {
@@ -136,13 +126,13 @@ namespace ULocalizer.Classes
         }
 
         /// <summary>
-        /// Just replaces few symbols of the path to be sure that it's in correct form
+        ///     Just replaces few symbols of the path to be sure that it's in correct form
         /// </summary>
-        /// <param name="Path">Source path string</param>
+        /// <param name="path">Source path string</param>
         /// <returns></returns>
-        public static string FixPath(string Path)
+        public static string FixPath(string path)
         {
-            return Path.Replace(".","").Replace("/",@"\");
+            return path.Replace(".", "").Replace("/", @"\");
         }
     }
 }

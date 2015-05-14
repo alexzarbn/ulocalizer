@@ -1,53 +1,66 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace ULocalizer.Classes
 {
     /// <summary>
-    /// Represents the translation node instances such as Variables,K2Node,SpriteCategory
+    ///     Represents the translation node instances such as Variables,K2Node,SpriteCategory
     /// </summary>
     public class CTranslationNode : INotifyPropertyChanged
     {
+        private string _iconPath = "/Images/variable.png";
+
+        /// <summary>
+        ///     List of items to translate
+        /// </summary>
+        private CObservableList<CTranslationNodeItem> _items = new CObservableList<CTranslationNodeItem>();
+
+        private string _title = string.Empty;
+        public bool IsTopLevel { get; set; }
+
+        public string IconPath
+        {
+            get { return _iconPath; }
+            set
+            {
+                _iconPath = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                _title = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public CObservableList<CTranslationNodeItem> Items
+        {
+            get { return _items; }
+            set
+            {
+                _items = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-        private bool _isTopLevel = false;
-        public bool isTopLevel
-        {
-            get { return _isTopLevel; }
-            set { _isTopLevel = value; }
-        }
 
-        private string _IconPath = "/Images/variable.png";
-        public string IconPath
-        {
-            get { return _IconPath; }
-            set { _IconPath = value; NotifyPropertyChanged(); }
-        }
-        private string _Title = string.Empty;
-        public string Title
-        {
-            get { return _Title; }
-            set { _Title = value; NotifyPropertyChanged(); }
-        }
-        /// <summary>
-        /// List of items to translate
-        /// </summary>
-        private CObservableList<CTranslationNodeItem> _Items = new CObservableList<CTranslationNodeItem>();
-        public CObservableList<CTranslationNodeItem> Items
-        {
-            get { return _Items; }
-            set { _Items = value; NotifyPropertyChanged(); }
-        }
         public override string ToString()
         {
-            return this.Title;
+            return Title;
         }
     }
 }

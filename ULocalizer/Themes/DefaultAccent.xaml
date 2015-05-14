@@ -1,5 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--ACCENT COLORS-->
     <Color x:Key="HighlightColor">#FF4d89c1</Color>
     <!--80%-->
@@ -12,11 +12,11 @@
     <Color x:Key="AccentColor4">#334d89c1</Color>
     <!-- re-set brushes too -->
     <SolidColorBrush x:Key="HighlightBrush" Color="{StaticResource HighlightColor}" />
-    <SolidColorBrush x:Key="AccentColorBrush" Color="{StaticResource AccentColor}"/>
-    <SolidColorBrush x:Key="AccentColorBrush2" Color="{StaticResource AccentColor2}"/>
-    <SolidColorBrush x:Key="AccentColorBrush3" Color="{StaticResource AccentColor3}"/>
-    <SolidColorBrush x:Key="AccentColorBrush4" Color="{StaticResource AccentColor4}"/>
-    <SolidColorBrush x:Key="BlackBrush" Color="#707070"/>
+    <SolidColorBrush x:Key="AccentColorBrush" Color="{StaticResource AccentColor}" />
+    <SolidColorBrush x:Key="AccentColorBrush2" Color="{StaticResource AccentColor2}" />
+    <SolidColorBrush x:Key="AccentColorBrush3" Color="{StaticResource AccentColor3}" />
+    <SolidColorBrush x:Key="AccentColorBrush4" Color="{StaticResource AccentColor4}" />
+    <SolidColorBrush x:Key="BlackBrush" Color="#707070" />
     <SolidColorBrush x:Key="WindowTitleColorBrush" Color="White" />
     <Color x:Key="WindowTitleForeground">White</Color>
     <SolidColorBrush x:Key="AccentSelectedColorBrush" Color="White" />
@@ -27,6 +27,6 @@
     <SolidColorBrush x:Key="CheckmarkFill" Color="{StaticResource AccentColor}" />
     <SolidColorBrush x:Key="RightArrowFill" Color="{StaticResource AccentColor}" />
     <Color x:Key="IdealForegroundColor">#4d89c1</Color>
-    <SolidColorBrush x:Key="IdealForegroundColorBrush" Color="{StaticResource IdealForegroundColor}"/>
-    <SolidColorBrush x:Key="IdealForegroundDisabledBrush" Color="{StaticResource IdealForegroundColor}" Opacity="0.4"  />
+    <SolidColorBrush x:Key="IdealForegroundColorBrush" Color="{StaticResource IdealForegroundColor}" />
+    <SolidColorBrush x:Key="IdealForegroundDisabledBrush" Color="{StaticResource IdealForegroundColor}" Opacity="0.4" />
 </ResourceDictionary>

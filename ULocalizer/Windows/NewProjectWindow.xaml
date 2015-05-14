@@ -1,11 +1,16 @@
-﻿<Controls:MetroWindow x:Class="ULocalizer.Windows.NewProjectWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:binding="clr-namespace:ULocalizer.Binding"
-        xmlns:UControls="clr-namespace:ULocalizer.Controls"
-        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls" ShowIconOnTitleBar="False"  WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"  GlowBrush="{StaticResource AccentColorBrush}"
-        Title="New Project" TitlebarHeight="26" Height="600" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" SizeToContent="Height" Icon="/Images/newProject.ico" NonActiveWindowTitleBrush="White">
+﻿<controls:MetroWindow x:Class="ULocalizer.Windows.NewProjectWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:binding="clr-namespace:ULocalizer.Binding"
+                      xmlns:uControls="clr-namespace:ULocalizer.Controls"
+                      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls" ShowIconOnTitleBar="False"
+                      WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"
+                      GlowBrush="{StaticResource AccentColorBrush}"
+                      Title="New Project" TitlebarHeight="26" Height="600" Width="500" ResizeMode="NoResize"
+                      WindowStartupLocation="CenterOwner" SizeToContent="Height" Icon="/Images/newProject.ico"
+                      NonActiveWindowTitleBrush="White">
     <StackPanel Margin="10">
-        <UControls:ProjectPropertiesControl Mode="New" DataContext="{Binding Path=(binding:Projects.NewProject)}" Executed="ProjectPropertiesControl_Executed"/>
+        <uControls:ProjectPropertiesControl Mode="New" DataContext="{Binding Path=(binding:Projects.NewProject)}"
+                                            Executed="ProjectPropertiesControl_Executed" />
     </StackPanel>
-    </Controls:MetroWindow>
+</controls:MetroWindow>

@@ -6,7 +6,7 @@ using ULocalizer.Classes;
 namespace ULocalizer.Windows
 {
     /// <summary>
-    /// Interaction logic for NewProjectWindow.xaml
+    ///     Interaction logic for NewProjectWindow.xaml
     /// </summary>
     public partial class NewProjectWindow
     {
@@ -16,9 +16,10 @@ namespace ULocalizer.Windows
             Projects.NewProject = new CProject();
             Projects.NewProject.Languages.Add(CultureInfo.GetCultureInfo("en"));
         }
+
         private async void ProjectPropertiesControl_Executed(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
             await CBuilder.Build(false);
         }
     }

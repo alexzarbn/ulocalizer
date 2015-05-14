@@ -5,84 +5,127 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Markup;
-using ExtensionMethods;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using ULocalizer.Classes;
+using ULocalizer.ExtensionMethods;
 
 namespace ULocalizer.Binding
 {
     /// <summary>
-    /// Represents the common properties used in app
+    ///     Represents the common properties used in app
     /// </summary>
     public static class Common
     {
-        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
-        public static void RaiseStaticPropertyChanged(string propName)
+        private static List<EncodingInfo> _encodings = new List<EncodingInfo>();
+        private static CObservableList<CultureInfo> _cultures = new CObservableList<CultureInfo>();
+
+        /// <summary>
+        ///     Available cultures for automatic translation
+        /// </summary>
+        private static CObservableList<CultureInfo> _translationCultures = new CObservableList<CultureInfo>();
+
+        private static string _consoleData = string.Empty;
+        private static CTranslationNode _selectedNode;
+
+        private static CTranslation _selectedTranslation;
+        private static CTranslationNodeItem _selectedTranslationNodeItem;
+
+        public static List<EncodingInfo> Encodings
         {
-            EventHandler<PropertyChangedEventArgs> handler = StaticPropertyChanged;
+            get { return _encodings; }
+            private set { _encodings = value; }
+        }
+
+        public static CObservableList<CultureInfo> Cultures
+        {
+            get { return _cultures; }
+            private set { _cultures = value; }
+        }
+
+        public static CObservableList<CultureInfo> TranslationCultures
+        {
+            get { return _translationCultures; }
+            set { _translationCultures = value; }
+        }
+
+        public static ProgressDialogController ProgressController { get; private set; }
+
+        public static string ConsoleData
+        {
+            get { return _consoleData; }
+            private set
+            {
+                _consoleData = value;
+                RaiseStaticPropertyChanged("ConsoleData");
+            }
+        }
+
+        public static CTranslationNode SelectedNode
+        {
+            get { return _selectedNode; }
+            set
+            {
+                _selectedNode = value;
+                RaiseStaticPropertyChanged("SelectedNode");
+            }
+        }
+
+        public static CTranslation SelectedTranslation
+        {
+            get { return _selectedTranslation; }
+            set
+            {
+                _selectedTranslation = value;
+                RaiseStaticPropertyChanged("SelectedTranslation");
+                Projects.XmlLang = XmlLanguage.GetLanguage(SelectedTranslation.Language.Name);
+            }
+        }
+
+        public static CTranslationNodeItem SelectedTranslationNodeItem
+        {
+            get { return _selectedTranslationNodeItem; }
+            set
+            {
+                _selectedTranslationNodeItem = value;
+                RaiseStaticPropertyChanged("SelectedTranslationNodeItem");
+            }
+        }
+
+        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+
+        private static void RaiseStaticPropertyChanged(string propName)
+        {
+            var handler = StaticPropertyChanged;
             if (handler != null)
                 handler(null, new PropertyChangedEventArgs(propName));
         }
 
-        private static List<EncodingInfo> _Encodings = new List<EncodingInfo>();
-        public static List<EncodingInfo> Encodings
+        private static bool IsProgressShown()
         {
-            get { return _Encodings; }
-            set { _Encodings = value; }
-        }
-
-        private static CObservableList<CultureInfo> _Cultures = new CObservableList<CultureInfo>();
-        public static CObservableList<CultureInfo> Cultures
-        {
-            get { return _Cultures; }
-            set { _Cultures = value; }
-        }
-
-        /// <summary>
-        /// Available cultures for automatic translation
-        /// </summary>
-        private static CObservableList<CultureInfo> _TranslationCultures = new CObservableList<CultureInfo>();
-        public static CObservableList<CultureInfo> TranslationCultures
-        {
-            get { return _TranslationCultures; }
-            set { _TranslationCultures = value; }
-        }
-
-
-        private static ProgressDialogController _ProgressController = null;
-        public static ProgressDialogController ProgressController
-        {
-            get { return _ProgressController; }
-            set { _ProgressController = value; }
-        }
-
-        public static bool IsProgressShown()
-        {
-            if ((ProgressController!=null) && (ProgressController.IsOpen)) {
+            if ((ProgressController != null) && (ProgressController.IsOpen))
+            {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
-        private static async Task ShowProgressDialog(string Message)
+        private static async Task ShowProgressDialog(string message)
         {
-            await App.Current.Dispatcher.InvokeAsync(async () => ProgressController = await DialogManager.ShowProgressAsync(App.Current.MainWindow as MetroWindow, "Operation in progress", Message));
+            await Application.Current.Dispatcher.InvokeAsync(async () => ProgressController = await (Application.Current.MainWindow as MetroWindow).ShowProgressAsync("Operation in progress", message));
         }
 
-        public static async Task ShowProgressMessage(string Message,bool useDelay)
+        public static async Task ShowProgressMessage(string message, bool useDelay)
         {
-            if (!Common.IsProgressShown())
+            if (!IsProgressShown())
             {
-                await Common.ShowProgressDialog(Message);
+                await ShowProgressDialog(message);
             }
             else
             {
-                Common.ProgressController.SetMessage(Message);
+                ProgressController.SetMessage(message);
             }
             if (useDelay)
             {
@@ -90,61 +133,22 @@ namespace ULocalizer.Binding
             }
         }
 
-        public static async Task ShowError(string Message)
+        public static async Task ShowError(string message)
         {
-            await App.Current.Dispatcher.InvokeAsync(async () => await DialogManager.ShowMessageAsync(App.Current.MainWindow as MetroWindow, "Error",Message));
+            await Application.Current.Dispatcher.InvokeAsync(async () => await (Application.Current.MainWindow as MetroWindow).ShowMessageAsync("Error", message));
         }
-
-        private static string _ConsoleData = string.Empty;
-        public static string ConsoleData
-        {
-            get { return _ConsoleData; }
-            set { _ConsoleData = value; RaiseStaticPropertyChanged("ConsoleData"); }
-        }
-
-        //private static bool _isAvailable = true;
-        /// <summary>
-        /// Gets of sets the value of app activity
-        /// </summary>
-        //public static bool isAvailable
-        //{
-        //    get { return _isAvailable; }
-        //    set { _isAvailable = value; RaiseStaticPropertyChanged("isAvailable"); }
-        //}
-
-        private static CTranslationNode _SelectedNode = null;
-        public static CTranslationNode SelectedNode
-        {
-            get { return _SelectedNode; }
-            set { _SelectedNode = value; RaiseStaticPropertyChanged("SelectedNode"); }
-        }
-
-        private static CTranslation _SelectedTranslation = null;
-        public static CTranslation SelectedTranslation
-        {
-            get { return _SelectedTranslation; }
-            set { _SelectedTranslation = value; RaiseStaticPropertyChanged("SelectedTranslation"); Projects.XmlLang = XmlLanguage.GetLanguage(SelectedTranslation.Language.Name); }
-        }
-
-        private static CTranslationNodeItem _SelectedTranslationNodeItem = null;
-        public static CTranslationNodeItem SelectedTranslationNodeItem
-        {
-            get { return _SelectedTranslationNodeItem; }
-            set { _SelectedTranslationNodeItem = value; RaiseStaticPropertyChanged("SelectedTranslationNodeItem"); }
-        }
-
 
         /// <summary>
-        /// Sets the encodings list
+        ///     Sets the encodings list
         /// </summary>
         public static void SetEncodings()
         {
-            EncodingInfo[] encodings = Encoding.GetEncodings();
+            var encodings = Encoding.GetEncodings();
             Encodings = encodings.ToList();
         }
 
         /// <summary>
-        /// Sets the cultures list
+        ///     Sets the cultures list
         /// </summary>
         public static async void SetCultures()
         {
@@ -163,50 +167,49 @@ namespace ULocalizer.Binding
             Cultures.Add(CultureInfo.GetCultureInfo("sv"));
             Cultures.Add(CultureInfo.GetCultureInfo("zh"));
             await CTranslator.GetAvailableLanguages();
-            foreach (CultureInfo CI in Cultures.ToList())
+            foreach (var ci in Cultures.ToList())
             {
-                AddRegions(CI.Name);
+                AddRegions(ci.Name);
             }
             Cultures = Cultures.OrderBy(culture => culture.Name).ToObservableList();
         }
 
-        private static void AddRegions(string ParentCulture)
+        private static void AddRegions(string parentCulture)
         {
-            var Regions = CultureInfo.GetCultures(CultureTypes.AllCultures).Where(x => x.Parent.Name == ParentCulture);
-            foreach (CultureInfo RegionInstance in Regions)
+            var regions = CultureInfo.GetCultures(CultureTypes.AllCultures).Where(x => x.Parent.Name == parentCulture);
+            foreach (var regionInstance in regions)
             {
-                Cultures.Add(RegionInstance);
+                Cultures.Add(regionInstance);
             }
         }
 
         /// <summary>
-        /// Writes text to console
+        ///     Writes text to console
         /// </summary>
-        /// <param name="Text">Text for writing</param>
-        public static void WriteToConsole(string Text,MessageType messageType)
+        /// <param name="text">Text for writing</param>
+        /// <param name="messageType"></param>
+        public static void WriteToConsole(string text, MessageType messageType)
         {
-            string Prefix = string.Empty;
+            var prefix = string.Empty;
             switch (messageType)
             {
                 case MessageType.Blank:
                     break;
                 case MessageType.Info:
-                    Prefix = "[Info]";
+                    prefix = "[Info]";
                     break;
                 case MessageType.Warning:
-                    Prefix = "[Warning]";
+                    prefix = "[Warning]";
                     break;
                 case MessageType.Error:
-                    Prefix = "[Error]";
-                    break;
-                default:
+                    prefix = "[Error]";
                     break;
             }
             if (messageType == MessageType.Info || messageType == MessageType.Warning || messageType == MessageType.Error)
             {
-                Prefix += "[" + DateTime.Now.ToString() + "]: ";
+                prefix += "[" + DateTime.Now + "]: ";
             }
-            ConsoleData += Prefix + Text + Environment.NewLine;
+            ConsoleData += prefix + text + Environment.NewLine;
         }
     }
 }

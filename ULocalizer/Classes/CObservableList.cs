@@ -10,95 +10,73 @@ namespace ULocalizer.Classes
     [Serializable]
     public class CObservableList<T> : ObservableCollection<T>
     {
-        private Dispatcher dispatcher;
+        private readonly Dispatcher _dispatcher;
         public override event NotifyCollectionChangedEventHandler CollectionChanged;
-        #region Constructors
-        public CObservableList(Dispatcher dispatcher = null)
-        {
-            this.dispatcher = dispatcher ??
-                              (Application.Current != null
-                                   ? Application.Current.Dispatcher
-                                   : Dispatcher.CurrentDispatcher);
-        }
-        public CObservableList(IEnumerable<T> collection, Dispatcher dispatcher = null)
-            : base(collection)
-        {
-            this.dispatcher = dispatcher ??
-                              (Application.Current != null
-                                   ? Application.Current.Dispatcher
-                                   : Dispatcher.CurrentDispatcher);
-        }
-        public CObservableList(List<T> list, Dispatcher dispatcher = null)
-            : base(list)
-        {
-            this.dispatcher = dispatcher ??
-                              (Application.Current != null
-                                   ? Application.Current.Dispatcher
-                                   : Dispatcher.CurrentDispatcher);
-        }
-        #endregion
+
         protected override async void ClearItems()
         {
-            if (dispatcher.CheckAccess())
+            if (_dispatcher.CheckAccess())
             {
                 base.ClearItems();
             }
             else
             {
-                await dispatcher.InvokeAsync(new Action(ClearItems));
+                await _dispatcher.InvokeAsync(ClearItems);
             }
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
+
         protected override async void RemoveItem(int index)
         {
-            if (dispatcher.CheckAccess())
+            if (_dispatcher.CheckAccess())
             {
                 base.RemoveItem(index);
             }
             else
             {
-                await dispatcher.InvokeAsync(new Action(() => RemoveItem(index)));
+                await _dispatcher.InvokeAsync(() => RemoveItem(index));
             }
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove));
         }
+
         protected override async void InsertItem(int index, T item)
         {
-            if (dispatcher.CheckAccess())
+            if (_dispatcher.CheckAccess())
             {
                 base.InsertItem(index, item);
-
-                
             }
             else
             {
-                await dispatcher.InvokeAsync(new Action(() => InsertItem(index, item)),DispatcherPriority.Background);
+                await _dispatcher.InvokeAsync(() => InsertItem(index, item), DispatcherPriority.Background);
             }
-           
         }
+
         protected override async void SetItem(int index, T item)
         {
-            if (dispatcher.CheckAccess())
+            if (_dispatcher.CheckAccess())
             {
                 base.SetItem(index, item);
             }
             else
             {
-                await dispatcher.InvokeAsync(new Action(() => SetItem(index, item)));
+                await _dispatcher.InvokeAsync(() => SetItem(index, item));
             }
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace));
         }
+
         protected override async void MoveItem(int oldIndex, int newIndex)
         {
-            if (dispatcher.CheckAccess())
+            if (_dispatcher.CheckAccess())
             {
                 base.MoveItem(oldIndex, newIndex);
             }
             else
             {
-                await dispatcher.InvokeAsync(new Action(() => MoveItem(oldIndex, newIndex)));
+                await _dispatcher.InvokeAsync(() => MoveItem(oldIndex, newIndex));
             }
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move));
         }
+
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             // Be nice - use BlockReentrancy like MSDN said
@@ -107,21 +85,40 @@ namespace ULocalizer.Classes
                 var eventHandler = CollectionChanged;
                 if (eventHandler != null)
                 {
-                    Delegate[] delegates = eventHandler.GetInvocationList();
+                    var delegates = eventHandler.GetInvocationList();
                     // Walk thru invocation list
-                    foreach (NotifyCollectionChangedEventHandler handler in delegates)
+                    foreach (var @delegate in delegates)
                     {
+                        var handler = (NotifyCollectionChangedEventHandler) @delegate;
                         var dispatcherObject = handler.Target as DispatcherObject;
                         // If the subscriber is a DispatcherObject and different thread
                         if (dispatcherObject != null && dispatcherObject.CheckAccess() == false)
                             // Invoke handler in the target dispatcher's thread
-                            dispatcherObject.Dispatcher.Invoke(DispatcherPriority.DataBind,
-                                          handler, this, e);
+                            dispatcherObject.Dispatcher.Invoke(DispatcherPriority.DataBind, handler, this, e);
                         else // Execute handler as is
                             handler(this, e);
                     }
                 }
             }
         }
+
+        #region Constructors
+
+        public CObservableList(Dispatcher dispatcher = null)
+        {
+            _dispatcher = dispatcher ?? (Application.Current != null ? Application.Current.Dispatcher : Dispatcher.CurrentDispatcher);
+        }
+
+        public CObservableList(IEnumerable<T> collection, Dispatcher dispatcher = null) : base(collection)
+        {
+            _dispatcher = dispatcher ?? (Application.Current != null ? Application.Current.Dispatcher : Dispatcher.CurrentDispatcher);
+        }
+
+        public CObservableList(List<T> list, Dispatcher dispatcher = null) : base(list)
+        {
+            _dispatcher = dispatcher ?? (Application.Current != null ? Application.Current.Dispatcher : Dispatcher.CurrentDispatcher);
+        }
+
+        #endregion
     }
 }

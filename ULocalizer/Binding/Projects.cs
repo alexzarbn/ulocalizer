@@ -10,63 +10,92 @@ namespace ULocalizer.Binding
 {
     public static class Projects
     {
-        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
-        public static void RaiseStaticPropertyChanged(string propName)
+        private static CProject _newProject = new CProject();
+        private static CProject _currentProject = new CProject();
+        private static XmlLanguage _xmlLang;
+        private static bool _isProjectSetted;
+        private static bool _isLanguagesListChanged;
+
+        public static CProject NewProject
         {
-            EventHandler<PropertyChangedEventArgs> handler = StaticPropertyChanged;
+            get { return _newProject; }
+            set
+            {
+                _newProject = value;
+                RaiseStaticPropertyChanged("NewProject");
+            }
+        }
+
+        public static CProject CurrentProject
+        {
+            get { return _currentProject; }
+            set
+            {
+                _currentProject = value;
+                RaiseStaticPropertyChanged("CurrentProject");
+                IsProjectSetted = true;
+            }
+        }
+
+        public static XmlLanguage XmlLang
+        {
+            get { return _xmlLang; }
+            set
+            {
+                _xmlLang = value;
+                RaiseStaticPropertyChanged("XmlLang");
+            }
+        }
+
+        public static bool IsProjectSetted
+        {
+            get { return _isProjectSetted; }
+            private set
+            {
+                _isProjectSetted = value;
+                RaiseStaticPropertyChanged("isProjectSetted");
+            }
+        }
+
+        public static bool IsLanguagesListChanged
+        {
+            get { return _isLanguagesListChanged; }
+            set
+            {
+                _isLanguagesListChanged = value;
+                RaiseStaticPropertyChanged("isLanguagesListChanged");
+            }
+        }
+
+        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+
+        private static void RaiseStaticPropertyChanged(string propName)
+        {
+            var handler = StaticPropertyChanged;
             if (handler != null)
                 handler(null, new PropertyChangedEventArgs(propName));
         }
-        private static CProject _NewProject = new CProject();
-        public static CProject NewProject
-        {
-            get { return _NewProject; }
-            set { _NewProject = value; RaiseStaticPropertyChanged("NewProject"); }
-        }
-        private static CProject _CurrentProject = new CProject();
-        public static CProject CurrentProject
-        {
-            get { return _CurrentProject; }
-            set { _CurrentProject = value; RaiseStaticPropertyChanged("CurrentProject"); isProjectSetted = true; }
-        }
-        private static XmlLanguage _XmlLang = null;
-        public static XmlLanguage XmlLang
-        {
-            get { return _XmlLang; }
-            set { _XmlLang = value; RaiseStaticPropertyChanged("XmlLang"); }
-        }
-        private static bool _isProjectSetted = false;
-        public static bool isProjectSetted
-        {
-            get { return _isProjectSetted; }
-            set { _isProjectSetted = value; RaiseStaticPropertyChanged("isProjectSetted"); }
-        }
-        private static bool _isLanguagesListChanged = false;
-        public static bool isLanguagesListChanged
-        {
-            get { return _isLanguagesListChanged; }
-            set { _isLanguagesListChanged = value; RaiseStaticPropertyChanged("isLanguagesListChanged"); }
-        }
+
         public static async Task Open()
         {
             await Task.Run(async () =>
             {
-                bool isSuccessful = true;
-                string Path = CUtils.ShowFileDialog(FileTypesFilter.ULocProject);
-                if (!string.IsNullOrWhiteSpace(Path))
+                var isSuccessful = true;
+                var path = CUtils.ShowFileDialog(FileTypesFilter.ULocProject);
+                if (!string.IsNullOrWhiteSpace(path))
                 {
                     try
                     {
-                        string serializedProject = File.ReadAllText(Path);
+                        var serializedProject = File.ReadAllText(path);
                         CurrentProject = JsonConvert.DeserializeObject<CProject>(serializedProject);
-                        CurrentProject.isChanged = false;
+                        CurrentProject.IsChanged = false;
                         await CBuilder.LoadTranslations(true);
-                        CurrentProject.isTranslationsChanged = false;
+                        CurrentProject.IsTranslationsChanged = false;
                     }
                     catch (IOException ex)
                     {
                         isSuccessful = false;
-                        Common.WriteToConsole(ex.Message,MessageType.Error);
+                        Common.WriteToConsole(ex.Message, MessageType.Error);
                     }
                 }
                 else

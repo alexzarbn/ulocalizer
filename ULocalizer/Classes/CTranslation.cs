@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 
@@ -7,49 +6,74 @@ namespace ULocalizer.Classes
 {
     public class CTranslation : INotifyPropertyChanged
     {
+        private bool _isChanged;
+        private CultureInfo _language;
+        private CObservableList<CTranslationNode> _nodes = new CObservableList<CTranslationNode>();
+
+        /// <summary>
+        ///     Path to translation file (*.archive)
+        /// </summary>
+        private string _path = string.Empty;
+
+        public CultureInfo Language
+        {
+            get { return _language; }
+            set
+            {
+                _language = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string Path
+        {
+            get { return _path; }
+            set
+            {
+                _path = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string IconPath
+        {
+            get { return "/Images/flags/" + Language.Name + ".png"; }
+        }
+
+        public CObservableList<CTranslationNode> Nodes
+        {
+            get { return _nodes; }
+            set
+            {
+                _nodes = value;
+                NotifyPropertyChanged();
+                IsChanged = true;
+            }
+        }
+
+        public bool IsChanged
+        {
+            get { return _isChanged; }
+            set
+            {
+                _isChanged = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-        private CultureInfo _Language = null;
-        public CultureInfo Language
-        {
-            get { return _Language; }
-            set { _Language = value; NotifyPropertyChanged();  }
-        }
-        /// <summary>
-        /// Path to translation file (*.archive)
-        /// </summary>
-        private string _Path =  string.Empty;
-        public string Path
-        {
-            get { return _Path; }
-            set { _Path = value; NotifyPropertyChanged(); }
-        }
-        public string IconPath
-        {
-            get { return "/Images/flags/" + this.Language.Name + ".png"; }
-        }
-        private CObservableList<CTranslationNode> _Nodes = new CObservableList<CTranslationNode>();
-        public CObservableList<CTranslationNode> Nodes
-        {
-            get { return _Nodes; }
-            set { _Nodes = value; NotifyPropertyChanged(); this.isChanged = true; }
-        }
-        private bool _isChanged = false;
-        public bool isChanged
-        {
-            get { return _isChanged; }
-            set { _isChanged = value; NotifyPropertyChanged(); }
-        }
+
         public override string ToString()
         {
-            return this.Language.DisplayName;
+            return Language.DisplayName;
         }
-        
     }
 }

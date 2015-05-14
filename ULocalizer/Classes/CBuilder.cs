@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ExtensionMethods;
+using System.Windows;
 using Newtonsoft.Json.Linq;
 using ULocalizer.Binding;
+using ULocalizer.ExtensionMethods;
+using ULocalizer.Windows;
 
 namespace ULocalizer.Classes
 {
     public static class CBuilder
     {
         /// <summary>
-        /// Build the localization packages
+        ///     Build the localization packages
         /// </summary>
         /// <returns></returns>
         public static async Task Build(bool saveTranslations)
@@ -25,42 +25,33 @@ namespace ULocalizer.Classes
                 {
                     await Projects.CurrentProject.SaveTranslations(true);
                 }
-                await Common.ShowProgressMessage("Building...",false);
-                bool isSuccessfull = true;
+                await Common.ShowProgressMessage("Building...", false);
+                var isSuccessfull = true;
                 if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini")))
                 {
                     try
                     {
-                        File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini"), Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), true);
-                        List<string> CulturesToGenerate = new List<string>();
-                        foreach (CultureInfo CI in Projects.CurrentProject.Languages)
+                        if (Projects.CurrentProject.PathToProjectFile != null)
                         {
-                            CulturesToGenerate.Add("CulturesToGenerate=" + CI.Name);
-                        }
-                        await CUtils.MakeConfig(Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), CulturesToGenerate, Projects.CurrentProject.SourcePath, Projects.CurrentProject.DestinationPath);
-                        var BuilderProcess = new Process
-                        {
-                            StartInfo = new ProcessStartInfo
+                            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini"), Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), true);
+                            var culturesToGenerate = Projects.CurrentProject.Languages.Select(ci => "CulturesToGenerate=" + ci.Name).ToList();
+                            if (Projects.CurrentProject.PathToProjectFile != null)
                             {
-                                FileName = Projects.CurrentProject.PathToEditor,
-                                Arguments = Projects.CurrentProject.PathToProjectFile + " -run=GatherText -config=" + Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"),
-                                UseShellExecute = false,
-                                RedirectStandardOutput = true,
-                                RedirectStandardError = true,
-                                CreateNoWindow = true
+                                await CUtils.MakeConfig(Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), culturesToGenerate, Projects.CurrentProject.SourcePath, Projects.CurrentProject.DestinationPath);
+                                var builderProcess = new Process {StartInfo = new ProcessStartInfo {FileName = Projects.CurrentProject.PathToEditor, Arguments = Projects.CurrentProject.PathToProjectFile + " -run=GatherText -config=" + Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true}};
+                                builderProcess.Start();
+                                while (!builderProcess.StandardOutput.EndOfStream)
+                                {
+                                    Common.WriteToConsole(builderProcess.StandardOutput.ReadLine(), MessageType.Blank);
+                                }
+                                while (!builderProcess.StandardError.EndOfStream)
+                                {
+                                    isSuccessfull = false;
+                                    Common.WriteToConsole(builderProcess.StandardError.ReadLine(), MessageType.Blank);
+                                }
+                                builderProcess.WaitForExit();
                             }
-                        };
-                        BuilderProcess.Start();
-                        while (!BuilderProcess.StandardOutput.EndOfStream)
-                        {
-                            Common.WriteToConsole(BuilderProcess.StandardOutput.ReadLine(), MessageType.Blank);
                         }
-                        while (!BuilderProcess.StandardError.EndOfStream)
-                        {
-                            isSuccessfull = false;
-                            Common.WriteToConsole(BuilderProcess.StandardError.ReadLine(), MessageType.Blank);
-                        }
-                        BuilderProcess.WaitForExit();
                         await Task.Delay(1000);
                         if (isSuccessfull)
                         {
@@ -70,12 +61,12 @@ namespace ULocalizer.Classes
                     catch (Exception ex)
                     {
                         isSuccessfull = false;
-                        Common.WriteToConsole(ex.Message,MessageType.Error);
+                        Common.WriteToConsole(ex.Message, MessageType.Error);
                     }
                 }
                 else
                 {
-                    Common.WriteToConsole("Default localization config doesn't exist.",MessageType.Error);
+                    Common.WriteToConsole("Default localization config doesn't exist.", MessageType.Error);
                     isSuccessfull = false;
                 }
                 if (!isSuccessfull)
@@ -85,93 +76,82 @@ namespace ULocalizer.Classes
                 await Common.ProgressController.CloseAsync();
             });
         }
+
         /// <summary>
-        /// Builds the languages list (on the left side of app)
+        ///     Builds the languages list (on the left side of app)
         /// </summary>
         /// <returns></returns>
         public static async Task LoadTranslations(bool closeProgressAfterExecution)
         {
             await Task.Run(async () =>
             {
-                await Common.ShowProgressMessage("Loading translations...",true);
-                foreach (CultureInfo Lang in Projects.CurrentProject.Languages)
+                await Common.ShowProgressMessage("Loading translations...", true);
+                foreach (var lang in Projects.CurrentProject.Languages)
                 {
                     if (Directory.Exists(Path.Combine(Projects.CurrentProject.GetProjectRoot(), Projects.CurrentProject.SourcePath)))
                     {
                         try
                         {
-                            string[] Files = Directory.GetFiles(CUtils.FixPath(Path.Combine(Projects.CurrentProject.GetProjectRoot(), Projects.CurrentProject.SourcePath, Lang.Name)), "*.archive");
-                            if (Files.Count() > 0)
+                            var files = Directory.GetFiles(CUtils.FixPath(Path.Combine(Projects.CurrentProject.GetProjectRoot(), Projects.CurrentProject.SourcePath, lang.Name)), "*.archive");
+                            if (files.Any())
                             {
-                                JObject DeserializedTranslation = JObject.Parse(File.ReadAllText(Files[0]));
-                                JToken Vars = null;
-                                JToken Subnamespaces = null;
-                                bool isVarsValid = DeserializedTranslation.TryGetValue("Children", out Vars);
-                                bool isSubnamespacesValid = DeserializedTranslation.TryGetValue("Subnamespaces", out Subnamespaces);
+                                var deserializedTranslation = JObject.Parse(File.ReadAllText(files[0]));
+                                JToken vars;
+                                JToken subnamespaces;
+                                var isVarsValid = deserializedTranslation.TryGetValue("Children", out vars);
+                                var isSubnamespacesValid = deserializedTranslation.TryGetValue("Subnamespaces", out subnamespaces);
                                 if (isVarsValid || isSubnamespacesValid)
                                 {
-                                    CTranslation TranslationInstance = new CTranslation();
-                                    TranslationInstance.Language = Lang;
-                                    TranslationInstance.Path = Files[0];
+                                    var translationInstance = new CTranslation {Language = lang, Path = files[0]};
                                     if (isVarsValid)
                                     {
-                                        CTranslationNode VarsNode = new CTranslationNode();
-                                        VarsNode.isTopLevel = true;
-                                        VarsNode.Title = "Variables";
-                                        foreach (JToken Var in Vars.Children())
+                                        var varsNode = new CTranslationNode {IsTopLevel = true, Title = "Variables"};
+                                        foreach (var var in vars.Children())
                                         {
-                                            CTranslationNodeItem Item = new CTranslationNodeItem();
-                                            Item.Source = Var.Value<JToken>("Source").Value<string>("Text");
-                                            Item.Translation = Var.Value<JToken>("Translation").Value<string>("Text");
-                                            VarsNode.Items.Add(Item);
+                                            var item = new CTranslationNodeItem {Source = var.Value<JToken>("Source").Value<string>("Text"), Translation = var.Value<JToken>("Translation").Value<string>("Text")};
+                                            varsNode.Items.Add(item);
                                         }
-                                        TranslationInstance.Nodes.Add(VarsNode);
+                                        translationInstance.Nodes.Add(varsNode);
                                     }
                                     if (isSubnamespacesValid)
                                     {
-                                        foreach (JToken Subnamespace in Subnamespaces)
+                                        foreach (var subnamespace in subnamespaces)
                                         {
-                                            CTranslationNode SubnamespacesNode = new CTranslationNode();
-                                            SubnamespacesNode.Title = Subnamespace.Value<string>("Namespace");
-                                            foreach (JToken Val in Subnamespace.Value<JToken>("Children").Children())
+                                            var subnamespacesNode = new CTranslationNode {Title = subnamespace.Value<string>("Namespace")};
+                                            foreach (var val in subnamespace.Value<JToken>("Children").Children())
                                             {
-                                                CTranslationNodeItem Item = new CTranslationNodeItem();
-                                                Item.Source = Val.Value<JToken>("Source").Value<string>("Text");
-                                                Item.Translation = Val.Value<JToken>("Translation").Value<string>("Text");
-                                                SubnamespacesNode.Items.Add(Item);
+                                                var item = new CTranslationNodeItem {Source = val.Value<JToken>("Source").Value<string>("Text"), Translation = val.Value<JToken>("Translation").Value<string>("Text")};
+                                                subnamespacesNode.Items.Add(item);
                                             }
-                                            TranslationInstance.Nodes.Add(SubnamespacesNode);
-
+                                            translationInstance.Nodes.Add(subnamespacesNode);
                                         }
-                                        
                                     }
-                                    Projects.CurrentProject.Translations.Add(TranslationInstance);
-                                    
+                                    Projects.CurrentProject.Translations.Add(translationInstance);
                                 }
                                 else
                                 {
-                                    Common.WriteToConsole("Something wrong with translation file. Please, run repair using Tools->Repair.",MessageType.Error);
+                                    Common.WriteToConsole("Something wrong with translation file. Please, run repair using Tools->Repair.", MessageType.Error);
                                 }
                             }
                             else
                             {
-                                Common.WriteToConsole("Translation file for " + Lang.DisplayName + " language doesn't exist.",MessageType.Error);
+                                Common.WriteToConsole("Translation file for " + lang.DisplayName + " language doesn't exist.", MessageType.Error);
                             }
                         }
                         catch (Exception ex)
                         {
-                            Common.WriteToConsole(ex.Message,MessageType.Error);
+                            Common.WriteToConsole(ex.Message, MessageType.Error);
                         }
                     }
                     else
                     {
-                        Common.WriteToConsole("Folder for " + Lang.DisplayName + " language doesn't exist.",MessageType.Error);
+                        Common.WriteToConsole("Folder for " + lang.DisplayName + " language doesn't exist.", MessageType.Error);
                     }
                 }
-                await Common.ShowProgressMessage("Sorting...",true);
+                await Common.ShowProgressMessage("Sorting...", true);
                 Projects.CurrentProject.Translations = Projects.CurrentProject.Translations.OrderBy(translation => translation.Language.Name).ToObservableList();
-                Projects.CurrentProject.isTranslationsChanged = false;
-                await App.Current.Dispatcher.InvokeAsync(()=>(App.Current.MainWindow as Windows.MainWindow).LanguagesList.SelectedIndex = 0);
+                Projects.CurrentProject.IsTranslationsChanged = false;
+                await Application.Current.Dispatcher.InvokeAsync(() => ((MainWindow) Application.Current.MainWindow).LanguagesList.SelectedIndex = 0);
                 if (closeProgressAfterExecution)
                 {
                     await Common.ProgressController.CloseAsync();
