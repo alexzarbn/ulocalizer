@@ -92,7 +92,7 @@ namespace ULocalizer.Binding
                         await CBuilder.LoadTranslations(true);
                         CurrentProject.IsTranslationsChanged = false;
                     }
-                    catch (IOException ex)
+                    catch (Exception ex)
                     {
                         isSuccessful = false;
                         Common.WriteToConsole(ex.Message, MessageType.Error);

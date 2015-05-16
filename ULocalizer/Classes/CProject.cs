@@ -208,7 +208,6 @@ namespace ULocalizer.Classes
                             {
                                 if (node.IsTopLevel)
                                 {
-                                    //deserializedFile.Value<JArray>("Children");
                                     var variablesNodeInst = JArray.FromObject(MakeChildList(node.Items));
                                     deserializedFile["Children"] = variablesNodeInst;
                                 }
@@ -229,6 +228,40 @@ namespace ULocalizer.Classes
                     else
                     {
                         Common.WriteToConsole("Translation file " + translationInstance.Path + " doesn't exist.", MessageType.Error);
+                    }
+                    if (File.Exists(Path.Combine(Path.GetDirectoryName(translationInstance.Path), "Game.po")))
+                    {
+                        try
+                        {
+                            var poContent = File.ReadAllLines(Path.Combine(Path.GetDirectoryName(translationInstance.Path), "Game.po"));
+                            if (poContent.Any())
+                            {
+                                foreach (var node in translationInstance.Nodes)
+                                {
+                                    foreach (var item in node.Items)
+                                    {
+                                        var sourceIndex = Array.IndexOf(poContent, "msgid \""+item.Source+"\"");
+                                        if ((sourceIndex != -1) && (poContent.Length >= sourceIndex + 1) && (poContent[sourceIndex + 1].Contains("msgstr")))
+                                        {
+                                            poContent[sourceIndex + 1] = "msgstr \"" + item.Translation + "\"";
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Common.WriteToConsole(Path.Combine(Path.GetDirectoryName(translationInstance.Path), "Game.po") + " is empty", MessageType.Error);
+                            }
+                            File.WriteAllLines(Path.Combine(Path.GetDirectoryName(translationInstance.Path), "Game.po"),poContent);
+                        }
+                        catch (Exception ex)
+                        {
+                            Common.WriteToConsole(ex.Message,MessageType.Error);
+                        }
+                    }
+                    else
+                    {
+                        Common.WriteToConsole("Translation file " + Path.Combine(Path.GetDirectoryName(translationInstance.Path), "Game.po") + " doesn't exist.", MessageType.Error);
                     }
                 }
                 IsTranslationsChanged = false;
