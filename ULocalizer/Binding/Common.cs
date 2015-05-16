@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,12 +21,12 @@ namespace ULocalizer.Binding
     public static class Common
     {
         private static List<EncodingInfo> _encodings = new List<EncodingInfo>();
-        private static CObservableList<CultureInfo> _cultures = new CObservableList<CultureInfo>();
+        private static CObservableList<CCulture> _cultures = new CObservableList<CCulture>();
 
         /// <summary>
         ///     Available cultures for automatic translation
         /// </summary>
-        private static CObservableList<CultureInfo> _translationCultures = new CObservableList<CultureInfo>();
+        private static CObservableList<CCulture> _translationCultures = new CObservableList<CCulture>();
 
         private static string _consoleData = string.Empty;
         private static CTranslationNode _selectedNode;
@@ -39,13 +40,13 @@ namespace ULocalizer.Binding
             private set { _encodings = value; }
         }
 
-        public static CObservableList<CultureInfo> Cultures
+        public static CObservableList<CCulture> Cultures
         {
             get { return _cultures; }
             private set { _cultures = value; }
         }
 
-        public static CObservableList<CultureInfo> TranslationCultures
+        public static CObservableList<CCulture> TranslationCultures
         {
             get { return _translationCultures; }
             set { _translationCultures = value; }
@@ -80,7 +81,7 @@ namespace ULocalizer.Binding
             {
                 _selectedTranslation = value;
                 RaiseStaticPropertyChanged("SelectedTranslation");
-                Projects.XmlLang = XmlLanguage.GetLanguage(SelectedTranslation.Language.Name);
+                Projects.XmlLang = XmlLanguage.GetLanguage(SelectedTranslation.Culture.ISO);
             }
         }
 
@@ -152,26 +153,24 @@ namespace ULocalizer.Binding
         /// </summary>
         public static async void SetCultures()
         {
-            Cultures.Clear(); //for sure...well, something can happend...it's programming, right ? x)
-            Cultures.Add(CultureInfo.GetCultureInfo("de"));
-            Cultures.Add(CultureInfo.GetCultureInfo("en"));
-            Cultures.Add(CultureInfo.GetCultureInfo("es"));
-            Cultures.Add(CultureInfo.GetCultureInfo("fr"));
-            Cultures.Add(CultureInfo.GetCultureInfo("hi"));
-            Cultures.Add(CultureInfo.GetCultureInfo("it"));
-            Cultures.Add(CultureInfo.GetCultureInfo("ja"));
-            Cultures.Add(CultureInfo.GetCultureInfo("ko"));
-            Cultures.Add(CultureInfo.GetCultureInfo("pl"));
-            Cultures.Add(CultureInfo.GetCultureInfo("pt"));
-            Cultures.Add(CultureInfo.GetCultureInfo("ru"));
-            Cultures.Add(CultureInfo.GetCultureInfo("sv"));
-            Cultures.Add(CultureInfo.GetCultureInfo("zh"));
+            Cultures.Clear();
+            Cultures.Add(new CCulture {DisplayName = "German", ISO = "de"});
+            Cultures.Add(new CCulture {DisplayName = "English", ISO = "en"});
+            Cultures.Add(new CCulture {DisplayName = "Spanish", ISO = "es"});
+            Cultures.Add(new CCulture {DisplayName = "Franch", ISO = "fr"});
+            Cultures.Add(new CCulture {DisplayName = "Hindi", ISO = "hi"});
+            Cultures.Add(new CCulture {DisplayName = "Italian",ISO = "it"});
+            Cultures.Add(new CCulture {DisplayName = "Japanese", ISO = "ja"});
+            Cultures.Add(new CCulture {DisplayName = "Korean", ISO = "ko"});
+            Cultures.Add(new CCulture {DisplayName = "Polish", ISO = "pl"});
+            Cultures.Add(new CCulture {DisplayName = "Portuguese", ISO = "pt"});
+            Cultures.Add(new CCulture {DisplayName = "Russian", ISO = "ru"});
+            Cultures.Add(new CCulture {DisplayName = "Swedish",  ISO = "sv"});
+            Cultures.Add(new CCulture {DisplayName = "Chinese",  ISO = "zh"});
+            Cultures.ToList().ForEach(culture => AddRegions(culture.ISO));
+            await AddAdditionalCultures();
             await CTranslator.GetAvailableLanguages();
-            foreach (var ci in Cultures.ToList())
-            {
-                AddRegions(ci.Name);
-            }
-            Cultures = Cultures.OrderBy(culture => culture.Name).ToObservableList();
+            Cultures = Cultures.OrderBy(culture => culture.ISO).ToObservableList();
         }
 
         private static void AddRegions(string parentCulture)
@@ -179,8 +178,53 @@ namespace ULocalizer.Binding
             var regions = CultureInfo.GetCultures(CultureTypes.AllCultures).Where(x => x.Parent.Name == parentCulture);
             foreach (var regionInstance in regions)
             {
-                Cultures.Add(regionInstance);
+                Cultures.Add(new CCulture {DisplayName = regionInstance.DisplayName, Parent = Cultures.First(culture => culture.ISO == regionInstance.Parent.Name), ISO = regionInstance.Name});
             }
+        }
+
+        private async static Task AddAdditionalCultures()
+        {
+            var isSuccessful = true;
+            try
+            {
+                var additionalCulturesTextData = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\additionalCultures.txt"));
+                if (additionalCulturesTextData.Any())
+                {
+                    foreach (var additionalCultureInfo in additionalCulturesTextData)
+                    {
+                        var additionalCultureSplitted = new string[2] {additionalCultureInfo.Substring(0, additionalCultureInfo.IndexOf(" ", StringComparison.Ordinal)), additionalCultureInfo.Substring(additionalCultureInfo.IndexOf(" ", StringComparison.Ordinal) + 1)};
+                        var isoSplitted = additionalCultureSplitted[0].Split('-');
+                        var parentCultureIso = isoSplitted[0];
+                        var additionalCulture = new CCulture {ISO = additionalCultureSplitted[0]};
+                        if (Cultures.FirstOrDefault(culture => culture.ISO == parentCultureIso) != null)
+                        {
+                            additionalCulture.Parent = Cultures.First(culture => culture.ISO == parentCultureIso);
+                            additionalCulture.DisplayName = string.Join(" ", additionalCulture.Parent.DisplayName, additionalCultureSplitted[1]);
+                        }
+                        else
+                        {
+                            additionalCulture.DisplayName = additionalCultureSplitted[1];
+                        }
+                        Cultures.Add(additionalCulture);
+                    }
+                }
+                else
+                {
+                    WriteToConsole("File with additional cultures is empty",MessageType.Error);
+                    isSuccessful = false;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                WriteToConsole(ex.Message,MessageType.Error);
+                isSuccessful = false;
+            }
+            if (!isSuccessful)
+            {
+                await ShowError("Additional cultures are not loaded. See console for details.");
+            }
+            
         }
 
         /// <summary>

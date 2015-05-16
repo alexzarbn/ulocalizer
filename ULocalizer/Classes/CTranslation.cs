@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace ULocalizer.Classes
@@ -7,7 +6,7 @@ namespace ULocalizer.Classes
     public class CTranslation : INotifyPropertyChanged
     {
         private bool _isChanged;
-        private CultureInfo _language;
+        private CCulture _culture;
         private CObservableList<CTranslationNode> _nodes = new CObservableList<CTranslationNode>();
 
         /// <summary>
@@ -15,12 +14,12 @@ namespace ULocalizer.Classes
         /// </summary>
         private string _path = string.Empty;
 
-        public CultureInfo Language
+        public CCulture Culture
         {
-            get { return _language; }
+            get { return _culture; }
             set
             {
-                _language = value;
+                _culture = value;
                 NotifyPropertyChanged();
             }
         }
@@ -37,7 +36,7 @@ namespace ULocalizer.Classes
 
         public string IconPath
         {
-            get { return "/Images/flags/" + Language.Name + ".png"; }
+            get { return "/Images/flags/" + Culture.ISO + ".png"; }
         }
 
         public CObservableList<CTranslationNode> Nodes
@@ -51,7 +50,7 @@ namespace ULocalizer.Classes
             }
         }
 
-        public bool IsChanged
+        private bool IsChanged
         {
             get { return _isChanged; }
             set
@@ -73,7 +72,7 @@ namespace ULocalizer.Classes
 
         public override string ToString()
         {
-            return Language.DisplayName;
+            return Culture.DisplayName;
         }
     }
 }

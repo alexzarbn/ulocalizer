@@ -22,7 +22,7 @@ namespace ULocalizer.Classes
         private EncodingInfo _encoding = Common.Encodings.Find(e => e.Name == "utf-8");
         private bool _isChanged;
         private bool _isTranslationsChanged;
-        private CObservableList<CultureInfo> _languages = new CObservableList<CultureInfo>();
+        private CObservableList<CCulture> _languages = new CObservableList<CCulture>();
         private string _name = string.Empty;
         private string _pathToEditor = string.Empty;
         private string _pathToProjectFile = string.Empty;
@@ -62,7 +62,7 @@ namespace ULocalizer.Classes
             }
         }
 
-        private EncodingInfo Encoding
+        public EncodingInfo Encoding
         {
             get { return _encoding; }
             set
@@ -73,7 +73,7 @@ namespace ULocalizer.Classes
             }
         }
 
-        public CObservableList<CultureInfo> Languages
+        public CObservableList<CCulture> Languages
         {
             get { return _languages; }
             set
@@ -153,6 +153,7 @@ namespace ULocalizer.Classes
         public async Task Save()
         {
             var serializedProject = JsonConvert.SerializeObject(this);
+            // ReSharper disable once AssignNullToNotNullAttribute
             await CUtils.SaveContentToFile(Path.Combine(Path.GetDirectoryName(PathToProjectFile), Name + ".ulp"), serializedProject, Encoding.GetEncoding());
         }
 

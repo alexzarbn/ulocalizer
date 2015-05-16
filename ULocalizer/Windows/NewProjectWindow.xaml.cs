@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+using System.Linq;
 using ULocalizer.Binding;
 using ULocalizer.Classes;
 
@@ -14,7 +14,7 @@ namespace ULocalizer.Windows
         {
             InitializeComponent();
             Projects.NewProject = new CProject();
-            Projects.NewProject.Languages.Add(CultureInfo.GetCultureInfo("en"));
+            Projects.NewProject.Languages.Add(Common.Cultures.First(culture => culture.ISO=="en"));
         }
 
         private async void ProjectPropertiesControl_Executed(object sender, EventArgs e)

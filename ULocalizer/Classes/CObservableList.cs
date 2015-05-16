@@ -23,7 +23,6 @@ namespace ULocalizer.Classes
             {
                 await _dispatcher.InvokeAsync(ClearItems);
             }
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         protected override async void RemoveItem(int index)
@@ -36,7 +35,6 @@ namespace ULocalizer.Classes
             {
                 await _dispatcher.InvokeAsync(() => RemoveItem(index));
             }
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove));
         }
 
         protected override async void InsertItem(int index, T item)
@@ -61,7 +59,6 @@ namespace ULocalizer.Classes
             {
                 await _dispatcher.InvokeAsync(() => SetItem(index, item));
             }
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace));
         }
 
         protected override async void MoveItem(int oldIndex, int newIndex)
@@ -74,7 +71,6 @@ namespace ULocalizer.Classes
             {
                 await _dispatcher.InvokeAsync(() => MoveItem(oldIndex, newIndex));
             }
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move));
         }
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)

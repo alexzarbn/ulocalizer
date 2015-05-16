@@ -73,6 +73,8 @@
     <Compile Include="Binding\Common.cs" />
     <Compile Include="Binding\Projects.cs" />
     <Compile Include="Classes\CBuilder.cs" />
+    <Compile Include="Classes\CCulture.cs" />
+    <Compile Include="Classes\CNotify.cs" />
     <Compile Include="Classes\CObservableList.cs" />
     <Compile Include="Classes\CProject.cs" />
     <Compile Include="Classes\CTranslation.cs" />
@@ -95,6 +97,7 @@
     <Compile Include="Controls\TranslateDirectionControl.xaml.cs">
       <DependentUpon>TranslateDirectionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\CCulterConverter.cs" />
     <Compile Include="Converters\CultureToFlagIconConverter.cs" />
     <Compile Include="Converters\SelectedItemToBooleanConverter.cs" />
     <Compile Include="Converters\SelectedNodeToBooleanConverter.cs" />
@@ -221,21 +224,6 @@
     <Resource Include="Images\newProject.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\flags\zh.png" />
-    <Resource Include="Images\flags\de.png" />
-    <Resource Include="Images\flags\en.png" />
-    <Resource Include="Images\flags\es.png" />
-    <Resource Include="Images\flags\fr.png" />
-    <Resource Include="Images\flags\hi.png" />
-    <Resource Include="Images\flags\it.png" />
-    <Resource Include="Images\flags\ja-jp.png" />
-    <Resource Include="Images\flags\ko-kr.png" />
-    <Resource Include="Images\flags\pl.png" />
-    <Resource Include="Images\flags\pt.png" />
-    <Resource Include="Images\flags\ru.png" />
-    <Resource Include="Images\flags\sv.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\variable.png" />
   </ItemGroup>
   <ItemGroup>
@@ -245,12 +233,144 @@
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\flags\de-AT.png" />
-    <Resource Include="Images\flags\de-CH.png" />
-    <Resource Include="Images\flags\de-LI.png" />
-    <Resource Include="Images\flags\de-LU.png" />
+    <Resource Include="Images\properties.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\console.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\abc.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\settings.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\de-BE.png" />
+    <Resource Include="Images\flags\en-150.png" />
+    <Resource Include="Images\flags\en-AG.png" />
+    <Resource Include="Images\flags\en-AI.png" />
+    <Resource Include="Images\flags\en-AS.png" />
+    <Resource Include="Images\flags\en-BB.png" />
+    <Resource Include="Images\flags\en-BE.png" />
+    <Resource Include="Images\flags\en-BM.png" />
+    <Resource Include="Images\flags\en-BS.png" />
+    <Resource Include="Images\flags\en-BW.png" />
+    <Resource Include="Images\flags\en-CC.png" />
+    <Resource Include="Images\flags\en-CI.png" />
+    <Resource Include="Images\flags\en-CK.png" />
+    <Resource Include="Images\flags\en-CM.png" />
+    <Resource Include="Images\flags\en-CX.png" />
+    <Resource Include="Images\flags\en-DM.png" />
+    <Resource Include="Images\flags\en-ER.png" />
+    <Resource Include="Images\flags\en-FJ.png" />
+    <Resource Include="Images\flags\en-FK.png" />
+    <Resource Include="Images\flags\en-FM.png" />
+    <Resource Include="Images\flags\en-GD.png" />
+    <Resource Include="Images\flags\en-GG.png" />
+    <Resource Include="Images\flags\en-GH.png" />
+    <Resource Include="Images\flags\en-GI.png" />
+    <Resource Include="Images\flags\en-GM.png" />
+    <Resource Include="Images\flags\en-GU.png" />
+    <Resource Include="Images\flags\en-GY.png" />
+    <Resource Include="Images\flags\en-IO.png" />
+    <Resource Include="Images\flags\en-KE.png" />
+    <Resource Include="Images\flags\en-KI.png" />
+    <Resource Include="Images\flags\en-KN.png" />
+    <Resource Include="Images\flags\en-KY.png" />
+    <Resource Include="Images\flags\en-LC.png" />
+    <Resource Include="Images\flags\en-LR.png" />
+    <Resource Include="Images\flags\en-LS.png" />
+    <Resource Include="Images\flags\en-MG.png" />
+    <Resource Include="Images\flags\en-MH.png" />
+    <Resource Include="Images\flags\en-MO.png" />
+    <Resource Include="Images\flags\en-MP.png" />
+    <Resource Include="Images\flags\en-MS.png" />
+    <Resource Include="Images\flags\en-MT.png" />
+    <Resource Include="Images\flags\en-MU.png" />
+    <Resource Include="Images\flags\en-MW.png" />
+    <Resource Include="Images\flags\en-NA.png" />
+    <Resource Include="Images\flags\en-NF.png" />
+    <Resource Include="Images\flags\en-NG.png" />
+    <Resource Include="Images\flags\en-NR.png" />
+    <Resource Include="Images\flags\en-NU.png" />
+    <Resource Include="Images\flags\en-PG.png" />
+    <Resource Include="Images\flags\en-PK.png" />
+    <Resource Include="Images\flags\en-PN.png" />
+    <Resource Include="Images\flags\en-PR.png" />
+    <Resource Include="Images\flags\en-PW.png" />
+    <Resource Include="Images\flags\en-RW.png" />
+    <Resource Include="Images\flags\en-SB.png" />
+    <Resource Include="Images\flags\en-SC.png" />
+    <Resource Include="Images\flags\en-SD.png" />
+    <Resource Include="Images\flags\en-SH.png" />
+    <Resource Include="Images\flags\en-SL.png" />
+    <Resource Include="Images\flags\en-SZ.png" />
+    <Resource Include="Images\flags\en-TC.png" />
+    <Resource Include="Images\flags\en-TK.png" />
+    <Resource Include="Images\flags\en-TO.png" />
+    <Resource Include="Images\flags\en-TV.png" />
+    <Resource Include="Images\flags\en-TZ.png" />
+    <Resource Include="Images\flags\en-UG.png" />
+    <Resource Include="Images\flags\en-UM.png" />
+    <Resource Include="Images\flags\en-US-POSIX.png" />
+    <Resource Include="Images\flags\en-VC.png" />
+    <Resource Include="Images\flags\en-VG.png" />
+    <Resource Include="Images\flags\en-VI.png" />
+    <Resource Include="Images\flags\en-VU.png" />
+    <Resource Include="Images\flags\en-WS.png" />
+    <Resource Include="Images\flags\en-ZM.png" />
+    <Resource Include="Images\flags\es-CU.png" />
+    <Resource Include="Images\flags\es-GQ.png" />
+    <Resource Include="Images\flags\es-PH.png" />
+    <Resource Include="Images\flags\fr-BF.png" />
+    <Resource Include="Images\flags\fr-BI.png" />
+    <Resource Include="Images\flags\fr-BJ.png" />
+    <Resource Include="Images\flags\fr-CF.png" />
+    <Resource Include="Images\flags\fr-DJ.png" />
+    <Resource Include="Images\flags\fr-DZ.png" />
+    <Resource Include="Images\flags\fr-GA.png" />
+    <Resource Include="Images\flags\fr-GF.png" />
+    <Resource Include="Images\flags\fr-GN.png" />
+    <Resource Include="Images\flags\fr-GP.png" />
+    <Resource Include="Images\flags\fr-GQ.png" />
+    <Resource Include="Images\flags\fr-KM.png" />
+    <Resource Include="Images\flags\fr-MG.png" />
+    <Resource Include="Images\flags\fr-MQ.png" />
+    <Resource Include="Images\flags\fr-MR.png" />
+    <Resource Include="Images\flags\fr-MU.png" />
+    <Resource Include="Images\flags\fr-NC.png" />
+    <Resource Include="Images\flags\fr-NE.png" />
+    <Resource Include="Images\flags\fr-PF.png" />
+    <Resource Include="Images\flags\fr-PM.png" />
+    <Resource Include="Images\flags\fr-RW.png" />
+    <Resource Include="Images\flags\fr-SC.png" />
+    <Resource Include="Images\flags\fr-SY.png" />
+    <Resource Include="Images\flags\fr-TD.png" />
+    <Resource Include="Images\flags\fr-TG.png" />
+    <Resource Include="Images\flags\fr-TN.png" />
+    <Resource Include="Images\flags\fr-VU.png" />
+    <Resource Include="Images\flags\fr-WF.png" />
+    <Resource Include="Images\flags\fr-YT.png" />
+    <Resource Include="Images\flags\it-SM.png" />
+    <Resource Include="Images\flags\ru-BY.png" />
+    <Resource Include="Images\flags\ru-KZ.png" />
+    <Resource Include="Images\flags\ru-UA.png" />
+    <Resource Include="Images\flags\zh-Hans-CH.png" />
+    <Resource Include="Images\flags\zh-Hans-MO.png" />
+    <Resource Include="Images\flags\zh-Hans-SG.png" />
+    <Resource Include="Images\flags\zh-Hant-HK.png" />
+    <Resource Include="Images\flags\zh-Hant-MO.png" />
+    <Resource Include="Images\flags\zh-Hant-TW.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flags\de-AT.png" />
+    <Resource Include="Images\flags\de-CH.png" />
+    <Resource Include="Images\flags\de-DE.png" />
+    <Resource Include="Images\flags\de-LI.png" />
+    <Resource Include="Images\flags\de-LU.png" />
+    <Resource Include="Images\flags\de.png" />
+    <Resource Include="Images\flags\en-001.png" />
+    <Resource Include="Images\flags\en-029.png" />
     <Resource Include="Images\flags\en-AU.png" />
     <Resource Include="Images\flags\en-BZ.png" />
     <Resource Include="Images\flags\en-CA.png" />
@@ -267,8 +387,8 @@
     <Resource Include="Images\flags\en-US.png" />
     <Resource Include="Images\flags\en-ZA.png" />
     <Resource Include="Images\flags\en-ZW.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Images\flags\en.png" />
+    <Resource Include="Images\flags\es-419.png" />
     <Resource Include="Images\flags\es-AR.png" />
     <Resource Include="Images\flags\es-BO.png" />
     <Resource Include="Images\flags\es-CL.png" />
@@ -289,11 +409,7 @@
     <Resource Include="Images\flags\es-US.png" />
     <Resource Include="Images\flags\es-UY.png" />
     <Resource Include="Images\flags\es-VE.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\flags\hi-IN.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Images\flags\es.png" />
     <Resource Include="Images\flags\fr-BE.png" />
     <Resource Include="Images\flags\fr-CA.png" />
     <Resource Include="Images\flags\fr-CD.png" />
@@ -308,59 +424,54 @@
     <Resource Include="Images\flags\fr-ML.png" />
     <Resource Include="Images\flags\fr-RE.png" />
     <Resource Include="Images\flags\fr-SN.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Images\flags\fr.png" />
+    <Resource Include="Images\flags\hi-IN.png" />
+    <Resource Include="Images\flags\hi.png" />
     <Resource Include="Images\flags\it-CH.png" />
     <Resource Include="Images\flags\it-IT.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Images\flags\it.png" />
+    <Resource Include="Images\flags\ja-jp.png" />
+    <Resource Include="Images\flags\ja.png" />
+    <Resource Include="Images\flags\ko-KP.png" />
+    <Resource Include="Images\flags\ko-KR.png" />
+    <Resource Include="Images\flags\ko.png" />
     <Resource Include="Images\flags\pl-PL.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Images\flags\pl.png" />
     <Resource Include="Images\flags\pt-AO.png" />
     <Resource Include="Images\flags\pt-BR.png" />
     <Resource Include="Images\flags\pt-PT.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Images\flags\pt.png" />
+    <Resource Include="Images\flags\ru-RU.png" />
+    <Resource Include="Images\flags\ru.png" />
     <Resource Include="Images\flags\sv-FI.png" />
     <Resource Include="Images\flags\sv-SE.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Images\flags\sv.png" />
     <Resource Include="Images\flags\zh-Hans.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\flags\zh-Hant.png" />
+    <Resource Include="Images\flags\zh.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\flags\de-DE.png" />
+    <Resource Include="Images\flags\en-IM.png" />
+    <Resource Include="Images\flags\en-JE.png" />
+    <Resource Include="Images\flags\en-SS.png" />
+    <Resource Include="Images\flags\en-SX.png" />
+    <Resource Include="Images\flags\es-EA.png" />
+    <Resource Include="Images\flags\es-IC.png" />
+    <Resource Include="Images\flags\fr-BL.png" />
+    <Resource Include="Images\flags\fr-MF.png" />
+    <Resource Include="Images\flags\leet.png" />
+    <Resource Include="Images\flags\pt-CV.png" />
+    <Resource Include="Images\flags\pt-GW.png" />
+    <Resource Include="Images\flags\pt-MO.png" />
+    <Resource Include="Images\flags\pt-MZ.png" />
+    <Resource Include="Images\flags\pt-ST.png" />
+    <Resource Include="Images\flags\pt-TL.png" />
+    <Resource Include="Images\flags\ru-KG.png" />
+    <Resource Include="Images\flags\ru-MD.png" />
+    <Resource Include="Images\flags\sv-AX.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\flags\ru-RU.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\flags\es-419.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\flags\en-029.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\flags\ja.png" />
-    <Resource Include="Images\flags\ko-KP.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\flags\ko.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\properties.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\console.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\abc.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\settings.ico" />
+    <Resource Include="Images\flags\en-DG.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

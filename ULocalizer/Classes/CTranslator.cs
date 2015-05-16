@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -37,28 +36,28 @@ namespace ULocalizer.Classes
             if ((response != null) && (response.ResponseStatus == ResponseStatus.Completed))
             {
                 var parsedResponse = JObject.Parse(response.Content);
-                foreach (var ci in from JProperty langInst in parsedResponse.Value<JToken>("langs").Children() select CultureInfo.GetCultureInfo(langInst.Name) into ci where Common.Cultures.Contains(ci) select ci)
+                foreach (var ci in parsedResponse.Value<JToken>("langs").Children().Where(ci => Common.Cultures.FirstOrDefault(culture => culture.ISO == ci.ToString()) != null))
                 {
-                    Common.TranslationCultures.Add(ci);
+                    Common.TranslationCultures.Add(Common.Cultures.First(culture => culture.ISO == ci.ToString()));
                 }
                 Common.WriteToConsole("List of languages available for translation has been loaded.", MessageType.Info);
             }
         }
 
-        public static async Task TranslateProject(CultureInfo @from)
+        public static async Task TranslateProject(CCulture @from)
         {
             await Common.ShowProgressMessage("Translating the whole project...", true);
             foreach (var translation in
-                Projects.CurrentProject.Translations.Where(translation => translation.Language.Name != @from.Name))
+                Projects.CurrentProject.Translations.Where(translation => translation.Culture.ISO != @from.ISO))
             {
-                translation.Nodes = await TranslateLanguage(translation.Language.DisplayName, translation.Nodes, @from, string.IsNullOrWhiteSpace(translation.Language.Parent.Name) ? translation.Language : translation.Language.Parent);
+                translation.Nodes = await TranslateLanguage(translation.Culture.DisplayName, translation.Nodes, @from, string.IsNullOrWhiteSpace(translation.Culture.ISO) ? translation.Culture : translation.Culture.Parent);
             }
             await Common.ProgressController.CloseAsync();
         }
 
-        public static async Task TranslateLanguage(CTranslation sourceTranslation, CultureInfo @from, CultureInfo to, bool closeProgress = false)
+        public static async Task TranslateLanguage(CTranslation sourceTranslation, CCulture @from, CCulture to, bool closeProgress = false)
         {
-            await Common.ShowProgressMessage("Translating " + sourceTranslation.Language.DisplayName + " language...", true);
+            await Common.ShowProgressMessage("Translating " + sourceTranslation.Culture.DisplayName + " language...", true);
             foreach (var node in sourceTranslation.Nodes)
             {
                 node.Items = await TranslateNode(node.Title, node.Items, @from, to);
@@ -69,7 +68,7 @@ namespace ULocalizer.Classes
             }
         }
 
-        private static async Task<CObservableList<CTranslationNode>> TranslateLanguage(string language, CObservableList<CTranslationNode> sourceNodes, CultureInfo @from, CultureInfo to)
+        private static async Task<CObservableList<CTranslationNode>> TranslateLanguage(string language, CObservableList<CTranslationNode> sourceNodes, CCulture @from, CCulture to)
         {
             await Common.ShowProgressMessage("Translating " + language + " language...", false);
             foreach (var node in sourceNodes)
@@ -79,7 +78,7 @@ namespace ULocalizer.Classes
             return sourceNodes;
         }
 
-        public static async Task TranslateNode(CTranslationNode sourceNode, CultureInfo @from, CultureInfo to, bool closeProgress = false)
+        public static async Task TranslateNode(CTranslationNode sourceNode, CCulture @from, CCulture to, bool closeProgress = false)
         {
             await Common.ShowProgressMessage("Translating " + sourceNode.Title + " node...", true);
             sourceNode.Items = await TranslateNodeItems(sourceNode.Items, @from, to);
@@ -89,13 +88,13 @@ namespace ULocalizer.Classes
             }
         }
 
-        private static async Task<CObservableList<CTranslationNodeItem>> TranslateNode(string title, CObservableList<CTranslationNodeItem> sourceNodeItems, CultureInfo @from, CultureInfo to)
+        private static async Task<CObservableList<CTranslationNodeItem>> TranslateNode(string title, CObservableList<CTranslationNodeItem> sourceNodeItems, CCulture @from, CCulture to)
         {
             await Common.ShowProgressMessage("Translating " + title + " node...", false);
             return await TranslateNodeItems(sourceNodeItems, @from, to);
         }
 
-        public static async Task TranslateList(CultureInfo @from, CultureInfo to)
+        public static async Task TranslateList(CCulture @from, CCulture to)
         {
             await Common.ShowProgressMessage("Translating selected items...", true);
             foreach (CTranslationNodeItem item in
@@ -107,7 +106,7 @@ namespace ULocalizer.Classes
             await Common.ProgressController.CloseAsync();
         }
 
-        private static async Task<CObservableList<CTranslationNodeItem>> TranslateNodeItems(CObservableList<CTranslationNodeItem> sourceText, CultureInfo @from, CultureInfo to)
+        private static async Task<CObservableList<CTranslationNodeItem>> TranslateNodeItems(CObservableList<CTranslationNodeItem> sourceText, CCulture @from, CCulture to)
         {
             if (string.IsNullOrWhiteSpace(Settings.Default.TranslateAPIKey))
             {
@@ -116,7 +115,7 @@ namespace ULocalizer.Classes
             }
             var request = new RestRequest("translate", Method.GET);
             request.AddParameter("key", Settings.Default.TranslateAPIKey);
-            request.AddParameter("lang", @from.Name + "-" + to.Name);
+            request.AddParameter("lang", @from.ISO + "-" + to.ISO);
             foreach (var item in sourceText)
             {
                 request.AddParameter("text", item.Translation);
@@ -144,7 +143,7 @@ namespace ULocalizer.Classes
             return sourceText;
         }
 
-        private static async Task<string> TranslateText(string sourceText, CultureInfo @from, CultureInfo to)
+        private static async Task<string> TranslateText(string sourceText, CCulture @from, CCulture to)
         {
             await Common.ShowProgressMessage("Translating " + sourceText, false);
             if (string.IsNullOrWhiteSpace(Settings.Default.TranslateAPIKey))
@@ -154,7 +153,7 @@ namespace ULocalizer.Classes
             }
             var request = new RestRequest("translate", Method.GET);
             request.AddParameter("key", Settings.Default.TranslateAPIKey);
-            request.AddParameter("lang", @from.Name + "-" + to.Name);
+            request.AddParameter("lang", @from.ISO + "-" + to.ISO);
             IRestResponse response = null;
             request.AddParameter("text", sourceText);
             try

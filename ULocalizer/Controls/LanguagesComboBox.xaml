@@ -18,7 +18,7 @@
                 <DataTemplate>
                     <DockPanel>
                         <Image Source="{Binding Converter={StaticResource CultureToFlagIconConverter}}" Width="14" />
-                        <TextBlock Text="{Binding DisplayName}" Margin="4,0,0,0" ToolTip="{Binding Name}" />
+                        <TextBlock Text="{Binding DisplayName}" Margin="4,0,0,0" ToolTip="{Binding ISO}" />
                     </DockPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>

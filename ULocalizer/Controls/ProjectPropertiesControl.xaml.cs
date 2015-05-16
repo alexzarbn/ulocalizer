@@ -23,7 +23,7 @@ namespace ULocalizer.Controls
 
         public ProjectPropertiesMode Mode
         {
-            get { return (ProjectPropertiesMode) GetValue(ModeProperty); }
+            private get { return (ProjectPropertiesMode) GetValue(ModeProperty); }
             set
             {
                 SetValue(ModeProperty, value);

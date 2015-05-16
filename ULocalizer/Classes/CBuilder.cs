@@ -34,7 +34,7 @@ namespace ULocalizer.Classes
                         if (Projects.CurrentProject.PathToProjectFile != null)
                         {
                             File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini"), Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), true);
-                            var culturesToGenerate = Projects.CurrentProject.Languages.Select(ci => "CulturesToGenerate=" + ci.Name).ToList();
+                            var culturesToGenerate = Projects.CurrentProject.Languages.Select(ci => "CulturesToGenerate=" + ci.ISO).ToList();
                             if (Projects.CurrentProject.PathToProjectFile != null)
                             {
                                 await CUtils.MakeConfig(Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), culturesToGenerate, Projects.CurrentProject.SourcePath, Projects.CurrentProject.DestinationPath);
@@ -92,7 +92,7 @@ namespace ULocalizer.Classes
                     {
                         try
                         {
-                            var files = Directory.GetFiles(CUtils.FixPath(Path.Combine(Projects.CurrentProject.GetProjectRoot(), Projects.CurrentProject.SourcePath, lang.Name)), "*.archive");
+                            var files = Directory.GetFiles(CUtils.FixPath(Path.Combine(Projects.CurrentProject.GetProjectRoot(), Projects.CurrentProject.SourcePath, lang.ISO)), "*.archive");
                             if (files.Any())
                             {
                                 var deserializedTranslation = JObject.Parse(File.ReadAllText(files[0]));
@@ -102,7 +102,7 @@ namespace ULocalizer.Classes
                                 var isSubnamespacesValid = deserializedTranslation.TryGetValue("Subnamespaces", out subnamespaces);
                                 if (isVarsValid || isSubnamespacesValid)
                                 {
-                                    var translationInstance = new CTranslation {Language = lang, Path = files[0]};
+                                    var translationInstance = new CTranslation {Culture = lang, Path = files[0]};
                                     if (isVarsValid)
                                     {
                                         var varsNode = new CTranslationNode {IsTopLevel = true, Title = "Variables"};
@@ -149,7 +149,7 @@ namespace ULocalizer.Classes
                     }
                 }
                 await Common.ShowProgressMessage("Sorting...", true);
-                Projects.CurrentProject.Translations = Projects.CurrentProject.Translations.OrderBy(translation => translation.Language.Name).ToObservableList();
+                Projects.CurrentProject.Translations = Projects.CurrentProject.Translations.OrderBy(translation => translation.Culture.ISO).ToObservableList();
                 Projects.CurrentProject.IsTranslationsChanged = false;
                 await Application.Current.Dispatcher.InvokeAsync(() => ((MainWindow) Application.Current.MainWindow).LanguagesList.SelectedIndex = 0);
                 if (closeProgressAfterExecution)

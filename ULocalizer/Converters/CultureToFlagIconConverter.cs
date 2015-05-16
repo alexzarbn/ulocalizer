@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using ULocalizer.Classes;
 
 namespace ULocalizer.Converters
 {
@@ -18,7 +19,7 @@ namespace ULocalizer.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return "/Images/flags/" + ((CultureInfo) value).Name + ".png";
+            return "/Images/flags/" + ((CCulture) value).ISO + ".png";
         }
 
         /// <summary>

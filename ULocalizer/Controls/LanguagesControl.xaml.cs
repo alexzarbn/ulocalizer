@@ -14,7 +14,7 @@ namespace ULocalizer.Controls
     /// </summary>
     public partial class LanguagesControl : INotifyPropertyChanged
     {
-        public static readonly DependencyProperty DestinationSourceProperty = DependencyProperty.Register("DestinationSource", typeof (CObservableList<CultureInfo>), typeof (LanguagesControl), new PropertyMetadata(new CObservableList<CultureInfo>()));
+        public static readonly DependencyProperty DestinationSourceProperty = DependencyProperty.Register("DestinationSource", typeof (CObservableList<CCulture>), typeof (LanguagesControl), new PropertyMetadata(new CObservableList<CCulture>()));
 
         public static readonly DependencyProperty WorkingProjectProperty = DependencyProperty.Register("WorkingProject", typeof (CProject), typeof (LanguagesControl), new PropertyMetadata(Projects.NewProject));
 
@@ -24,9 +24,9 @@ namespace ULocalizer.Controls
             DataContext = this;
         }
 
-        public CObservableList<CultureInfo> DestinationSource
+        public CObservableList<CCulture> DestinationSource
         {
-            get { return (CObservableList<CultureInfo>) GetValue(DestinationSourceProperty); }
+            get { return (CObservableList<CCulture>) GetValue(DestinationSourceProperty); }
             set
             {
                 SetValue(DestinationSourceProperty, value);
@@ -59,13 +59,13 @@ namespace ULocalizer.Controls
             if ((SourceLanguagePicker.SelectedLanguage != null) && (!WorkingProject.Languages.Contains(SourceLanguagePicker.SelectedLanguage)))
             {
                 WorkingProject.Languages.Add(SourceLanguagePicker.SelectedLanguage);
-                WorkingProject.Languages = WorkingProject.Languages.OrderBy(culture => culture.Name).ToObservableList();
+                WorkingProject.Languages = WorkingProject.Languages.OrderBy(culture => culture.ISO).ToObservableList();
             }
         }
 
         private void DelLangBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (DestinationLanguagePicker.SelectedLanguage != null && DestinationLanguagePicker.Items.Count > 1 && DestinationLanguagePicker.SelectedLanguage.Name != "en")
+            if (DestinationLanguagePicker.SelectedLanguage != null && DestinationLanguagePicker.Items.Count > 1 && DestinationLanguagePicker.SelectedLanguage.ISO != "en")
             {
                 WorkingProject.Languages.Remove(DestinationLanguagePicker.SelectedLanguage);
             }
@@ -80,14 +80,14 @@ namespace ULocalizer.Controls
                     WorkingProject.Languages.Add(ci);
                 }
             }
-            WorkingProject.Languages = WorkingProject.Languages.OrderBy(culture => culture.Name).ToObservableList();
+            WorkingProject.Languages = WorkingProject.Languages.OrderBy(culture => culture.ISO).ToObservableList();
         }
 
         private void RemoveAllLangBtn_Click(object sender, RoutedEventArgs e)
         {
             foreach (var ci in DestinationLanguagePicker.Items.ToList())
             {
-                if ((ci.Name != "en") && (WorkingProject.Languages.Contains(ci)))
+                if ((ci.ISO != "en") && (WorkingProject.Languages.Contains(ci)))
                 {
                     WorkingProject.Languages.Remove(ci);
                 }

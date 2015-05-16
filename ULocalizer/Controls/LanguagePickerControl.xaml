@@ -9,6 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:CultureToFlagIconConverter x:Key="CultureToFlagIconConverter" />
+        <BitmapImage x:Key="DefaultIcon" UriSource="/Images/flags/en-001.png" />
     </UserControl.Resources>
     <StackPanel>
         <Label Padding="0" Content="{Binding Title}" />
@@ -17,8 +18,8 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
-                        <Image Source="{Binding Converter={StaticResource CultureToFlagIconConverter}}" Width="14" />
-                        <TextBlock Text="{Binding DisplayName}" Margin="4,0,0,0" ToolTip="{Binding Name}" />
+                        <Image Source="{Binding Converter={StaticResource CultureToFlagIconConverter},FallbackValue={StaticResource DefaultIcon},TargetNullValue={StaticResource DefaultIcon}}" Width="14" />
+                        <TextBlock Text="{Binding DisplayName}" Margin="4,0,0,0" ToolTip="{Binding ISO}" />
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

@@ -13,9 +13,9 @@ namespace ULocalizer.Controls
     {
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof (string), typeof (LanguagePickerControl), new PropertyMetadata(string.Empty));
 
-        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register("Items", typeof (CObservableList<CultureInfo>), typeof (LanguagePickerControl), new PropertyMetadata(new CObservableList<CultureInfo>()));
+        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register("Items", typeof (CObservableList<CCulture>), typeof (LanguagePickerControl), new PropertyMetadata(new CObservableList<CCulture>()));
 
-        private CultureInfo _selectedLanguage;
+        private CCulture _selectedLanguage;
 
         public LanguagePickerControl()
         {
@@ -23,7 +23,7 @@ namespace ULocalizer.Controls
             DataContext = this;
         }
 
-        public CultureInfo SelectedLanguage
+        public CCulture SelectedLanguage
         {
             get { return _selectedLanguage; }
             set
@@ -43,9 +43,9 @@ namespace ULocalizer.Controls
             }
         }
 
-        public CObservableList<CultureInfo> Items
+        public CObservableList<CCulture> Items
         {
-            get { return (CObservableList<CultureInfo>) GetValue(ItemsProperty); }
+            get { return (CObservableList<CCulture>) GetValue(ItemsProperty); }
             set
             {
                 SetValue(ItemsProperty, value);

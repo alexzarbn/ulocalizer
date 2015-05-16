@@ -113,7 +113,7 @@ namespace ULocalizer.Windows
             {
                 try
                 {
-                    Common.SelectedTranslationNodeItem.Translation = Projects.CurrentProject.Translations.First(translation => translation.Language.Name == "en").Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.First(item => item.Source == Common.SelectedTranslationNodeItem.Source).Translation;
+                    Common.SelectedTranslationNodeItem.Translation = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == "en").Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.First(item => item.Source == Common.SelectedTranslationNodeItem.Source).Translation;
                 }
                 catch (Exception ex)
                 {
@@ -133,9 +133,9 @@ namespace ULocalizer.Windows
                 {
                     translateOptionsWnd.DirectionsControl.Visibility = Visibility.Collapsed;
                 }
-                if (!string.IsNullOrWhiteSpace(Common.SelectedTranslation.Language.Parent.Name))
+                if (!string.IsNullOrWhiteSpace(Common.SelectedTranslation.Culture.ISO))
                 {
-                    translateOptionsWnd.DirectionsControl.DestinationLanguage.SelectedLanguage = Common.TranslationCultures.First(translation => translation.Name == Common.SelectedTranslation.Language.Parent.Name);
+                    translateOptionsWnd.DirectionsControl.DestinationLanguage.SelectedLanguage = Common.TranslationCultures.First(translation => translation.ISO == Common.SelectedTranslation.Culture.ISO);
                 }
                 translateOptionsWnd.ShowDialog();
             }
@@ -173,7 +173,7 @@ namespace ULocalizer.Windows
             {
                 try
                 {
-                    Common.SelectedNode.Items = Projects.CurrentProject.Translations.First(translation => translation.Language.Name == "en").Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.ToObservableList();
+                    Common.SelectedNode.Items = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == "en").Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.ToObservableList();
                 }
                 catch (Exception ex)
                 {
@@ -188,7 +188,7 @@ namespace ULocalizer.Windows
             {
                 try
                 {
-                    Common.SelectedTranslation.Nodes = Projects.CurrentProject.Translations.First(translation => translation.Language.Name == "en").Nodes.ToObservableList();
+                    Common.SelectedTranslation.Nodes = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == "en").Nodes.ToObservableList();
                     Common.SelectedNode = Common.SelectedTranslation.Nodes[0];
                 }
                 catch (Exception ex)
@@ -200,7 +200,7 @@ namespace ULocalizer.Windows
 
         private async void TranslateProjectBtn_Click(object sender, RoutedEventArgs e)
         {
-            await CTranslator.TranslateProject(Common.TranslationCultures.First(translation => translation.Name == "en"));
+            await CTranslator.TranslateProject(Common.TranslationCultures.FirstOrDefault(translation => translation.ISO == "en"));
         }
     }
 }

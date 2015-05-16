@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using ULocalizer.Binding;
+using ULocalizer.Classes;
 
 namespace ULocalizer.Controls
 {
@@ -13,7 +16,7 @@ namespace ULocalizer.Controls
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof (string), typeof (LanguagesComboBox), new PropertyMetadata(string.Empty));
 
         // Using a DependencyProperty as the backing store for SelectedLanguage.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SelectedLanguageProperty = DependencyProperty.Register("SelectedLanguage", typeof (CultureInfo), typeof (LanguagesComboBox), new PropertyMetadata(CultureInfo.GetCultureInfo("en")));
+        public static readonly DependencyProperty SelectedLanguageProperty = DependencyProperty.Register("SelectedLanguage", typeof (CCulture), typeof (LanguagesComboBox), new PropertyMetadata(Common.Cultures.FirstOrDefault(culture => culture.ISO == "en")));
 
         public LanguagesComboBox()
         {
@@ -31,9 +34,9 @@ namespace ULocalizer.Controls
             }
         }
 
-        public CultureInfo SelectedLanguage
+        public CCulture SelectedLanguage
         {
-            get { return (CultureInfo) GetValue(SelectedLanguageProperty); }
+            get { return (CCulture) GetValue(SelectedLanguageProperty); }
             set
             {
                 SetValue(SelectedLanguageProperty, value);

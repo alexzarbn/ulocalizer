@@ -4,7 +4,7 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:binding="clr-namespace:ULocalizer.Binding"
                       xmlns:converters="clr-namespace:ULocalizer.Converters"
-                      xmlns:classes="clr-namespace:ULocalizer.Classes" ShowIconOnTitleBar="False"
+                      ShowIconOnTitleBar="False"
                       WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"
                       WindowMaxButtonStyle="{StaticResource WindowButtonStyle}"
                       WindowMinButtonStyle="{StaticResource WindowButtonStyle}" EnableDWMDropShadow="True"
@@ -155,7 +155,7 @@
                     <DataTemplate>
                         <DockPanel Margin="10,0,0,0" HorizontalAlignment="Left">
                             <Image Source="{Binding IconPath}" Width="14" />
-                            <TextBlock Margin="4,0,0,0" Text="{Binding Path=Language.DisplayName}" />
+                            <TextBlock Margin="4,0,0,0" Text="{Binding Path=Culture.DisplayName}" />
                         </DockPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -187,7 +187,6 @@
                         Name="BuildBtn" Click="BuildBtn_Click" HorizontalAlignment="Left">
                     <Button.IsEnabled>
                         <MultiBinding Converter="{StaticResource MultiValueConverter}">
-                            <!--<Binding Path="(binding:Common.isAvailable)"/>-->
                             <Binding Path="(binding:Projects.IsProjectSetted)" />
                         </MultiBinding>
                     </Button.IsEnabled>
@@ -233,7 +232,6 @@
                 <DockPanel HorizontalAlignment="Left">
                     <DockPanel.IsEnabled>
                         <MultiBinding Converter="{StaticResource MultiValueConverter}">
-                            <!--<Binding Path="(binding:Common.isAvailable)"/>-->
                             <Binding Path="(binding:Projects.IsProjectSetted)" />
                         </MultiBinding>
                     </DockPanel.IsEnabled>
