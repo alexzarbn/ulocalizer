@@ -40,6 +40,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
+        <controls:LanguagesComboBox Title="Source language" SelectedLanguage="{Binding ElementName=UcProjectProperties, Path=DataContext.SourceCulture}"  Items="{Binding Source={x:Static binding:Common.Cultures}}" UpdateLanguagesList="True"/>
         <controls:LanguagesControl Margin="0,4,0,0"
                                    DestinationSource="{Binding ElementName=UcProjectProperties, Path=DataContext.Languages}"
                                    WorkingProject="{Binding ElementName=UcProjectProperties, Path=DataContext}" />

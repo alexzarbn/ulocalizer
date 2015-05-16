@@ -30,7 +30,6 @@ namespace ULocalizer.Binding
 
         private static string _consoleData = string.Empty;
         private static CTranslationNode _selectedNode;
-
         private static CTranslation _selectedTranslation;
         private static CTranslationNodeItem _selectedTranslationNodeItem;
 
@@ -159,14 +158,14 @@ namespace ULocalizer.Binding
             Cultures.Add(new CCulture {DisplayName = "Spanish", ISO = "es"});
             Cultures.Add(new CCulture {DisplayName = "Franch", ISO = "fr"});
             Cultures.Add(new CCulture {DisplayName = "Hindi", ISO = "hi"});
-            Cultures.Add(new CCulture {DisplayName = "Italian",ISO = "it"});
+            Cultures.Add(new CCulture {DisplayName = "Italian", ISO = "it"});
             Cultures.Add(new CCulture {DisplayName = "Japanese", ISO = "ja"});
             Cultures.Add(new CCulture {DisplayName = "Korean", ISO = "ko"});
             Cultures.Add(new CCulture {DisplayName = "Polish", ISO = "pl"});
             Cultures.Add(new CCulture {DisplayName = "Portuguese", ISO = "pt"});
             Cultures.Add(new CCulture {DisplayName = "Russian", ISO = "ru"});
-            Cultures.Add(new CCulture {DisplayName = "Swedish",  ISO = "sv"});
-            Cultures.Add(new CCulture {DisplayName = "Chinese",  ISO = "zh"});
+            Cultures.Add(new CCulture {DisplayName = "Swedish", ISO = "sv"});
+            Cultures.Add(new CCulture {DisplayName = "Chinese", ISO = "zh"});
             Cultures.ToList().ForEach(culture => AddRegions(culture.ISO));
             await AddAdditionalCultures();
             await CTranslator.GetAvailableLanguages();
@@ -182,7 +181,7 @@ namespace ULocalizer.Binding
             }
         }
 
-        private async static Task AddAdditionalCultures()
+        private static async Task AddAdditionalCultures()
         {
             var isSuccessful = true;
             try
@@ -210,21 +209,19 @@ namespace ULocalizer.Binding
                 }
                 else
                 {
-                    WriteToConsole("File with additional cultures is empty",MessageType.Error);
+                    WriteToConsole("File with additional cultures is empty", MessageType.Error);
                     isSuccessful = false;
                 }
-                
             }
             catch (Exception ex)
             {
-                WriteToConsole(ex.Message,MessageType.Error);
+                WriteToConsole(ex.Message, MessageType.Error);
                 isSuccessful = false;
             }
             if (!isSuccessful)
             {
                 await ShowError("Additional cultures are not loaded. See console for details.");
             }
-            
         }
 
         /// <summary>

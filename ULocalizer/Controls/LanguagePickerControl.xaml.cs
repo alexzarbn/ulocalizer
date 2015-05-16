@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using ULocalizer.Classes;
@@ -12,9 +11,7 @@ namespace ULocalizer.Controls
     public partial class LanguagePickerControl : INotifyPropertyChanged
     {
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof (string), typeof (LanguagePickerControl), new PropertyMetadata(string.Empty));
-
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register("Items", typeof (CObservableList<CCulture>), typeof (LanguagePickerControl), new PropertyMetadata(new CObservableList<CCulture>()));
-
         private CCulture _selectedLanguage;
 
         public LanguagePickerControl()

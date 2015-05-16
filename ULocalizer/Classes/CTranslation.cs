@@ -5,8 +5,8 @@ namespace ULocalizer.Classes
 {
     public class CTranslation : INotifyPropertyChanged
     {
-        private bool _isChanged;
         private CCulture _culture;
+        private bool _isChanged;
         private CObservableList<CTranslationNode> _nodes = new CObservableList<CTranslationNode>();
 
         /// <summary>

@@ -36,7 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\Icon.ico</ApplicationIcon>
+    <ApplicationIcon>Images\icons\Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="INIFileParser, Version=2.0.4.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
@@ -215,16 +215,10 @@
     <SplashScreen Include="Images\splash.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\kawaii.png" />
+    <Resource Include="Images\icons\Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\newProject.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\variable.png" />
+    <Resource Include="Images\icons\newProject.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\WindowsIcons-license.txt" />
@@ -233,16 +227,16 @@
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\properties.ico" />
+    <Resource Include="Images\icons\properties.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\console.ico" />
+    <Resource Include="Images\icons\console.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\abc.ico" />
+    <Resource Include="Images\icons\abc.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\settings.ico" />
+    <Resource Include="Images\icons\settings.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\flags\de-BE.png" />

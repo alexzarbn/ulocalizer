@@ -7,8 +7,8 @@
                       WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"
                       GlowBrush="{StaticResource AccentColorBrush}" TitlebarHeight="26"
                       Title="Properties" Height="600" Width="500" ResizeMode="NoResize"
-                      WindowStartupLocation="CenterOwner" Icon="/Images/properties.ico"
-                      NonActiveWindowTitleBrush="White">
+                      WindowStartupLocation="CenterOwner" Icon="/Images/icons/properties.ico"
+                      NonActiveWindowTitleBrush="White" SizeToContent="Height">
     <StackPanel Margin="10">
         <uControls:ProjectPropertiesControl Mode="Exist" DataContext="{Binding Path=(binding:Projects.CurrentProject)}"
                                             Executed="ProjectPropertiesControl_Executed" />

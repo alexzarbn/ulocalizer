@@ -6,7 +6,8 @@
                       WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"
                       GlowBrush="{StaticResource AccentColorBrush}"
                       TitlebarHeight="26" Title="Console" Height="400" Width="600" ResizeMode="NoResize"
-                      WindowStartupLocation="CenterOwner" NonActiveWindowTitleBrush="White" Icon="/Images/console.ico">
+                      WindowStartupLocation="CenterOwner" NonActiveWindowTitleBrush="White"
+                      Icon="/Images/icons/console.ico">
     <DockPanel LastChildFill="True">
         <GridSplitter Height="1" HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
         <TextBox AcceptsReturn="True" BorderThickness="0" AcceptsTab="True" TextWrapping="Wrap"

@@ -36,9 +36,9 @@ namespace ULocalizer.Classes
             if ((response != null) && (response.ResponseStatus == ResponseStatus.Completed))
             {
                 var parsedResponse = JObject.Parse(response.Content);
-                foreach (var ci in parsedResponse.Value<JToken>("langs").Children().Where(ci => Common.Cultures.FirstOrDefault(culture => culture.ISO == ci.ToString()) != null))
+                foreach (var ci in parsedResponse.Value<JToken>("langs").Children<JProperty>().Where(ci => Common.Cultures.FirstOrDefault(culture => culture.ISO == ci.Name) != null))
                 {
-                    Common.TranslationCultures.Add(Common.Cultures.First(culture => culture.ISO == ci.ToString()));
+                    Common.TranslationCultures.Add(Common.Cultures.First(culture => culture.ISO == ci.Name));
                 }
                 Common.WriteToConsole("List of languages available for translation has been loaded.", MessageType.Info);
             }

@@ -18,7 +18,9 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
-                        <Image Source="{Binding Converter={StaticResource CultureToFlagIconConverter},FallbackValue={StaticResource DefaultIcon},TargetNullValue={StaticResource DefaultIcon}}" Width="14" />
+                        <Image
+                            Source="{Binding Converter={StaticResource CultureToFlagIconConverter},FallbackValue={StaticResource DefaultIcon},TargetNullValue={StaticResource DefaultIcon}}"
+                            Width="14" />
                         <TextBlock Text="{Binding DisplayName}" Margin="4,0,0,0" ToolTip="{Binding ISO}" />
                     </DockPanel>
                 </DataTemplate>

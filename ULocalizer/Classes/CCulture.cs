@@ -1,14 +1,13 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using ULocalizer.Converters;
 
 namespace ULocalizer.Classes
 {
-    [TypeConverter(typeof(CCulterConverter))]
+    [TypeConverter(typeof (CCulterConverter))]
     public class CCulture : CNotify
     {
-        private string _iso = string.Empty;
         private string _displayName = string.Empty;
+        private string _iso = string.Empty;
         private CCulture _parent;
 
         public bool IsNeutral
@@ -19,7 +18,11 @@ namespace ULocalizer.Classes
         public CCulture Parent
         {
             get { return _parent; }
-            set { _parent = value; NotifyPropertyChanged(); }
+            set
+            {
+                _parent = value;
+                NotifyPropertyChanged();
+            }
         }
 
         public string ISO

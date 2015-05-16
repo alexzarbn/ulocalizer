@@ -6,7 +6,8 @@
                       WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"
                       GlowBrush="{StaticResource AccentColorBrush}" TitlebarHeight="26"
                       Title="Translate options" Height="300" Width="300" ResizeMode="NoResize"
-                      WindowStartupLocation="CenterOwner" Icon="/Images/abc.ico" NonActiveWindowTitleBrush="White"
+                      WindowStartupLocation="CenterOwner" Icon="/Images/icons/abc.ico"
+                      NonActiveWindowTitleBrush="White"
                       SizeToContent="Height">
     <StackPanel Margin="10">
         <uControls:TranslateDirectionControl x:Name="DirectionsControl" />

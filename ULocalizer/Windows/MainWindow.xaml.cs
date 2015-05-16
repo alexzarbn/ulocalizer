@@ -102,8 +102,7 @@ namespace ULocalizer.Windows
 
         private void ConsoleBtn_Click(object sender, RoutedEventArgs e)
         {
-            var consoleWnd = new ConsoleWindow();
-            consoleWnd.Owner = this;
+            var consoleWnd = new ConsoleWindow {Owner = this};
             consoleWnd.Show();
         }
 
@@ -113,7 +112,7 @@ namespace ULocalizer.Windows
             {
                 try
                 {
-                    Common.SelectedTranslationNodeItem.Translation = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == "en").Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.First(item => item.Source == Common.SelectedTranslationNodeItem.Source).Translation;
+                    Common.SelectedTranslationNodeItem.Translation = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == Projects.CurrentProject.SourceCulture.ISO).Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.First(item => item.Source == Common.SelectedTranslationNodeItem.Source).Translation;
                 }
                 catch (Exception ex)
                 {
@@ -124,11 +123,9 @@ namespace ULocalizer.Windows
 
         private async void ShowTranslateOptionsWindow(TranslateMode mode, bool hideDirectionControl = false)
         {
-            if (Common.TranslationCultures.Count > 1)
+            if (Common.TranslationCultures.Any())
             {
-                var translateOptionsWnd = new TranslateOptionsWindow();
-                translateOptionsWnd.Owner = this;
-                translateOptionsWnd.Mode = mode;
+                var translateOptionsWnd = new TranslateOptionsWindow {Owner = this, Mode = mode};
                 if (hideDirectionControl)
                 {
                     translateOptionsWnd.DirectionsControl.Visibility = Visibility.Collapsed;
@@ -173,7 +170,7 @@ namespace ULocalizer.Windows
             {
                 try
                 {
-                    Common.SelectedNode.Items = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == "en").Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.ToObservableList();
+                    Common.SelectedNode.Items = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == Projects.CurrentProject.SourceCulture.ISO).Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.ToObservableList();
                 }
                 catch (Exception ex)
                 {
@@ -184,23 +181,21 @@ namespace ULocalizer.Windows
 
         private void SetLangToDefValBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (Common.SelectedTranslation != null)
+            if (Common.SelectedTranslation == null) return;
+            try
             {
-                try
-                {
-                    Common.SelectedTranslation.Nodes = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == "en").Nodes.ToObservableList();
-                    Common.SelectedNode = Common.SelectedTranslation.Nodes[0];
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                Common.SelectedTranslation.Nodes = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == Projects.CurrentProject.SourceCulture.ISO).Nodes.ToObservableList();
+                Common.SelectedNode = Common.SelectedTranslation.Nodes[0];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
 
         private async void TranslateProjectBtn_Click(object sender, RoutedEventArgs e)
         {
-            await CTranslator.TranslateProject(Common.TranslationCultures.FirstOrDefault(translation => translation.ISO == "en"));
+            await CTranslator.TranslateProject(Common.TranslationCultures.FirstOrDefault(translation => translation.ISO == Projects.CurrentProject.SourceCulture.ISO));
         }
     }
 }

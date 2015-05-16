@@ -14,7 +14,7 @@ namespace ULocalizer.Windows
         {
             InitializeComponent();
             Projects.NewProject = new CProject();
-            Projects.NewProject.Languages.Add(Common.Cultures.First(culture => culture.ISO=="en"));
+
         }
 
         private async void ProjectPropertiesControl_Executed(object sender, EventArgs e)

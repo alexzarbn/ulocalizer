@@ -7,7 +7,7 @@
                       WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"
                       GlowBrush="{StaticResource AccentColorBrush}"
                       Title="New Project" TitlebarHeight="26" Height="600" Width="500" ResizeMode="NoResize"
-                      WindowStartupLocation="CenterOwner" SizeToContent="Height" Icon="/Images/newProject.ico"
+                      WindowStartupLocation="CenterOwner" SizeToContent="Height" Icon="/Images/icons/newProject.ico"
                       NonActiveWindowTitleBrush="White">
     <StackPanel Margin="10">
         <uControls:ProjectPropertiesControl Mode="New" DataContext="{Binding Path=(binding:Projects.NewProject)}"

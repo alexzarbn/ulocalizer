@@ -10,7 +10,7 @@
                       WindowMinButtonStyle="{StaticResource WindowButtonStyle}" EnableDWMDropShadow="True"
                       TitleForeground="White" TitlebarHeight="26"
                       Title="{Binding WTitle}" MinHeight="500" MinWidth="800" Width="800" Height="500"
-                      WindowStartupLocation="CenterScreen" Icon="/Images/Icon.ico" ResizeMode="CanResizeWithGrip"
+                      WindowStartupLocation="CenterScreen" Icon="/Images/icons/Icon.ico" ResizeMode="CanResizeWithGrip"
                       NonActiveWindowTitleBrush="White">
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>

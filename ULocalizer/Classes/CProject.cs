@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +28,7 @@ namespace ULocalizer.Classes
         private string _pathToProjectFile = string.Empty;
         private string _sourcePath = "./Content/Localization/Game";
         private CObservableList<CTranslation> _translations = new CObservableList<CTranslation>();
+        private CCulture _sourceCulture = Common.Cultures.FirstOrDefault(culture => culture.ISO == "en");
 
         public string PathToEditor
         {
@@ -68,6 +69,15 @@ namespace ULocalizer.Classes
             set
             {
                 _encoding = value;
+                NotifyPropertyChanged();
+                IsChanged = true;
+            }
+        }
+
+        public CCulture SourceCulture
+        {
+            get { return _sourceCulture; }
+            set { _sourceCulture = value;
                 NotifyPropertyChanged();
                 IsChanged = true;
             }
@@ -178,7 +188,6 @@ namespace ULocalizer.Classes
                             {
                                 deserializedFile.Add("Namespace", string.Empty);
                             }
-                            tmpToken = null;
                             if (deserializedFile.TryGetValue("Children", out tmpToken))
                             {
                                 deserializedFile["Children"] = new JArray();
@@ -187,7 +196,6 @@ namespace ULocalizer.Classes
                             {
                                 deserializedFile.Add("Children", new JArray());
                             }
-                            tmpToken = null;
                             if (deserializedFile.TryGetValue("Subnamespaces", out tmpToken))
                             {
                                 deserializedFile["Subnamespaces"] = new JArray();

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -15,7 +14,6 @@ namespace ULocalizer.Controls
     public partial class LanguagesControl : INotifyPropertyChanged
     {
         public static readonly DependencyProperty DestinationSourceProperty = DependencyProperty.Register("DestinationSource", typeof (CObservableList<CCulture>), typeof (LanguagesControl), new PropertyMetadata(new CObservableList<CCulture>()));
-
         public static readonly DependencyProperty WorkingProjectProperty = DependencyProperty.Register("WorkingProject", typeof (CProject), typeof (LanguagesControl), new PropertyMetadata(Projects.NewProject));
 
         public LanguagesControl()
@@ -65,7 +63,7 @@ namespace ULocalizer.Controls
 
         private void DelLangBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (DestinationLanguagePicker.SelectedLanguage != null && DestinationLanguagePicker.Items.Count > 1 && DestinationLanguagePicker.SelectedLanguage.ISO != "en")
+            if (DestinationLanguagePicker.SelectedLanguage != null && DestinationLanguagePicker.Items.Count > 1 && DestinationLanguagePicker.SelectedLanguage.ISO != WorkingProject.SourceCulture.ISO)
             {
                 WorkingProject.Languages.Remove(DestinationLanguagePicker.SelectedLanguage);
             }
@@ -87,7 +85,7 @@ namespace ULocalizer.Controls
         {
             foreach (var ci in DestinationLanguagePicker.Items.ToList())
             {
-                if ((ci.ISO != "en") && (WorkingProject.Languages.Contains(ci)))
+                if ((ci.ISO != WorkingProject.SourceCulture.ISO) && (WorkingProject.Languages.Contains(ci)))
                 {
                     WorkingProject.Languages.Remove(ci);
                 }

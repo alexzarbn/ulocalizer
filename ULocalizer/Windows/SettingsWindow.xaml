@@ -6,7 +6,8 @@
                       WindowCloseButtonStyle="{StaticResource WindowCloseButtonStyle}"
                       GlowBrush="{StaticResource AccentColorBrush}" TitlebarHeight="26"
                       Title="Settings" Height="300" Width="500" ResizeMode="NoResize"
-                      WindowStartupLocation="CenterOwner" Icon="/Images/settings.ico" NonActiveWindowTitleBrush="White"
+                      WindowStartupLocation="CenterOwner" Icon="/Images/icons/settings.ico"
+                      NonActiveWindowTitleBrush="White"
                       SizeToContent="Height">
     <controls:MetroWindow.Resources>
         <Style TargetType="{x:Type Label}" BasedOn="{StaticResource PaddingLabelStyle}" />
