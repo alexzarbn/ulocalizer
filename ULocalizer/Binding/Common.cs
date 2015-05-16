@@ -192,7 +192,7 @@ namespace ULocalizer.Binding
                 {
                     foreach (var additionalCultureInfo in additionalCulturesTextData)
                     {
-                        var additionalCultureSplitted = new string[2] {additionalCultureInfo.Substring(0, additionalCultureInfo.IndexOf(" ", StringComparison.Ordinal)), additionalCultureInfo.Substring(additionalCultureInfo.IndexOf(" ", StringComparison.Ordinal) + 1)};
+                        var additionalCultureSplitted = new[] {additionalCultureInfo.Substring(0, additionalCultureInfo.IndexOf(" ", StringComparison.Ordinal)), additionalCultureInfo.Substring(additionalCultureInfo.IndexOf(" ", StringComparison.Ordinal) + 1)};
                         var isoSplitted = additionalCultureSplitted[0].Split('-');
                         var parentCultureIso = isoSplitted[0];
                         var additionalCulture = new CCulture {ISO = additionalCultureSplitted[0]};
