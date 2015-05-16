@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -106,19 +104,25 @@ namespace ULocalizer.Classes
         /// <param name="sourcePath">SourcePath property for config</param>
         /// <param name="destinationPath">DestinationPath property for config</param>
         /// <returns></returns>
-        public static async Task MakeConfig(string path, List<string> cultures, string sourcePath, string destinationPath)
+        public static async Task MakeConfig(string path, string sourcePath, string destinationPath)
         {
             await Task.Run(() =>
             {
                 try
                 {
-                    var configContent = File.ReadAllLines(path).ToList();
-                    configContent.Insert(2, "SourcePath=" + sourcePath);
-                    configContent.Insert(3, "DestinationPath=" + destinationPath);
-                    configContent.InsertRange(10, cultures);
-                    File.WriteAllLines(path, configContent);
+
+                    //var configContent = File.ReadAllLines(path).ToList();
+                    //var sectionIndex = Array.IndexOf(configContent.ToArray(), "[CommonSettings]");
+                    //var stepIndex = Array.IndexOf(configContent.ToArray(), "[GatherTextStep0]");
+                    //if ((sectionIndex != -1) && (stepIndex != -1))
+                    //{
+                    //    configContent.InsertRange(stepIndex-2,Projects.CurrentProject.Languages.Select(culture => culture.ISO));
+                    //}
+                    //configContent.Insert(2, "SourcePath=" + sourcePath);
+                    //configContent.Insert(3, "DestinationPath=" + destinationPath);
+                    //File.WriteAllLines(path, configContent);
                 }
-                catch (IOException ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }

@@ -11,6 +11,7 @@ using System.Windows.Markup;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using ULocalizer.Classes;
+using ULocalizer.Classes.Configuration;
 using ULocalizer.ExtensionMethods;
 
 namespace ULocalizer.Binding
@@ -170,6 +171,8 @@ namespace ULocalizer.Binding
             await AddAdditionalCultures();
             await CTranslator.GetAvailableLanguages();
             Cultures = Cultures.OrderBy(culture => culture.ISO).ToObservableList();
+            var config = new CConfig();
+            config.LoadFromFile(@"D:\Dev\Desktop\ULocalizer\ULocalizer\bin\Debug\data\Localization.ini");
         }
 
         private static void AddRegions(string parentCulture)

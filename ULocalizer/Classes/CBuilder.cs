@@ -34,10 +34,9 @@ namespace ULocalizer.Classes
                         if (Projects.CurrentProject.PathToProjectFile != null)
                         {
                             File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini"), Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), true);
-                            var culturesToGenerate = Projects.CurrentProject.Languages.Select(ci => "CulturesToGenerate=" + ci.ISO).ToList();
                             if (Projects.CurrentProject.PathToProjectFile != null)
                             {
-                                await CUtils.MakeConfig(Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), culturesToGenerate, Projects.CurrentProject.SourcePath, Projects.CurrentProject.DestinationPath);
+                                await CUtils.MakeConfig(Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), Projects.CurrentProject.SourcePath, Projects.CurrentProject.DestinationPath);
                                 var builderProcess = new Process {StartInfo = new ProcessStartInfo {FileName = Projects.CurrentProject.PathToEditor, Arguments = Projects.CurrentProject.PathToProjectFile + " -run=GatherText -config=" + Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true}};
                                 builderProcess.Start();
                                 while (!builderProcess.StandardOutput.EndOfStream)
