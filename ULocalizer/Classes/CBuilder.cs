@@ -31,25 +31,21 @@ namespace ULocalizer.Classes
                 {
                     try
                     {
-                        if (Projects.CurrentProject.PathToProjectFile != null)
+                        if (!string.IsNullOrWhiteSpace(Projects.CurrentProject.GetProjectRoot()))
                         {
-                            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini"), Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), true);
-                            if (Projects.CurrentProject.PathToProjectFile != null)
+                            await CUtils.MakeConfig(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini"),Path.Combine(Projects.CurrentProject.GetProjectRoot(), @"Config\Localization.ini"), Projects.CurrentProject.SourcePath, Projects.CurrentProject.DestinationPath);
+                            var builderProcess = new Process {StartInfo = new ProcessStartInfo {FileName = Projects.CurrentProject.PathToEditor, Arguments = Projects.CurrentProject.PathToProjectFile + " -run=GatherText -config=" + Path.Combine(Projects.CurrentProject.GetProjectRoot(), @"Config\Localization.ini"), UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true}};
+                            builderProcess.Start();
+                            while (!builderProcess.StandardOutput.EndOfStream)
                             {
-                                await CUtils.MakeConfig(Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), Projects.CurrentProject.SourcePath, Projects.CurrentProject.DestinationPath);
-                                var builderProcess = new Process {StartInfo = new ProcessStartInfo {FileName = Projects.CurrentProject.PathToEditor, Arguments = Projects.CurrentProject.PathToProjectFile + " -run=GatherText -config=" + Path.Combine(Path.GetDirectoryName(Projects.CurrentProject.PathToProjectFile), @"Config\Localization.ini"), UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true}};
-                                builderProcess.Start();
-                                while (!builderProcess.StandardOutput.EndOfStream)
-                                {
-                                    Common.WriteToConsole(builderProcess.StandardOutput.ReadLine(), MessageType.Blank);
-                                }
-                                while (!builderProcess.StandardError.EndOfStream)
-                                {
-                                    isSuccessfull = false;
-                                    Common.WriteToConsole(builderProcess.StandardError.ReadLine(), MessageType.Blank);
-                                }
-                                builderProcess.WaitForExit();
+                                Common.WriteToConsole(builderProcess.StandardOutput.ReadLine(), MessageType.Blank);
                             }
+                            while (!builderProcess.StandardError.EndOfStream)
+                            {
+                                isSuccessfull = false;
+                                Common.WriteToConsole(builderProcess.StandardError.ReadLine(), MessageType.Blank);
+                            }
+                            builderProcess.WaitForExit();
                         }
                         await Task.Delay(1000);
                         if (isSuccessfull)

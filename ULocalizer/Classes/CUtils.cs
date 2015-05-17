@@ -1,10 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
+using ULocalizer.Binding;
+using ULocalizer.Classes.Configuration;
 
 namespace ULocalizer.Classes
 {
@@ -99,28 +102,35 @@ namespace ULocalizer.Classes
         /// <summary>
         ///     Updates localization config
         /// </summary>
-        /// <param name="path">Path to config file</param>
-        /// <param name="cultures">Cultures to generate</param>
+        /// <param name="sourceConfigPath">Path to config file</param>
+        /// <param name="destinationConfigPath"></param>
         /// <param name="sourcePath">SourcePath property for config</param>
         /// <param name="destinationPath">DestinationPath property for config</param>
         /// <returns></returns>
-        public static async Task MakeConfig(string path, string sourcePath, string destinationPath)
+        public static async Task MakeConfig(string sourceConfigPath,string destinationConfigPath, string sourcePath, string destinationPath)
         {
-            await Task.Run(() =>
+            await Task.Run(async() =>
             {
                 try
                 {
+                    var configFile = new CConfig();
+                    await configFile.LoadFromFileTask(sourceConfigPath);
+                    configFile.Sections["CommonSettings"].UpdateItem("SourcePath",sourcePath);
+                    configFile.Sections["CommonSettings"].UpdateItem("DestinationPath", destinationPath);
+                    configFile.Sections["CommonSettings"].UpdateItem("ManifestName", "Game.manifest");
+                    configFile.Sections["CommonSettings"].UpdateItem("ArchiveName", "Game.archive");
+                    configFile.Sections["CommonSettings"].UpdateItem("ResourceName", "Game.locres");
+                    configFile.Sections["CommonSettings"].UpdateItem("PortableObjectName", "Game.po");
+                    configFile.Sections["CommonSettings"].UpdateItem("SourceCulture", Projects.CurrentProject.SourceCulture.ISO);
 
-                    //var configContent = File.ReadAllLines(path).ToList();
-                    //var sectionIndex = Array.IndexOf(configContent.ToArray(), "[CommonSettings]");
-                    //var stepIndex = Array.IndexOf(configContent.ToArray(), "[GatherTextStep0]");
-                    //if ((sectionIndex != -1) && (stepIndex != -1))
-                    //{
-                    //    configContent.InsertRange(stepIndex-2,Projects.CurrentProject.Languages.Select(culture => culture.ISO));
-                    //}
-                    //configContent.Insert(2, "SourcePath=" + sourcePath);
-                    //configContent.Insert(3, "DestinationPath=" + destinationPath);
-                    //File.WriteAllLines(path, configContent);
+                    foreach (var culture in Projects.CurrentProject.Languages.Where(culture => configFile.Sections["CommonSettings"].Items.FirstOrDefault(item => item.Key == "CulturesToGenerate" && item.Value == culture.ISO) == null))
+                    {
+                        configFile.Sections["CommonSettings"].AddItem("CulturesToGenerate",culture.ISO);
+                    }                
+                    configFile.Sections["CommonSettings"].Items.ToList().RemoveAll(item => item.Key == "CulturesToGenerate" && Projects.CurrentProject.Languages.FirstOrDefault(culture => culture.ISO == item.Value) == null);
+
+                    await configFile.SaveToFileTask(destinationConfigPath);
+
                 }
                 catch (Exception ex)
                 {
