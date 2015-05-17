@@ -186,3 +186,13 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/ULocalizer/bin/Debug/Newtonsoft.Json.xml
+/ULocalizer/bin/Debug/MahApps.Metro.xml
+/ULocalizer/bin/Debug/RestSharp.xml
+/ULocalizer/bin/Debug/ULocalizer.vshost.exe.manifest
+/ULocalizer/bin/Release/MahApps.Metro.xml
+/ULocalizer/bin/Release/Newtonsoft.Json.xml
+/ULocalizer/bin/Release/RestSharp.xml
+/ULocalizer/bin/Release/ULocalizer.vshost.exe.config
+/ULocalizer/bin/Release/ULocalizer.exe.config
+/ULocalizer/bin/Release/ULocalizer.vshost.exe.manifest
