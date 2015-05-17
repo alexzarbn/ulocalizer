@@ -123,11 +123,19 @@ namespace ULocalizer.Classes
                     configFile.Sections["CommonSettings"].UpdateItem("PortableObjectName", "Game.po");
                     configFile.Sections["CommonSettings"].UpdateItem("SourceCulture", Projects.CurrentProject.SourceCulture.ISO);
 
+                    //add new cultures
                     foreach (var culture in Projects.CurrentProject.Languages.Where(culture => configFile.Sections["CommonSettings"].Items.FirstOrDefault(item => item.Key == "CulturesToGenerate" && item.Value == culture.ISO) == null))
                     {
                         configFile.Sections["CommonSettings"].AddItem("CulturesToGenerate",culture.ISO);
-                    }                
+                    }       
+                    //clean up unused cultures
                     configFile.Sections["CommonSettings"].Items.ToList().RemoveAll(item => item.Key == "CulturesToGenerate" && Projects.CurrentProject.Languages.FirstOrDefault(culture => culture.ISO == item.Value) == null);
+
+                    //clean up unused culture directories
+                    foreach (var directory in Directory.GetDirectories(Path.Combine(Projects.CurrentProject.GetProjectRoot(),@"Content\Localization\Game")).Where(directory => Projects.CurrentProject.Languages.FirstOrDefault(culture => culture.ISO == Path.GetFileName(directory)) == null))
+                    {
+                        Directory.Delete(directory,true);
+                    }
 
                     await configFile.SaveToFileTask(destinationConfigPath);
 
