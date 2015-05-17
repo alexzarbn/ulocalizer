@@ -81,7 +81,7 @@ namespace ULocalizer.Binding
             {
                 _selectedTranslation = value;
                 RaiseStaticPropertyChanged("SelectedTranslation");
-                Projects.XmlLang = XmlLanguage.GetLanguage(SelectedTranslation.Culture.ISO);
+                Projects.XmlLang = XmlLanguage.GetLanguage(SelectedTranslation.Culture.IsNeutral ? SelectedTranslation.Culture.ISO : SelectedTranslation.Culture.Parent.ISO);
             }
         }
 

@@ -35,7 +35,7 @@ namespace ULocalizer.Classes
             }
         }
 
-        [DisplayName]
+        
         public string DisplayName
         {
             get { return _displayName; }
@@ -44,6 +44,11 @@ namespace ULocalizer.Classes
                 _displayName = value;
                 NotifyPropertyChanged();
             }
+        }
+
+        public override string ToString()
+        {
+            return ISO;
         }
     }
 }
