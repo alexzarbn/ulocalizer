@@ -29,6 +29,10 @@ namespace ULocalizer.Classes
         private string _sourcePath = "./Content/Localization/Game";
         private CObservableList<CTranslation> _translations = new CObservableList<CTranslation>();
         private CCulture _sourceCulture = Common.Cultures.FirstOrDefault(culture => culture.ISO == "en");
+        private string _manifestName = "Game.manifest";
+        private string _archiveName = "Game.archive";
+        private string _resourceName = "Game.locres";
+        private string _portableObjectName = "Game.po";
 
         public string PathToEditor
         {
@@ -111,6 +115,50 @@ namespace ULocalizer.Classes
             set
             {
                 _destinationPath = value;
+                NotifyPropertyChanged();
+                IsChanged = true;
+            }
+        }
+
+        public string ManifestName
+        {
+            get { return _manifestName; }
+            set
+            {
+                _manifestName = value;
+                NotifyPropertyChanged();
+                IsChanged = true;
+            }
+        }
+
+        public string ArchiveName
+        {
+            get { return _archiveName; }
+            set
+            {
+                _archiveName = value;
+                NotifyPropertyChanged();
+                IsChanged = true;
+            }
+        }
+
+        public string ResourceName
+        {
+            get { return _resourceName; }
+            set
+            {
+                _resourceName = value;
+                NotifyPropertyChanged();
+                IsChanged = true;
+            }
+        }
+
+        public string PortableObjectName
+        {
+            get { return _portableObjectName; }
+            set
+            {
+                _portableObjectName = value;
                 NotifyPropertyChanged();
                 IsChanged = true;
             }

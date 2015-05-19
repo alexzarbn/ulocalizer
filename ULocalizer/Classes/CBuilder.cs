@@ -33,7 +33,7 @@ namespace ULocalizer.Classes
                     {
                         if (!string.IsNullOrWhiteSpace(Projects.CurrentProject.GetProjectRoot()))
                         {
-                            await CUtils.MakeConfig(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini"),Path.Combine(Projects.CurrentProject.GetProjectRoot(), @"Config\Localization.ini"), Projects.CurrentProject.SourcePath, Projects.CurrentProject.DestinationPath);
+                            await CUtils.MakeConfig(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\Localization.ini"),Path.Combine(Projects.CurrentProject.GetProjectRoot(), @"Config\Localization.ini"));
                             var builderProcess = new Process {StartInfo = new ProcessStartInfo {FileName = Projects.CurrentProject.PathToEditor, Arguments = Projects.CurrentProject.PathToProjectFile + " -run=GatherText -config=" + Path.Combine(Projects.CurrentProject.GetProjectRoot(), @"Config\Localization.ini"), UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true}};
                             builderProcess.Start();
                             while (!builderProcess.StandardOutput.EndOfStream)
