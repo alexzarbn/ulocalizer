@@ -15,5 +15,6 @@
     <StackPanel Margin="10">
         <Label Content="Translate API Key" />
         <TextBox Text="{Binding TranslateAPIKey,Source={x:Static props:Settings.Default}}" />
+        <CheckBox Margin="0,4,0,0" Content="Delete unused culture folders" IsChecked="{Binding DeleteUnusedCultureFolders,Source={x:Static props:Settings.Default}}"/>
     </StackPanel>
 </controls:MetroWindow>

@@ -132,9 +132,12 @@ namespace ULocalizer.Classes
                     configFile.Sections["CommonSettings"].Items.ToList().RemoveAll(item => item.Key == "CulturesToGenerate" && Projects.CurrentProject.Languages.FirstOrDefault(culture => culture.ISO == item.Value) == null);
 
                     //clean up unused culture directories
-                    foreach (var directory in Directory.GetDirectories(Path.Combine(Projects.CurrentProject.GetProjectRoot(),@"Content\Localization\Game")).Where(directory => Projects.CurrentProject.Languages.FirstOrDefault(culture => culture.ISO == Path.GetFileName(directory)) == null))
+                    if (Properties.Settings.Default.DeleteUnusedCultureFolders)
                     {
-                        Directory.Delete(directory,true);
+                        foreach (var directory in Directory.GetDirectories(Path.Combine(Projects.CurrentProject.GetProjectRoot(), @"Content\Localization\Game")).Where(directory => Projects.CurrentProject.Languages.FirstOrDefault(culture => culture.ISO == Path.GetFileName(directory)) == null))
+                        {
+                            Directory.Delete(directory, true);
+                        }
                     }
 
                     await configFile.SaveToFileTask(destinationConfigPath);
