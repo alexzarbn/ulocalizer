@@ -70,6 +70,7 @@
     <Compile Include="Binding\Projects.cs" />
     <Compile Include="Classes\CBuilder.cs" />
     <Compile Include="Classes\CCulture.cs" />
+    <Compile Include="Classes\CDefaults.cs" />
     <Compile Include="Classes\CNotify.cs" />
     <Compile Include="Classes\CObservableList.cs" />
     <Compile Include="Classes\Configuration\CConfig.cs" />

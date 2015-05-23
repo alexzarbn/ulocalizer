@@ -44,13 +44,14 @@ namespace ULocalizer.Classes
             }
         }
 
-        public static async Task TranslateProject(CCulture @from)
+        public static async Task TranslateProject()
         {
+            var from = Common.TranslationCultures.First(translation => translation.ISO == (Projects.CurrentProject.SourceCulture.Parent != null ? Projects.CurrentProject.SourceCulture.Parent.ISO : Projects.CurrentProject.SourceCulture.ISO));
             await Common.ShowProgressMessage("Translating the whole project...", true);
             foreach (var translation in
-                Projects.CurrentProject.Translations.Where(translation => translation.Culture.ISO != @from.ISO))
+                Projects.CurrentProject.Translations.Where(translation => (translation.Culture.Parent != null && translation.Culture.Parent.ISO != @from.ISO) || (translation.Culture.Parent == null && translation.Culture.ISO != @from.ISO)))
             {
-                translation.Nodes = await TranslateLanguage(translation.Culture.DisplayName, translation.Nodes, @from, string.IsNullOrWhiteSpace(translation.Culture.ISO) ? translation.Culture : translation.Culture.Parent);
+                translation.Nodes = await TranslateLanguage(translation.Culture.DisplayName, translation.Nodes, @from, translation.Culture.Parent ?? translation.Culture);
             }
             await Common.ProgressController.CloseAsync();
         }
