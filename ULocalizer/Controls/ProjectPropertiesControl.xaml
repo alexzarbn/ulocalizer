@@ -13,41 +13,61 @@
         <Style TargetType="{x:Type Label}" BasedOn="{StaticResource PaddingLabelStyle}" />
     </UserControl.Resources>
     <StackPanel>
-        <Label Content="Path to Editor" />
-        <DockPanel>
-            <TextBox MinWidth="428" Text="{Binding Path=PathToEditor}" />
-            <Button Content="..." Width="32" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top"
+    <TabControl Padding="0">
+        <TabItem Header="General" Padding="0">
+            <StackPanel>
+                <Label Content="Path to Editor" />
+                <DockPanel>
+                    <TextBox MinWidth="428" Text="{Binding Path=PathToEditor}" />
+                    <Button Content="..." Width="32" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top"
                     Name="SetPathToEditorBtn" Click="SetPathToEditorBtn_Click" Margin="4,0,0,0" />
-        </DockPanel>
-        <CheckBox Content="Save path for further projects" IsChecked="True" Margin="0,0,0,5" Name="SavePathField" />
-        <Label Content="Path to project file (.uproject)" />
-        <DockPanel>
-            <TextBox MinWidth="428" Text="{Binding Path=PathToProjectFile}" />
-            <Button Content="..." Width="32" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top"
+                </DockPanel>
+                <CheckBox Content="Save path for further projects" IsChecked="True" Margin="0,0,0,5" Name="SavePathField" />
+                <Label Content="Path to project file (.uproject)" />
+                <DockPanel>
+                    <TextBox MinWidth="428" Text="{Binding Path=PathToProjectFile}" />
+                    <Button Content="..." Width="32" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top"
                     Name="SetPathToProjectFileBtn" Click="SetPathToProjectFileBtn_Click" Margin="4,0,0,0" />
-        </DockPanel>
-        <Label Content="Project name" />
-        <TextBox Width="428" HorizontalAlignment="Left" Text="{Binding Path=Name}" />
-        <StackPanel>
-            <Label Content="Encoding" />
-            <ComboBox Width="256" HorizontalAlignment="Left"
+                </DockPanel>
+                <Label Content="Project name" />
+                <TextBox Width="428" HorizontalAlignment="Left" Text="{Binding Path=Name}" />
+                <StackPanel>
+                    <Label Content="Encoding" />
+                    <ComboBox Width="256" HorizontalAlignment="Left"
                       ItemsSource="{Binding Source={x:Static binding:Common.Encodings}}"
                       SelectedValue="{Binding Path=Encoding}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding DisplayName}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </StackPanel>
-        <controls:LanguagesComboBox Title="Source language" SelectedLanguage="{Binding ElementName=UcProjectProperties, Path=DataContext.SourceCulture}"  Items="{Binding Source={x:Static binding:Common.Cultures}}" UpdateLanguagesList="True"/>
-        <controls:LanguagesControl Margin="0,4,0,0"
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DisplayName}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+                <controls:LanguagesComboBox Title="Source language" SelectedLanguage="{Binding ElementName=UcProjectProperties, Path=DataContext.SourceCulture}"  Items="{Binding Source={x:Static binding:Common.Cultures}}" UpdateLanguagesList="True"/>
+                <controls:LanguagesControl Margin="0,4,0,0"
                                    DestinationSource="{Binding ElementName=UcProjectProperties, Path=DataContext.Languages}"
                                    WorkingProject="{Binding ElementName=UcProjectProperties, Path=DataContext}" />
-        <Label Content="Source path" />
-        <TextBox Text="{Binding Path=SourcePath}" />
-        <Label Content="Destination path" />
-        <TextBox Text="{Binding Path=DestinationPath}" />
-        <Button Content="Create" Name="ActionBtn" Click="ActionBtn_Click" Margin="0,5" />
+                
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Advanced" Padding="6,0,0,0">
+            <StackPanel>
+                <Label Content="Source Path" />
+                <TextBox Text="{Binding Path=SourcePath}" />
+                <Label Content="Destination Path" />
+                <TextBox Text="{Binding Path=DestinationPath}" />
+                    <Label Content="Manifest Name" />
+                    <TextBox Text="{Binding Path=ManifestName}" />
+                    <Label Content="Archive Name" />
+                    <TextBox Text="{Binding Path=ArchiveName}" />
+                    <Label Content="Resource Name" />
+                    <TextBox Text="{Binding Path=ResourceName}" />
+                    <Label Content="PortableObject Name" />
+                    <TextBox Text="{Binding Path=PortableObjectName}" />
+                </StackPanel>
+        </TabItem>
+    </TabControl>
+    <Button Content="Create" Name="ActionBtn" Click="ActionBtn_Click" Margin="0,5" />
+        
     </StackPanel>
 </UserControl>

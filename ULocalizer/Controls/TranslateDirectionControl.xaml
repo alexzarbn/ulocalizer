@@ -16,7 +16,7 @@
             <ColumnDefinition Width="32" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <controls:LanguagesComboBox Title="From" Grid.Column="0" x:Name="SourceLanguage" Items="{Binding Source={x:Static binding:Common.TranslationCultures}}" SelectedLanguage="{Binding Path=SourceCulture, Source={x:Static binding:Projects.CurrentProject}}" />
+        <controls:LanguagesComboBox Title="From" Grid.Column="0" x:Name="SourceLanguage" Items="{Binding Source={x:Static binding:Common.TranslationCultures}}" />
         <Button Style="{DynamicResource ToolBarButtonStyle}" HorizontalAlignment="Stretch" Width="24" ToolTip="Swap"
                 Name="SwapBtn" Grid.Column="1" VerticalAlignment="Bottom" Click="SwapBtn_Click">
             <DockPanel>
@@ -34,7 +34,6 @@
                 </Rectangle>
             </DockPanel>
         </Button>
-        <controls:LanguagesComboBox Title="To" Grid.Column="2" x:Name="DestinationLanguage"  Items="{Binding Source={x:Static binding:Common.TranslationCultures}}"
-                                    SelectedLanguage="{Binding Culture,Source={x:Static binding:Common.SelectedTranslation}}" />
+        <controls:LanguagesComboBox Title="To" Grid.Column="2" x:Name="DestinationLanguage"  Items="{Binding Source={x:Static binding:Common.TranslationCultures}}" />
     </Grid>
 </UserControl>

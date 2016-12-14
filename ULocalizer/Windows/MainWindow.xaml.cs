@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using ULocalizer.Binding;
 using ULocalizer.Classes;
-using ULocalizer.ExtensionMethods;
 
 namespace ULocalizer.Windows
 {
@@ -95,8 +94,7 @@ namespace ULocalizer.Windows
 
         private void PropertiesBtn_Click(object sender, RoutedEventArgs e)
         {
-            var propertiesWnd = new PropertiesWindow();
-            propertiesWnd.Owner = this;
+            var propertiesWnd = new PropertiesWindow {Owner = this};
             propertiesWnd.ShowDialog();
         }
 
@@ -104,21 +102,6 @@ namespace ULocalizer.Windows
         {
             var consoleWnd = new ConsoleWindow {Owner = this};
             consoleWnd.Show();
-        }
-
-        private void SetToDefValBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (Common.SelectedTranslationNodeItem != null)
-            {
-                try
-                {
-                    Common.SelectedTranslationNodeItem.Translation = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == Projects.CurrentProject.SourceCulture.ISO).Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.First(item => item.Source == Common.SelectedTranslationNodeItem.Source).Translation;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
         }
 
         private async void ShowTranslateOptionsWindow(TranslateMode mode, bool hideDirectionControl = false)
@@ -132,7 +115,8 @@ namespace ULocalizer.Windows
                 }
                 if (!string.IsNullOrWhiteSpace(Common.SelectedTranslation.Culture.ISO))
                 {
-                    translateOptionsWnd.DirectionsControl.DestinationLanguage.SelectedLanguage = Common.TranslationCultures.First(translation => translation.ISO == Common.SelectedTranslation.Culture.ISO);
+                    translateOptionsWnd.DirectionsControl.SourceLanguage.SelectedLanguage = Common.TranslationCultures.First(translation => translation.ISO == (Projects.CurrentProject.SourceCulture.Parent != null ? Projects.CurrentProject.SourceCulture.Parent.ISO : Projects.CurrentProject.SourceCulture.ISO));
+                    translateOptionsWnd.DirectionsControl.DestinationLanguage.SelectedLanguage = Common.TranslationCultures.First(translation => translation.ISO == (Common.SelectedTranslation.Culture.Parent != null ? Common.SelectedTranslation.Culture.Parent.ISO : Common.SelectedTranslation.Culture.ISO));
                 }
                 translateOptionsWnd.ShowDialog();
             }
@@ -159,43 +143,28 @@ namespace ULocalizer.Windows
 
         private void SettingsBtn_Click(object sender, RoutedEventArgs e)
         {
-            var settingsWnd = new SettingsWindow();
-            settingsWnd.Owner = this;
+            var settingsWnd = new SettingsWindow {Owner = this};
             settingsWnd.ShowDialog();
+        }
+
+        private void SetToDefValBtn_Click(object sender, RoutedEventArgs e)
+        {
+            CDefaults.SetItem(Common.SelectedNode,Common.SelectedTranslationNodeItem);
         }
 
         private void SetNodeToDefValBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (Common.SelectedNode != null)
-            {
-                try
-                {
-                    Common.SelectedNode.Items = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == Projects.CurrentProject.SourceCulture.ISO).Nodes.First(node => node.Title == Common.SelectedNode.Title).Items.ToObservableList();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
+            CDefaults.SetNode(Common.SelectedNode);
         }
 
         private void SetLangToDefValBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (Common.SelectedTranslation == null) return;
-            try
-            {
-                Common.SelectedTranslation.Nodes = Projects.CurrentProject.Translations.First(translation => translation.Culture.ISO == Projects.CurrentProject.SourceCulture.ISO).Nodes.ToObservableList();
-                Common.SelectedNode = Common.SelectedTranslation.Nodes[0];
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            CDefaults.SetTranslation(Common.SelectedTranslation);
         }
 
         private async void TranslateProjectBtn_Click(object sender, RoutedEventArgs e)
         {
-            await CTranslator.TranslateProject(Common.TranslationCultures.FirstOrDefault(translation => translation.ISO == Projects.CurrentProject.SourceCulture.ISO));
+            await CTranslator.TranslateProject();
         }
     }
 }

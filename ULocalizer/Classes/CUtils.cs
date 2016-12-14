@@ -104,10 +104,8 @@ namespace ULocalizer.Classes
         /// </summary>
         /// <param name="sourceConfigPath">Path to config file</param>
         /// <param name="destinationConfigPath"></param>
-        /// <param name="sourcePath">SourcePath property for config</param>
-        /// <param name="destinationPath">DestinationPath property for config</param>
         /// <returns></returns>
-        public static async Task MakeConfig(string sourceConfigPath,string destinationConfigPath, string sourcePath, string destinationPath)
+        public static async Task MakeConfig(string sourceConfigPath,string destinationConfigPath)
         {
             await Task.Run(async() =>
             {
@@ -115,12 +113,12 @@ namespace ULocalizer.Classes
                 {
                     var configFile = new CConfig();
                     await configFile.LoadFromFileTask(sourceConfigPath);
-                    configFile.Sections["CommonSettings"].UpdateItem("SourcePath",sourcePath);
-                    configFile.Sections["CommonSettings"].UpdateItem("DestinationPath", destinationPath);
-                    configFile.Sections["CommonSettings"].UpdateItem("ManifestName", "Game.manifest");
-                    configFile.Sections["CommonSettings"].UpdateItem("ArchiveName", "Game.archive");
-                    configFile.Sections["CommonSettings"].UpdateItem("ResourceName", "Game.locres");
-                    configFile.Sections["CommonSettings"].UpdateItem("PortableObjectName", "Game.po");
+                    configFile.Sections["CommonSettings"].UpdateItem("SourcePath",Projects.CurrentProject.SourcePath);
+                    configFile.Sections["CommonSettings"].UpdateItem("DestinationPath",Projects.CurrentProject.DestinationPath);
+                    configFile.Sections["CommonSettings"].UpdateItem("ManifestName", Projects.CurrentProject.ManifestName);
+                    configFile.Sections["CommonSettings"].UpdateItem("ArchiveName", Projects.CurrentProject.ArchiveName);
+                    configFile.Sections["CommonSettings"].UpdateItem("ResourceName", Projects.CurrentProject.ResourceName);
+                    configFile.Sections["CommonSettings"].UpdateItem("PortableObjectName", Projects.CurrentProject.PortableObjectName);
                     configFile.Sections["CommonSettings"].UpdateItem("SourceCulture", Projects.CurrentProject.SourceCulture.ISO);
 
                     //add new cultures
@@ -132,9 +130,12 @@ namespace ULocalizer.Classes
                     configFile.Sections["CommonSettings"].Items.ToList().RemoveAll(item => item.Key == "CulturesToGenerate" && Projects.CurrentProject.Languages.FirstOrDefault(culture => culture.ISO == item.Value) == null);
 
                     //clean up unused culture directories
-                    foreach (var directory in Directory.GetDirectories(Path.Combine(Projects.CurrentProject.GetProjectRoot(),@"Content\Localization\Game")).Where(directory => Projects.CurrentProject.Languages.FirstOrDefault(culture => culture.ISO == Path.GetFileName(directory)) == null))
+                    if (Properties.Settings.Default.DeleteUnusedCultureFolders)
                     {
-                        Directory.Delete(directory,true);
+                        foreach (var directory in Directory.GetDirectories(Path.Combine(Projects.CurrentProject.GetProjectRoot(), @"Content\Localization\Game")).Where(directory => Projects.CurrentProject.Languages.FirstOrDefault(culture => culture.ISO == Path.GetFileName(directory)) == null))
+                        {
+                            Directory.Delete(directory, true);
+                        }
                     }
 
                     await configFile.SaveToFileTask(destinationConfigPath);
